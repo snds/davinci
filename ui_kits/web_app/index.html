@@ -1,0 +1,265 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<title>Davinci — Web App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<link rel="stylesheet" href="../../colors_and_type.css?v=7">
+<link rel="stylesheet" href="davinci.css?v=10">
+<style>
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-feature-settings: 'liga';
+    -moz-font-feature-settings: 'liga';
+    text-rendering: optimizeLegibility;
+  }
+  .material-symbols-outlined.icon-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="Shared.jsx"></script>
+<script type="text/babel" src="Ads.jsx"></script>
+<script type="text/babel" src="Search.jsx"></script>
+<script type="text/babel" src="Rails.jsx"></script>
+<script type="text/babel" src="Feed.jsx"></script>
+<script type="text/babel" src="ProfilePage.jsx"></script>
+<script type="text/babel" src="CompanyPage.jsx"></script>
+<script type="text/babel" src="NetworkJobsPages.jsx"></script>
+<script type="text/babel" src="MessagesAlertsPages.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "dark",
+  "typeaheadLayout": "grouped"
+}/*EDITMODE-END*/;
+
+function loadTweaks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('davinci_tweaks') || '{}');
+    return { ...TWEAK_DEFAULTS, ...saved };
+  } catch { return { ...TWEAK_DEFAULTS }; }
+}
+
+function App() {
+  const [route, setRoute] = useState('home'); // home | profile | company | network | jobs | messaging | notifications | search
+  const [tweaks, setTweaks] = useState(loadTweaks);
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [searchSubmittedQuery, setSearchSubmittedQuery] = useState('');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', tweaks.theme === 'light' ? 'light' : 'dark');
+    localStorage.setItem('davinci_tweaks', JSON.stringify(tweaks));
+  }, [tweaks]);
+
+  // Tweaks protocol
+  useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data;
+      if (!d || typeof d !== 'object') return;
+      // no-op — tweaks panel is in-page
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const updateTweak = (patch) => {
+    setTweaks(prev => {
+      const next = { ...prev, ...patch };
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: patch }, '*');
+      return next;
+    });
+  };
+
+  const isLight = tweaks.theme === 'light';
+  const toggleTheme = () => updateTweak({ theme: isLight ? 'dark' : 'light' });
+
+  const handleSearchSubmit = (q) => {
+    setSearchSubmittedQuery(q);
+    setSearchValue(q);
+    setRoute('search');
+  };
+
+  const goTo = (id) => {
+    const map = {
+      home: 'home',
+      network: 'network',
+      jobs: 'jobs',
+      messaging: 'messaging',
+      notifications: 'notifications',
+    };
+    setRoute(map[id] || 'home');
+  };
+
+  // Which topnav tab is visually active
+  const activeTab = {
+    home: 'home',
+    profile: 'home',
+    company: 'home',
+    network: 'network',
+    jobs: 'jobs',
+    messaging: 'messaging',
+    notifications: 'notifications',
+    search: 'home',
+  }[route] || 'home';
+
+  const pageFor = {
+    home: (
+      <div className="layout" data-screen-label="01 Feed">
+        <LeftRail onViewProfile={() => setRoute('profile')} />
+        <Feed />
+        <RightRail />
+      </div>
+    ),
+    profile: (
+      <div className="layout layout--narrow" data-screen-label="02 Profile">
+        <LeftRail onViewProfile={() => setRoute('profile')} />
+        <ProfilePage />
+      </div>
+    ),
+    company: (
+      <div className="layout layout--single" data-screen-label="03 Company" style={{ maxWidth: 900 }}>
+        <CompanyPage />
+      </div>
+    ),
+    network: (
+      <div className="layout layout--single" data-screen-label="04 Network" style={{ maxWidth: 820 }}>
+        <NetworkPage />
+      </div>
+    ),
+    jobs: (
+      <div className="layout layout--single" data-screen-label="05 Jobs" style={{ maxWidth: 1180 }}>
+        <JobsPage />
+      </div>
+    ),
+    messaging: (
+      <div className="layout layout--single" data-screen-label="06 Messages" style={{ maxWidth: 1100 }}>
+        <MessagesPage />
+      </div>
+    ),
+    notifications: (
+      <div className="layout layout--single" data-screen-label="07 Alerts" style={{ maxWidth: 1000 }}>
+        <AlertsPage />
+      </div>
+    ),
+    search: (
+      <div className="layout layout--single" data-screen-label="08 Search Results" style={{ maxWidth: 820 }}>
+        <SearchResults query={searchSubmittedQuery} />
+      </div>
+    ),
+  };
+  const body = pageFor[route] || pageFor.home;
+
+  return (
+    <div className="app">
+      <TopNav
+        active={activeTab}
+        onNavigate={goTo}
+        searchValue={searchValue}
+        onSearchChange={(v) => { setSearchValue(v); if (route === 'search') setSearchSubmittedQuery(v); }}
+        onSearchSubmit={handleSearchSubmit}
+        typeaheadLayout={tweaks.typeaheadLayout}
+        alertCount={3}
+        alertsOpen={alertsOpen}
+        onToggleAlerts={setAlertsOpen}
+      />
+      {/* Jump-to ribbon */}
+      <div style={{
+        background: 'var(--bg-subtle)',
+        borderBottom: '1px solid var(--border-subtle)',
+        padding: '0 24px',
+        height: 48,
+        display: 'flex', gap: 8, alignItems: 'center',
+        fontSize: 12,
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        whiteSpace: 'nowrap',
+        flexWrap: 'nowrap',
+      }}>
+        <span className="meta" style={{ marginRight: 8, flexShrink: 0 }}>Jump to:</span>
+        <Button size="sm" variant={route === 'home' ? 'primary' : 'secondary'} pill onClick={() => setRoute('home')}>Feed</Button>
+        <Button size="sm" variant={route === 'profile' ? 'primary' : 'secondary'} pill onClick={() => setRoute('profile')}>Profile</Button>
+        <Button size="sm" variant={route === 'company' ? 'primary' : 'secondary'} pill onClick={() => setRoute('company')}>Company</Button>
+        <Button size="sm" variant={route === 'network' ? 'primary' : 'secondary'} pill onClick={() => setRoute('network')}>Network</Button>
+        <Button size="sm" variant={route === 'jobs' ? 'primary' : 'secondary'} pill onClick={() => setRoute('jobs')}>Jobs</Button>
+        <Button size="sm" variant={route === 'messaging' ? 'primary' : 'secondary'} pill onClick={() => setRoute('messaging')}>Messages</Button>
+        <Button size="sm" variant={route === 'notifications' ? 'primary' : 'secondary'} pill onClick={() => setRoute('notifications')}>Alerts</Button>
+
+        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, paddingLeft: 16 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span className="meta">Typeahead</span>
+            <select
+              value={tweaks.typeaheadLayout}
+              onChange={(e) => updateTweak({ typeaheadLayout: e.target.value })}
+              style={{
+                background: 'var(--bg-surface)',
+                color: 'var(--fg)',
+                border: '1px solid var(--border)',
+                borderRadius: 6,
+                padding: '4px 8px',
+                fontSize: 12,
+                fontFamily: 'inherit',
+              }}
+            >
+              <option value="grouped">Grouped (v1)</option>
+              <option value="compact">Compact (v2)</option>
+            </select>
+          </label>
+
+          <span className="meta" aria-hidden="true">Theme</span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isLight}
+            aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
+            onClick={toggleTheme}
+            className="theme-toggle"
+            data-state={isLight ? 'light' : 'dark'}
+          >
+            <span className="theme-toggle__track">
+              <span className="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">
+                <Icon name="dark_mode" style={{ fontSize: 14 }} />
+              </span>
+              <span className="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">
+                <Icon name="light_mode" style={{ fontSize: 14 }} />
+              </span>
+              <span className="theme-toggle__thumb" />
+            </span>
+          </button>
+        </div>
+      </div>
+      {body}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

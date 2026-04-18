@@ -1,0 +1,48 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .avatar { border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-family: var(--font-display); }
+  .a-xs { width: 20px; height: 20px; font-size: 9px; }
+  .a-sm { width: 28px; height: 28px; font-size: 11px; }
+  .a-md { width: 40px; height: 40px; font-size: 14px; }
+  .a-lg { width: 56px; height: 56px; font-size: 18px; }
+  .a-xl { width: 80px; height: 80px; font-size: 26px; }
+  .g1 { background: linear-gradient(135deg, var(--blue-7), var(--blue-9)); }
+  .g2 { background: linear-gradient(135deg, var(--yellow-8), var(--yellow-10)); color: #1a1500; }
+  .g3 { background: linear-gradient(135deg, var(--sand-7), var(--sand-9)); }
+  .g4 { background: linear-gradient(135deg, #d14b92, #e48ac7); }
+  .stack { display: flex; }
+  .stack .avatar { border: 2px solid var(--bg); margin-left: -10px; }
+  .stack .avatar:first-child { margin-left: 0; }
+  .ring { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+  .online::after { content: ''; position: absolute; width: 10px; height: 10px; background: var(--success); border: 2px solid var(--bg); border-radius: 50%; bottom: 0; right: 0; }
+  .wrap-on { position: relative; display: inline-block; }
+  .label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="label">Sizes</div>
+  <div class="row" style="margin-bottom: 14px;">
+    <div class="avatar a-xs g1">AL</div>
+    <div class="avatar a-sm g2">SA</div>
+    <div class="avatar a-md g3">JR</div>
+    <div class="avatar a-lg g4">MC</div>
+    <div class="wrap-on online"><div class="avatar a-lg g1 ring">DA</div></div>
+  </div>
+  <div class="label">Stack</div>
+  <div class="row">
+    <div class="stack">
+      <div class="avatar a-md g1">AL</div>
+      <div class="avatar a-md g2">SA</div>
+      <div class="avatar a-md g3">JR</div>
+      <div class="avatar a-md g4">MC</div>
+      <div class="avatar a-md" style="background: var(--sand-4); color: var(--fg-muted); font-size: 11px;">+12</div>
+    </div>
+  </div>
+</div>
+</body></html>

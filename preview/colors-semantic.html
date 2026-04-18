@@ -1,0 +1,32 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chip {
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--bg-surface);
+  }
+  .bar { height: 24px; border-radius: 4px; }
+  .chip-label { font-family: var(--font-display); font-weight: 600; font-size: 12px; }
+  .chip-hex { font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); }
+  .chip-role { font-size: 11px; color: var(--fg-subtle); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid">
+    <div class="chip"><div class="bar" style="background: var(--success); "></div><div class="chip-label" style="color: var(--success-fg)">Success</div><div class="chip-hex">--success</div><div class="chip-role">confirmed, live, online</div></div>
+    <div class="chip"><div class="bar" style="background: var(--warning);"></div><div class="chip-label" style="color: var(--warning-fg)">Warning</div><div class="chip-hex">--warning</div><div class="chip-role">caution, needs review</div></div>
+    <div class="chip"><div class="bar" style="background: var(--danger);"></div><div class="chip-label" style="color: var(--danger-fg)">Danger</div><div class="chip-hex">--danger</div><div class="chip-role">errors, destructive</div></div>
+    <div class="chip"><div class="bar" style="background: var(--accent);"></div><div class="chip-label" style="color: var(--accent-fg)">Info / Accent</div><div class="chip-hex">--accent</div><div class="chip-role">links, primary CTA</div></div>
+  </div>
+</div>
+</body></html>

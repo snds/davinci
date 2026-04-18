@@ -1,0 +1,40 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .specimen { display: grid; grid-template-columns: 90px 1fr auto; gap: 16px; align-items: baseline; padding: 6px 0; border-bottom: 1px dashed var(--border-subtle); }
+  .specimen:last-child { border: none; }
+  .meta { text-align: right; font-family: var(--font-mono); font-size: 11px; color: var(--fg-muted); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="specimen">
+    <span class="label">Body LG</span>
+    <span style="font-size: 17px; line-height: 1.5;">The quick brown fox jumps over the lazy dog. — 0123456789</span>
+    <span class="meta">17 / 400</span>
+  </div>
+  <div class="specimen">
+    <span class="label">Body</span>
+    <span style="font-size: 15px; line-height: 1.5;">The quick brown fox jumps over the lazy dog. — 0123456789</span>
+    <span class="meta">15 / 400</span>
+  </div>
+  <div class="specimen">
+    <span class="label">Body SM</span>
+    <span style="font-size: 13px; line-height: 1.5;" class="muted">The quick brown fox jumps over the lazy dog.</span>
+    <span class="meta">13 / 400</span>
+  </div>
+  <div class="specimen">
+    <span class="label">Caption</span>
+    <span style="font-size: 12px;" class="muted">Small supporting metadata • timestamps • helpers</span>
+    <span class="meta">12 / 400</span>
+  </div>
+  <div class="specimen">
+    <span class="label">Eyebrow</span>
+    <span class="eyebrow">Section label / overline</span>
+    <span class="meta">12 / 600 / 0.08em</span>
+  </div>
+</div>
+</body></html>

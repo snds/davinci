@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" width="220" height="56" role="img" aria-label="Davinci" class="dv-logo">
+  <g transform="translate(4,8)">
+    <rect x="0" y="0" width="40" height="40" rx="8" style="fill: var(--dv-logo-mark, #0090ff)"></rect>
+    <path d="M11 10 h10 a10 10 0 0 1 10 10 v0 a10 10 0 0 1 -10 10 h-10 z" style="fill: var(--dv-logo-counter, var(--bg, #fff))"></path>
+    <circle cx="24" cy="20" r="3" style="fill: var(--dv-logo-accent, #ffe629)"></circle>
+  </g>
+  <text x="56" y="36" style="fill: var(--dv-logo-text, currentColor); font-family: var(--font-display, Inter, ui-sans-serif, system-ui, sans-serif); font-weight: 800; font-size: 30px; letter-spacing: -0.02em">davinci</text>
+</svg>

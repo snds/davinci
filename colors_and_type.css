@@ -1,0 +1,444 @@
+/* ============================================================
+   Davinci Design System — Core tokens
+   Radix-based palette (blue primary, sand neutral, yellow alt)
+   Default theme: dark. Light available via [data-theme="light"]
+   ============================================================ */
+
+/* ---------- Fonts (Google Fonts) ---------- */
+/* Display + body: Inter — default, modern-neutral workhorse
+   Mono: JetBrains Mono
+   Icons: Material Symbols Rounded */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+/* ============================================================
+   RADIX COLOR SCALES (full)
+   All scales shipped; consumers reference via semantic vars.
+   Scales: 1-2 backgrounds, 3-5 component bg, 6-8 borders,
+           9-10 solid, 11 low-contrast text, 12 high-contrast text
+   ============================================================ */
+
+:root, [data-theme="dark"] {
+  /* ---------- Sand (neutral) — dark ---------- */
+  --sand-1: #111110;
+  --sand-2: #191918;
+  --sand-3: #222221;
+  --sand-4: #2a2a28;
+  --sand-5: #31312e;
+  --sand-6: #3b3a37;
+  --sand-7: #494844;
+  --sand-8: #62605b;
+  --sand-9: #6f6d66;
+  --sand-10: #7c7b74;
+  --sand-11: #b5b3ad;
+  --sand-12: #eeeeec;
+  --sand-a1: #00000000;
+  --sand-a12: #fffff0ee;
+
+  /* ---------- Blue (primary) — dark ---------- */
+  --blue-1: #0d1520;
+  --blue-2: #111927;
+  --blue-3: #0d2847;
+  --blue-4: #003362;
+  --blue-5: #004074;
+  --blue-6: #104d87;
+  --blue-7: #205d9e;
+  --blue-8: #2870bd;
+  --blue-9: #0090ff;
+  --blue-10: #3b9eff;
+  --blue-11: #70b8ff;
+  --blue-12: #c2e6ff;
+
+  /* ---------- Yellow (alt brand) — dark ---------- */
+  --yellow-1: #14120b;
+  --yellow-2: #1b180f;
+  --yellow-3: #2d2305;
+  --yellow-4: #362b00;
+  --yellow-5: #433500;
+  --yellow-6: #524202;
+  --yellow-7: #665417;
+  --yellow-8: #836a21;
+  --yellow-9: #ffe629;
+  --yellow-10: #ffff57;
+  --yellow-11: #f5e147;
+  --yellow-12: #f6eeb4;
+
+  /* ---------- Functional scales (dark) ---------- */
+  --green-9: #30a46c;
+  --green-10: #33b074;
+  --green-11: #4cc38a;
+  --green-a3: #2bd27922;
+  --green-a11: #63e39c;
+  --red-9: #e5484d;
+  --red-10: #ec5d5e;
+  --red-11: #ff9592;
+  --red-a3: #ff525533;
+  --amber-9: #ffc53d;
+  --amber-11: #ffc944;
+  --gray-a3: #ffffff1a;
+  --gray-a6: #ffffff33;
+
+  /* ---------- Semantic (dark-mode) ---------- */
+  --bg:            var(--sand-1);
+  --bg-subtle:     var(--sand-2);
+  --bg-surface:    var(--sand-3);
+  --bg-elevated:   var(--sand-4);
+  --bg-hover:      var(--sand-4);
+  --bg-active:     var(--sand-5);
+  --bg-selected:   var(--blue-4);
+
+  --fg:            var(--sand-12);
+  --fg-muted:      var(--sand-11);
+  --fg-subtle:     var(--sand-10);
+  --fg-disabled:   var(--sand-8);
+  --fg-on-accent:  #ffffff;
+  --fg-on-alt:     #1a1500;
+
+  --border:        var(--sand-6);
+  --border-subtle: var(--sand-4);
+  --border-strong: var(--sand-8);
+  --border-focus:  var(--blue-8);
+
+  --accent:        var(--blue-9);
+  --accent-hover:  var(--blue-10);
+  --accent-subtle: var(--blue-3);
+  --accent-fg:     var(--blue-11);
+  --accent-border: var(--blue-7);
+
+  --alt:           var(--yellow-9);
+  --alt-hover:     var(--yellow-10);
+  --alt-subtle:    var(--yellow-3);
+  --alt-fg:        var(--yellow-11);
+
+  --success:       var(--green-9);
+  --success-fg:    var(--green-11);
+  --danger:        var(--red-9);
+  --danger-fg:     var(--red-11);
+  --warning:       var(--amber-9);
+  --warning-fg:    var(--amber-11);
+
+  /* Overlays */
+  --overlay:       rgba(0,0,0,.7);
+  --scrim:         rgba(0,0,0,.45);
+
+  /* Brand logo — theme-aware */
+  --dv-logo-mark:     var(--blue-9);     /* square */
+  --dv-logo-counter:  var(--bg);         /* "D" cutout — matches page bg */
+  --dv-logo-accent:   var(--yellow-9);   /* dot */
+  --dv-logo-text:     var(--fg);         /* wordmark */
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+[data-theme="light"] {
+  /* Sand — light */
+  --sand-1: #fdfdfc;
+  --sand-2: #f9f9f8;
+  --sand-3: #f1f0ef;
+  --sand-4: #e9e8e6;
+  --sand-5: #e2e1de;
+  --sand-6: #dad9d6;
+  --sand-7: #cfceca;
+  --sand-8: #bcbbb5;
+  --sand-9: #8d8d86;
+  --sand-10: #82827c;
+  --sand-11: #63635e;
+  --sand-12: #21201c;
+
+  /* Blue — light */
+  --blue-1: #fbfdff;
+  --blue-2: #f4faff;
+  --blue-3: #e6f4fe;
+  --blue-4: #d5efff;
+  --blue-5: #c2e5ff;
+  --blue-6: #acd8fc;
+  --blue-7: #8ec8f6;
+  --blue-8: #5eb1ef;
+  --blue-9: #0090ff;
+  --blue-10: #0588f0;
+  --blue-11: #0d74ce;
+  --blue-12: #113264;
+
+  /* Yellow — light */
+  --yellow-1: #fdfdf9;
+  --yellow-2: #fefce9;
+  --yellow-3: #fffab8;
+  --yellow-4: #fff394;
+  --yellow-5: #ffe770;
+  --yellow-6: #f3d768;
+  --yellow-7: #e4c767;
+  --yellow-8: #d5ae39;
+  --yellow-9: #ffe629;
+  --yellow-10: #ffdc00;
+  --yellow-11: #9e6c00;
+  --yellow-12: #473b1f;
+
+  --green-9: #30a46c;
+  --green-10: #2b9a66;
+  --green-11: #218358;
+  --green-a3: #00803b1a;
+  --red-9: #e5484d;
+  --red-10: #dc3e42;
+  --red-11: #ce2c31;
+  --red-a3: #ff0a0a1a;
+  --amber-9: #ffc53d;
+  --amber-11: #ab6400;
+  --gray-a3: #0000001a;
+  --gray-a6: #00000033;
+
+  --bg:            var(--sand-1);
+  --bg-subtle:     var(--sand-2);
+  --bg-surface:    #ffffff;
+  --bg-elevated:   #ffffff;
+  --bg-hover:      var(--sand-3);
+  --bg-active:     var(--sand-4);
+  --bg-selected:   var(--blue-3);
+
+  --fg:            var(--sand-12);
+  --fg-muted:      var(--sand-11);
+  --fg-subtle:     var(--sand-10);
+  --fg-disabled:   var(--sand-8);
+  --fg-on-accent:  #ffffff;
+  --fg-on-alt:     #2a2200;
+
+  --border:        var(--sand-6);
+  --border-subtle: var(--sand-4);
+  --border-strong: var(--sand-8);
+  --border-focus:  var(--blue-8);
+
+  --accent:        var(--blue-9);
+  --accent-hover:  var(--blue-10);
+  --accent-subtle: var(--blue-3);
+  --accent-fg:     var(--blue-11);
+  --accent-border: var(--blue-7);
+
+  --alt:           var(--yellow-9);
+  --alt-hover:     var(--yellow-10);
+  --alt-subtle:    var(--yellow-3);
+  --alt-fg:        var(--yellow-11);
+
+  --success:       var(--green-9);
+  --success-fg:    var(--green-11);
+  --danger:        var(--red-9);
+  --danger-fg:     var(--red-11);
+  --warning:       var(--amber-9);
+  --warning-fg:    var(--amber-11);
+
+  --overlay:       rgba(0,0,0,.45);
+  --scrim:         rgba(0,0,0,.30);
+
+  /* Brand logo — theme-aware */
+  --dv-logo-mark:     var(--blue-9);
+  --dv-logo-counter:  #ffffff;
+  --dv-logo-accent:   var(--yellow-9);
+  --dv-logo-text:     var(--fg);
+
+  color-scheme: light;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+:root {
+  --font-display: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale (fluid-ish, desktop-first) */
+  --text-2xs: 11px;
+  --text-xs:  12px;
+  --text-sm:  13px;
+  --text-md:  14px;
+  --text-base:15px;
+  --text-lg:  17px;
+  --text-xl:  20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 38px;
+  --text-5xl: 48px;
+  --text-6xl: 60px;
+  --text-7xl: 76px;
+
+  /* Line heights */
+  --lh-tight:  1.1;
+  --lh-snug:   1.25;
+  --lh-normal: 1.5;
+  --lh-loose:  1.7;
+
+  /* Weights */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-heavy:    800;
+
+  /* Letter spacing */
+  --ls-tight:  -0.02em;
+  --ls-snug:   -0.01em;
+  --ls-normal: 0;
+  --ls-wide:   0.02em;
+  --ls-wider:  0.08em;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --s-0: 0px;
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 8px;
+  --s-4: 12px;
+  --s-5: 16px;
+  --s-6: 20px;
+  --s-7: 24px;
+  --s-8: 32px;
+  --s-9: 40px;
+  --s-10: 48px;
+  --s-11: 64px;
+  --s-12: 80px;
+  --s-13: 96px;
+  --s-14: 128px;
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* ---------- Shadows (warm, subtle) ---------- */
+  --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.06);
+  --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.08), 0 1px 3px rgba(17, 17, 16, 0.06);
+  --shadow-md: 0 2px 4px rgba(17, 17, 16, 0.08), 0 4px 8px rgba(17, 17, 16, 0.06);
+  --shadow-lg: 0 4px 8px rgba(17, 17, 16, 0.08), 0 12px 24px rgba(17, 17, 16, 0.10);
+  --shadow-xl: 0 8px 16px rgba(17, 17, 16, 0.12), 0 24px 48px rgba(17, 17, 16, 0.14);
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--blue-8) 40%, transparent);
+
+  /* Motion */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:   120ms;
+  --dur-base:   180ms;
+  --dur-slow:   280ms;
+}
+
+/* ============================================================
+   SEMANTIC TYPE — classes + reset
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--lh-normal);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+}
+
+h1, .h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-heavy);
+  letter-spacing: var(--ls-tight);
+  margin: 0;
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-snug);
+  margin: 0;
+}
+h3, .h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  margin: 0;
+}
+h4, .h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+  margin: 0;
+}
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+p, .body {
+  font-size: var(--text-base);
+  line-height: var(--lh-normal);
+  color: var(--fg);
+  margin: 0;
+}
+.body-sm { font-size: var(--text-sm); color: var(--fg-muted); line-height: var(--lh-normal); }
+.body-lg { font-size: var(--text-lg); line-height: var(--lh-normal); }
+.caption { font-size: var(--text-xs); color: var(--fg-muted); line-height: var(--lh-normal); }
+
+code, .code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+code {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  color: var(--fg);
+}
+
+a {
+  color: var(--accent-fg);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--accent-hover); text-decoration: underline; text-underline-offset: 2px; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--s-7) 0;
+}
+
+::selection { background: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--fg); }
+
+/* ============================================================
+   Material Symbols (Rounded) — default for the whole system
+   (Font is @import'd at the top of this file)
+   ============================================================ */
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+.material-symbols-rounded.filled { font-variation-settings: 'FILL' 1; }

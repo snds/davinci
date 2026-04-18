@@ -1,0 +1,37 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .side { border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; }
+  .side > header { padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); }
+  .demo { padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--bg); color: var(--fg); }
+  .demo h3 { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin: 0; }
+  .demo p { font-size: 13px; color: var(--fg-muted); margin: 0; }
+  .demo .btn { align-self: flex-start; background: var(--accent); color: var(--fg-on-accent); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card" style="padding: 20px;">
+  <div class="grid">
+    <div class="side" data-theme="light" style="background: #fdfdfc;">
+      <header style="background: #f9f9f8; color: #63635e;">☀ Light</header>
+      <div class="demo" style="background: #fdfdfc; color: #21201c;">
+        <h3>Warm by default</h3>
+        <p style="color: #63635e;">Sand neutrals give surfaces a paper-like warmth. Blue carries the interaction load; yellow is reserved for attention.</p>
+        <div class="btn" style="background: #0090ff; color: #fff;">Primary action</div>
+      </div>
+    </div>
+    <div class="side" data-theme="dark">
+      <header>🌙 Dark (default)</header>
+      <div class="demo">
+        <h3>Warm by default</h3>
+        <p>Sand neutrals give surfaces a paper-like warmth. Blue carries the interaction load; yellow is reserved for attention.</p>
+        <div class="btn">Primary action</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

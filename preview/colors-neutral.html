@@ -1,0 +1,34 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .scale { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+  .sw { height: 44px; border-radius: 4px; position: relative; border: 1px solid rgba(255,255,255,0.04); }
+  .sw span { position: absolute; bottom: -18px; left: 0; right: 0; text-align: center; font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); }
+  .name { font-family: var(--font-display); font-weight: 600; font-size: 13px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+  .name small { font-family: var(--font-mono); font-size: 10px; color: var(--fg-muted); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; }
+  .hint { font-family: var(--font-mono); font-size: 10px; color: var(--fg-subtle); margin-top: 22px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="name">Sand <small>neutral — surfaces, text, borders</small></div>
+  <div class="scale">
+    <div class="sw" style="background: var(--sand-1)"><span>1</span></div>
+    <div class="sw" style="background: var(--sand-2)"><span>2</span></div>
+    <div class="sw" style="background: var(--sand-3)"><span>3</span></div>
+    <div class="sw" style="background: var(--sand-4)"><span>4</span></div>
+    <div class="sw" style="background: var(--sand-5)"><span>5</span></div>
+    <div class="sw" style="background: var(--sand-6)"><span>6</span></div>
+    <div class="sw" style="background: var(--sand-7)"><span>7</span></div>
+    <div class="sw" style="background: var(--sand-8)"><span>8</span></div>
+    <div class="sw" style="background: var(--sand-9)"><span>9</span></div>
+    <div class="sw" style="background: var(--sand-10)"><span>10</span></div>
+    <div class="sw" style="background: var(--sand-11)"><span>11</span></div>
+    <div class="sw" style="background: var(--sand-12)"><span>12</span></div>
+  </div>
+  <div class="hint">1–2 backgrounds · 3–5 component bg · 6–8 borders · 9–10 solid · 11 low-contrast text · 12 high-contrast text</div>
+</div>
+</body></html>

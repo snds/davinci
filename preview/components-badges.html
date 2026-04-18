@@ -1,0 +1,47 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    line-height: 1.4;
+  }
+  .b-neutral  { background: var(--sand-3); color: var(--fg-muted); border: 1px solid var(--sand-6); }
+  .b-accent   { background: var(--blue-3); color: var(--blue-11); border: 1px solid var(--blue-7); }
+  .b-success  { background: var(--green-a3); color: var(--green-11); border: 1px solid rgba(48,164,108,.4); }
+  .b-warning  { background: rgba(255,197,61,.1); color: var(--amber-11); border: 1px solid rgba(255,197,61,.4); }
+  .b-danger   { background: var(--red-a3); color: var(--danger-fg); border: 1px solid rgba(229,72,77,.4); }
+  .b-alt      { background: var(--yellow-3); color: var(--yellow-11); border: 1px solid var(--yellow-7); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .b-solid { background: var(--accent); color: #fff; border: none; }
+  .b-square { border-radius: 4px; }
+  .label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin: 6px 0; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="label">Status</div>
+  <div class="row" style="margin-bottom: 12px;">
+    <span class="badge b-neutral"><span class="dot"></span>Draft</span>
+    <span class="badge b-accent"><span class="dot"></span>In review</span>
+    <span class="badge b-success"><span class="dot"></span>Published</span>
+    <span class="badge b-warning"><span class="dot"></span>Needs attention</span>
+    <span class="badge b-danger"><span class="dot"></span>Blocked</span>
+  </div>
+  <div class="label">Tags / Emphasis</div>
+  <div class="row">
+    <span class="badge b-alt">New</span>
+    <span class="badge b-accent b-square">Featured</span>
+    <span class="badge b-solid">12</span>
+    <span class="badge b-neutral b-square">design-system</span>
+    <span class="badge b-neutral b-square">radix-ui</span>
+  </div>
+</div>
+</body></html>

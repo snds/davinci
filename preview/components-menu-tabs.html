@@ -1,0 +1,79 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<style>
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal; font-style: normal;
+    font-size: 22px; line-height: 1; letter-spacing: normal;
+    text-transform: none; display: inline-block;
+    white-space: nowrap; word-wrap: normal; direction: ltr;
+    -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+<style>
+  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .menu {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 4px;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+  }
+  .item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .item:hover { background: var(--bg-hover); }
+  .item.selected { background: var(--bg-selected); color: var(--blue-12); }
+  .item i, .item > svg { color: var(--fg-muted); }
+  .item .shortcut { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--fg-subtle); }
+  .divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+  .group-label { font-size: 10px; color: var(--fg-subtle); padding: 6px 10px 4px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border-subtle); padding: 0 4px; }
+  .tab {
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+  }
+  .tab:hover { color: var(--fg); }
+  .tab.active { color: var(--accent-fg); border-bottom-color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="wrap">
+    <div class="menu">
+      <div class="group-label">Actions</div>
+      <div class="item"><span class="material-symbols-outlined"></span>Edit post<span class="shortcut">⌘E</span></div>
+      <div class="item selected"><span class="material-symbols-outlined"></span>Save for later<span class="shortcut">⌘S</span></div>
+      <div class="item"><span class="material-symbols-outlined"></span>Copy link</div>
+      <div class="divider"></div>
+      <div class="item" style="color: var(--danger-fg);"><span class="material-symbols-outlined" style="color: var(--danger-fg);"></span>Delete</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="tabs">
+        <div class="tab active">Posts</div>
+        <div class="tab">About</div>
+        <div class="tab">People</div>
+        <div class="tab">Jobs</div>
+      </div>
+      <div style="font-size: 12px; color: var(--fg-muted); padding-left: 8px;">Active tab uses <code style="font-size: 11px;">--accent</code> underline</div>
+    </div>
+  </div>
+</div>
+</body></html>

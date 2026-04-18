@@ -1,0 +1,59 @@
+<!doctype html>
+<html data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<style>
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal; font-style: normal;
+    font-size: 22px; line-height: 1; letter-spacing: normal;
+    text-transform: none; display: inline-block;
+    white-space: nowrap; word-wrap: normal; direction: ltr;
+    -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+<style>
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .cardel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .cardel h4 { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin: 0; }
+  .cardel p { font-size: 12px; color: var(--fg-muted); margin: 0; line-height: 1.5; }
+  .avatar-row { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--blue-7), var(--blue-9)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 13px; }
+  .meta { font-size: 11px; color: var(--fg-subtle); }
+  .footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--fg-muted); padding-top: 8px; border-top: 1px dashed var(--border-subtle); }
+  .pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-weight: 600; background: var(--blue-3); color: var(--blue-11); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="row">
+    <div class="cardel">
+      <div class="avatar-row">
+        <div class="avatar">SA</div>
+        <div><div style="font-weight: 600; font-size: 13px;">Sofia Antonova</div><div class="meta">Staff Designer · 2nd</div></div>
+      </div>
+      <p>Shipping a refresh of our component system, grounded in Radix Colors and a warm sand neutral.</p>
+      <div class="footer"><span>Posted 2h ago</span><span class="pill">Design</span></div>
+    </div>
+    <div class="cardel" style="box-shadow: var(--shadow-md); border-color: var(--border);">
+      <span class="pill" style="align-self: flex-start; background: var(--yellow-3); color: var(--yellow-11);">Event</span>
+      <h4>Typography in UI — online meetup</h4>
+      <p>A discussion of variable fonts, tabular figures, and why line-height matters more than most teams admit.</p>
+      <div class="footer"><span>Thu, Apr 24 · 6 PM</span><span style="display: inline-flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 14px;"></span>128 going</span></div>
+    </div>
+  </div>
+</div>
+</body></html>
