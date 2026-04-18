@@ -97,11 +97,23 @@ body {
    ============================================================ */
 .navbar {
   border-bottom: 1px solid var(--border);
+  background-color: transparent;
+  padding: 0 var(--s-7);
+  height: 60px;
+  position: sticky;
+}
+
+/* Blur on pseudo-element so navbar itself doesn't create a stacking context
+   (backdrop-filter on the element itself would trap the mobile sidebar) */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   background-color: color-mix(in srgb, var(--bg-subtle) 88%, transparent);
-  padding: 0 var(--s-7);
-  height: 60px;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .navbar__title {
