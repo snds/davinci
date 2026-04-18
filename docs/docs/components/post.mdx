@@ -3,144 +3,198 @@ title: Post
 sidebar_label: Post
 ---
 
+import LiveDemo from '@site/src/components/LiveDemo';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import DocsCallout from '@site/src/components/DocsCallout';
 
 # Post
 
 Post is the central content unit of the Davinci feed. It renders a structured social post with author identity, timestamp, body text, optional media attachments, and a reaction bar.
+
+<LiveDemo
+  title="Full post card"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40">JD</div>
+      <div class="post__who">
+        <div class="post__name">Jane Doe</div>
+        <div class="post__role">Senior Product Designer · Davinci Co.</div>
+        <div class="post__time">
+          <span class="material-symbols-rounded" style="font-size:13px;">schedule</span>
+          2h
+        </div>
+      </div>
+      <button class="btn btn--ghost btn--icon" aria-label="More">
+        <span class="material-symbols-rounded">more_horiz</span>
+      </button>
+    </div>
+    <div class="post__body">Excited to share that the new design system docs just shipped!
+
+Built with the same CSS it documents — fully dog-fooded. The token-to-component pipeline is finally documented end to end.</div>
+    <div class="post__reactions">
+      <span>👍 · ❤️ · 🎉  <strong>42</strong></span>
+      <span>12 comments</span>
+    </div>
+    <div class="post__actions">
+      <button class="post__action active">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">chat_bubble_outline</span>
+        Comment
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">repeat</span>
+        Repost
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">send</span>
+        Send
+      </button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
 ## Anatomy
 
 ```
 ┌───────────────────────────────────────┐
 │ [Avatar]  Author Name          [•••]  │  ← .post__header
-│           @handle · 2h                │
+│           Role · Company              │
+│           2h                          │
 ├───────────────────────────────────────┤
 │                                       │
 │  Post body text goes here.            │  ← .post__body
-│  Can be multiple paragraphs.          │
-│                                       │
-│  ┌─────────────────────────────────┐  │
-│  │  Attachment / media / link      │  │  ← .post__attachment (optional)
-│  └─────────────────────────────────┘  │
 │                                       │
 ├───────────────────────────────────────┤
-│  👍 Like · 💬 Comment · ↻ Repost · ↗ │  ← .post__actions
+│  👍 ❤️ 🎉 42          12 comments     │  ← .post__reactions
+├───────────────────────────────────────┤
+│  Like · Comment · Repost · Send       │  ← .post__actions
 └───────────────────────────────────────┘
 ```
 
 ## HTML structure
 
 ```html
-<article class="post">
-  <header class="post__header">
-    <div class="avatar avatar--grad-blue">JR</div>
-    <div class="post__meta">
-      <div class="post__author">Jordan Reeves</div>
-      <div class="post__byline">@jreeves · 2h</div>
+<div class="panel">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40">JD</div>
+      <div class="post__who">
+        <div class="post__name">Jane Doe</div>
+        <div class="post__role">Senior Designer · Company</div>
+        <div class="post__time">2h</div>
+      </div>
+      <button class="btn btn--ghost btn--icon" aria-label="More options">
+        <span class="material-symbols-rounded">more_horiz</span>
+      </button>
     </div>
-    <button class="btn btn--ghost btn--icon post__overflow" aria-label="More options">
-      <span class="material-symbols-rounded">more_horiz</span>
-    </button>
-  </header>
 
-  <div class="post__body">
-    <p>Excited to share that we're launching our new design system today...</p>
+    <div class="post__body">Post content goes here.</div>
+
+    <div class="post__reactions">
+      <span>👍 ❤️ 42</span>
+      <span>12 comments</span>
+    </div>
+
+    <div class="post__actions">
+      <button class="post__action">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+    </div>
   </div>
+</div>
+```
 
-  <footer class="post__actions">
-    <button class="post__action" aria-label="Like">
+---
+
+## With link attachment
+
+<LiveDemo
+  title="Post with link attachment"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40 avatar--g2">MK</div>
+      <div class="post__who">
+        <div class="post__name">Marcus Kim</div>
+        <div class="post__role">Engineering Lead · Build Co.</div>
+        <div class="post__time">5h</div>
+      </div>
+    </div>
+    <div class="post__body">This article on token-first design systems is required reading for anyone building a design system in 2025.</div>
+    <div class="post__attachment">
+      <div class="post__attachment-img"></div>
+      <div class="post__attachment-body">
+        <strong>Stop Paying for Design System Docs</strong>
+        <span style="color:var(--fg-muted);">Build them yourself with Docusaurus + your own CSS</span>
+      </div>
+    </div>
+    <div class="post__actions">
+      <button class="post__action">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">chat_bubble_outline</span>
+        Comment
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">repeat</span>
+        Repost
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">send</span>
+        Send
+      </button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+---
+
+## Action states
+
+Add `.active` to a `.post__action` to show the engaged state (`--accent-fg` color).
+
+<LiveDemo
+  title="Active action state"
+  html={`<div class="panel" style="max-width:400px;">
+  <div class="post__actions" style="margin:0;border:none;">
+    <button class="post__action active">
       <span class="material-symbols-rounded">thumb_up</span>
-      <span class="post__action-count">24</span>
+      Liked
     </button>
-    <button class="post__action" aria-label="Comment">
-      <span class="material-symbols-rounded">comment</span>
-      <span class="post__action-count">8</span>
+    <button class="post__action">
+      <span class="material-symbols-rounded">chat_bubble_outline</span>
+      Comment
     </button>
-    <button class="post__action" aria-label="Repost">
+    <button class="post__action">
       <span class="material-symbols-rounded">repeat</span>
+      Repost
     </button>
-    <button class="post__action" aria-label="Share">
-      <span class="material-symbols-rounded">ios_share</span>
+    <button class="post__action">
+      <span class="material-symbols-rounded">send</span>
+      Send
     </button>
-  </footer>
-</article>
-```
-
-## Token usage
-
-| Property | Token |
-|---|---|
-| Background | `--bg-surface` |
-| Border | `1px solid var(--border)` |
-| Border radius | `--radius-lg` |
-| Shadow | `--shadow-sm` |
-| Padding | `--s-6` |
-| Author name | `--text-md` / `--fw-semibold` |
-| Byline | `--text-sm` / `--fg-muted` |
-| Body text | `--text-base` / `--lh-normal` |
-| Action icons | `--fg-muted`, hover `--fg` |
-| Like count | `--text-sm` / `--fg-muted` |
-
-## Variants
-
-### Default post
-
-Plain text post with no media.
-
-### Liked state
-
-When the current user has liked a post, the like button fills with `--accent` and `font-variation-settings: 'FILL' 1`:
-
-```html
-<button class="post__action post__action--liked" aria-label="Unlike">
-  <span class="material-symbols-rounded" style="color:var(--accent); font-variation-settings:'FILL' 1;">
-    thumb_up
-  </span>
-  <span class="post__action-count" style="color:var(--accent-fg);">25</span>
-</button>
-```
-
-### With image attachment
-
-```html
-<div class="post__attachment post__attachment--image">
-  <img src="/post-image.jpg" alt="Post attachment" loading="lazy" />
-</div>
-```
-
-### With link preview
-
-```html
-<div class="post__attachment post__attachment--link">
-  <img class="post__link-thumb" src="/og-image.jpg" alt="" />
-  <div class="post__link-meta">
-    <div class="post__link-domain">davinci.design</div>
-    <div class="post__link-title">Davinci Design System launches v2</div>
-    <div class="post__link-desc">A complete, layered design system...</div>
   </div>
-</div>
-```
+</div>`}
+  pad="0"
+/>
 
-## Usage guidance
-
-**Do:**
-- Always include the overflow menu (`more_horiz`) for contextual actions
-- Keep post body text unstyled — let the user's content breathe without interference
-- Lazy-load all media attachments
-- Truncate long posts with a "see more" expand at ~5 lines
-
-**Don't:**
-- Add decorative borders or backgrounds inside the post body
-- Add padding inside `.post__body` beyond the inherited `--s-6` from `.post`
-- Change the reaction icon set without updating the accessible `aria-label` values
+<DocsCallout type="note">
+Post body uses `white-space: pre-wrap` to preserve line breaks. Sanitize all user-submitted content before inserting into `.post__body` to prevent XSS.
+</DocsCallout>
 
 ---
 
 ## Storybook
 
-<StorybookEmbed story="components-post--default" height={360} title="Post — default" />
-
-<StorybookEmbed story="components-post--liked" height={360} title="Post — liked state" />
-
-<StorybookEmbed story="components-post--with-image" height={500} title="Post — with image attachment" />
+<StorybookEmbed story="components-post--default" height={500} title="Post component" />

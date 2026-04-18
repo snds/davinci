@@ -3,81 +3,125 @@ title: Pills
 sidebar_label: Pills
 ---
 
+import LiveDemo from '@site/src/components/LiveDemo';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import DocsCallout from '@site/src/components/DocsCallout';
 
 # Pills
 
-Pills are compact, inline status indicators, category tags, and count badges. They are always `--radius-full` (fully rounded), use the `--text-xs` or `--text-sm` type scale, and come in several semantic variants.
+Pills are compact, inline status indicators, category tags, and count badges. They are always `--radius-full` (fully rounded) and use the `--text-xs` type scale.
 
-## Base anatomy
-
-A pill consists of optional icon + label + optional count. All parts are optional independently, but at least one must be present.
-
-```html
-<span class="pill">Default</span>
-<span class="pill pill--accent">Accent</span>
-<span class="pill pill--success">Active</span>
-<span class="pill pill--danger">Deleted</span>
-<span class="pill pill--warning">Pending</span>
-```
+<LiveDemo
+  title="All pill variants"
+  center
+  html={`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+  <span class="pill">Default</span>
+  <span class="pill pill--accent">Accent</span>
+  <span class="pill pill--alt">Alt</span>
+  <span class="pill pill--success">Active</span>
+</div>`}
+  pad="28px 24px"
+/>
 
 ## Variants
 
 | Class | Background | Text | Border | Use case |
 |---|---|---|---|---|
-| `.pill` | `--bg-surface` | `--fg-muted` | `--border` | Neutral category, default tag |
+| `.pill` | `--bg-subtle` | `--fg-muted` | `--border-subtle` | Neutral category, default tag |
 | `.pill--accent` | `--accent-subtle` | `--accent-fg` | `--accent-border` | Selected, active, featured |
-| `.pill--alt` | `--alt-subtle` | `--alt-fg` | none | Brand highlight, new, featured |
-| `.pill--success` | `--green-a3` | `--success-fg` | none | Online, active, published |
-| `.pill--danger` | `--red-a3` | `--danger-fg` | none | Error, deleted, banned |
-| `.pill--warning` | (amber-a3) | `--warning-fg` | none | Pending, review needed |
-| `.pill--ghost` | transparent | `--fg-subtle` | `--border-subtle` | Secondary categorization |
+| `.pill--alt` | `--alt-subtle` | `--alt-fg` | — | Brand highlight, new, featured |
+| `.pill--success` | `--green-a3` | `--success-fg` | rgba green | Active status, positive indicator |
 
-## Sizes
+<LiveDemo
+  title="Pills with icons"
+  html={`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+  <span class="pill">
+    <span class="material-symbols-rounded" style="font-size:12px;">label</span>
+    Design
+  </span>
+  <span class="pill pill--accent">
+    <span class="material-symbols-rounded" style="font-size:12px;">star</span>
+    Featured
+  </span>
+  <span class="pill pill--alt">
+    <span class="material-symbols-rounded" style="font-size:12px;">bolt</span>
+    New
+  </span>
+  <span class="pill pill--success">
+    <span class="material-symbols-rounded" style="font-size:12px;">radio_button_checked</span>
+    Active
+  </span>
+</div>`}
+  pad="24px"
+/>
 
-| Class | Height | Font | Padding |
-|---|---|---|---|
-| `.pill--sm` | 18px | `--text-2xs` | 2px 6px |
-| `.pill` (default) | 22px | `--text-xs` | 3px 8px |
-| `.pill--lg` | 28px | `--text-sm` | 4px 12px |
+---
 
-## With icon
+## Base anatomy
+
+A pill consists of an optional leading icon, label text, and an optional trailing count. All parts are independently optional.
 
 ```html
-<span class="pill pill--success">
-  <span class="material-symbols-rounded" style="font-size:12px; font-variation-settings:'FILL' 1;">
-    circle
-  </span>
-  Online
+<!-- Label only -->
+<span class="pill">Design</span>
+
+<!-- Icon + label -->
+<span class="pill pill--accent">
+  <span class="material-symbols-rounded" style="font-size:12px;">star</span>
+  Featured
+</span>
+
+<!-- Label + count -->
+<span class="pill">
+  Connections
+  <span style="opacity:0.6;margin-left:2px;">· 248</span>
 </span>
 ```
 
-## Count pill
+---
 
-Use `.pill--count` for numeric badges (notification counts, result totals):
+## Real-world: skill tag cloud
 
-```html
-<span class="pill pill--accent pill--count">12</span>
-```
+<LiveDemo
+  title="Skill tags"
+  html={`<div>
+  <div style="font-size:11px;font-weight:600;color:var(--fg-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Skills</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <span class="pill pill--accent">Product Design</span>
+    <span class="pill pill--accent">Figma</span>
+    <span class="pill pill--accent">Design Systems</span>
+    <span class="pill">Research</span>
+    <span class="pill">Prototyping</span>
+    <span class="pill">UX Writing</span>
+    <span class="pill">Accessibility</span>
+  </div>
+</div>`}
+  pad="20px 24px"
+/>
 
-For counts over 99, show `99+`.
+## Real-world: status badge
 
-## Usage guidance
+<LiveDemo
+  title="Status indicator"
+  html={`<div style="display:flex;align-items:center;gap:8px;">
+  <div class="avatar avatar--40">JD</div>
+  <div>
+    <div style="font-weight:600;font-size:14px;">Jane Doe</div>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <span class="pill pill--success">Open to work</span>
+      <span class="pill pill--accent">Pro</span>
+    </div>
+  </div>
+</div>`}
+  pad="20px 24px"
+/>
 
-**Do:**
-- Use pills for categorical information (e.g. job type: Full-time, Remote)
-- Use `.pill--success` / `.pill--danger` for clear binary status (Online / Offline)
-- Use `.pill--accent` for the currently selected filter or active navigation state
-- Keep pill labels short — 1–3 words maximum
-
-**Don't:**
-- Use pills as buttons (use `.btn` instead)
-- Use more than 2–3 pills in a single row without overflow handling
-- Use `.pill--danger` for anything other than a genuine error or destructive state (it creates unnecessary alarm)
-- Mix size variants in the same horizontal group
+<DocsCallout type="info">
+Pills are display-only. For interactive filter-style pills, derive from `.btn--pill` and add focus, selected, and active states. Never make a plain `.pill` the primary interactive trigger.
+</DocsCallout>
 
 ---
 
 ## Storybook
 
-<StorybookEmbed story="primitives-pill--all-variants" height={280} title="Pill variants" />
+<StorybookEmbed story="primitives-pill--all-variants" height={300} title="Pill variants" />

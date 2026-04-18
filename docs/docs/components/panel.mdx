@@ -3,11 +3,30 @@ title: Panel
 sidebar_label: Panel
 ---
 
+import LiveDemo from '@site/src/components/LiveDemo';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
 
 # Panel
 
 Panel is the primary surface container in Davinci. It wraps any bounded region of related content — a profile summary, a list of connections, an ad unit, a settings section. It provides consistent spacing, surface color, border, and optional header/footer regions.
+
+<LiveDemo
+  title="Panel with header and body"
+  html={`<div class="panel" style="max-width:400px;">
+  <div class="panel__header">
+    <span>Connections</span>
+    <button class="btn btn--ghost btn--sm">See all</button>
+  </div>
+  <div class="panel__body">
+    <p style="color:var(--fg-muted);font-size:13px;margin:0;">
+      You have 248 connections. Stay in touch with your network.
+    </p>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
 ## Anatomy
 
@@ -26,81 +45,129 @@ Panel is the primary surface container in Davinci. It wraps any bounded region o
 ## HTML structure
 
 ```html
-<!-- Basic panel -->
-<div class="panel">
-  <div class="panel__body">
-    Content goes here
-  </div>
-</div>
-
 <!-- Panel with header -->
 <div class="panel">
   <div class="panel__header">
-    <h3 class="panel__title">Network</h3>
+    <span>Section Title</span>
+    <button class="btn btn--ghost btn--sm">Action</button>
   </div>
   <div class="panel__body">
-    Content goes here
+    <!-- any content -->
   </div>
 </div>
 
-<!-- Panel with header action -->
+<!-- Minimal panel — no header -->
 <div class="panel">
-  <div class="panel__header">
-    <h3 class="panel__title">Connections</h3>
-    <a class="btn btn--ghost btn--sm" href="#">See all</a>
-  </div>
   <div class="panel__body">
-    Content goes here
+    <!-- any content -->
   </div>
 </div>
 ```
 
-## Token usage
+---
 
-| Property | Token |
-|---|---|
-| Background | `--bg-surface` |
-| Border | `1px solid var(--border)` |
-| Border radius | `--radius-lg` |
-| Shadow | `--shadow-sm` |
-| Header padding | `--s-5` vertical, `--s-6` horizontal |
-| Body padding | `--s-6` |
-| Header border | `1px solid var(--border)` |
-| Title font | `--text-md` / `--fw-semibold` |
+## Stacking panels
 
-## Variants
+Panels stacked vertically in a sidebar automatically get `16px` top margin via the `panel + panel` adjacency selector.
 
-### Plain panel (no header)
+<LiveDemo
+  title="Stacked panels"
+  html={`<div style="max-width:400px;">
+  <div class="panel">
+    <div class="panel__header"><span>Profile</span></div>
+    <div class="panel__body">
+      <p style="color:var(--fg-muted);font-size:13px;margin:0;">Your public profile details and banner.</p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel__header"><span>Analytics</span></div>
+    <div class="panel__body">
+      <p style="color:var(--fg-muted);font-size:13px;margin:0;">Profile views this week: <strong>142</strong></p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel__header"><span>Resources</span></div>
+    <div class="panel__body">
+      <p style="color:var(--fg-muted);font-size:13px;margin:0;">Links to premium tools and templates.</p>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
-When the panel's purpose is self-evident from its contents — e.g. an ad unit, a profile summary card — omit the header entirely. Just use `.panel > .panel__body`.
+---
 
-### Panel with section header
+## Panel as a card grid
 
-The most common variant. Use whenever the panel holds a list of items or requires a title to disambiguate from adjacent panels.
+<LiveDemo
+  title="Cards in a grid"
+  html={`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+  <div class="panel">
+    <div class="panel__body">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:6px;">Followers</div>
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-0.02em;color:var(--fg);">12.4k</div>
+      <div style="margin-top:8px;"><span class="pill pill--success">↑ 8% this month</span></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel__body">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:6px;">Profile Views</div>
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-0.02em;color:var(--fg);">3,218</div>
+      <div style="margin-top:8px;"><span class="pill">Last 7 days</span></div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
-### Panel with action
+---
 
-Add a button or link to the header's right side for "see all" navigation, "edit", or section-level settings. Always use `.btn--ghost .btn--sm` for these actions — never a Primary button in a panel header.
+## Panel with nav list
 
-### Flush panel
+<LiveDemo
+  title="Panel + NavList"
+  html={`<div class="panel" style="max-width:280px;">
+  <div class="panel__header"><span>Navigation</span></div>
+  <ul class="nav-list">
+    <li class="active">
+      <span class="material-symbols-rounded">home</span>
+      Home
+    </li>
+    <li>
+      <span class="material-symbols-rounded">group</span>
+      Network
+      <span class="count">12</span>
+    </li>
+    <li>
+      <span class="material-symbols-rounded">work</span>
+      Jobs
+    </li>
+    <li>
+      <span class="material-symbols-rounded">notifications</span>
+      Notifications
+      <span class="count">3</span>
+    </li>
+  </ul>
+</div>`}
+  pad="24px"
+/>
 
-For panels embedded in rail layouts where inner padding of a list item already provides spacing, add `.panel--flush` to remove `.panel__body` padding.
+---
 
-## Usage guidance
+## CSS classes
 
-**Do:**
-- Use panels as the standard container for all rail content
-- Keep panel content focused — one logical group per panel
-- Use the header only when the panel contains multiple item types or the content type isn't obvious
-- Stack panels vertically with `--s-5` or `--s-6` gap
+<PropsTable props={[
+  { name: '.panel', type: 'div', description: 'Root container — surface bg, 1px border, border-radius:10px, overflow:hidden' },
+  { name: '.panel__header', type: 'div', description: 'Optional header row — 12px/16px padding, border-bottom, flex layout, font-weight:600' },
+  { name: '.panel__body', type: 'div', description: 'Content slot — 16px padding all sides' },
+]} />
 
-**Don't:**
-- Nest panels inside panels
-- Place primary actions inside panels — panels are informational/navigational containers
-- Use custom background colors on panels — always `--bg-surface`
+<DocsCallout type="info">
+The `overflow: hidden` on `.panel` ensures child elements respect the border-radius. If you need overflow-visible for dropdowns or tooltips, render those outside the panel or use a portal.
+</DocsCallout>
 
 ---
 
 ## Storybook
 
-<StorybookEmbed story="components-panel--default" height={400} title="Panel variants" />
+<StorybookEmbed story="components-panel--default" height={400} title="Panel component" />
