@@ -1,0 +1,146 @@
+---
+title: Post
+sidebar_label: Post
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Post
+
+Post is the central content unit of the Davinci feed. It renders a structured social post with author identity, timestamp, body text, optional media attachments, and a reaction bar.
+
+## Anatomy
+
+```
+┌───────────────────────────────────────┐
+│ [Avatar]  Author Name          [•••]  │  ← .post__header
+│           @handle · 2h                │
+├───────────────────────────────────────┤
+│                                       │
+│  Post body text goes here.            │  ← .post__body
+│  Can be multiple paragraphs.          │
+│                                       │
+│  ┌─────────────────────────────────┐  │
+│  │  Attachment / media / link      │  │  ← .post__attachment (optional)
+│  └─────────────────────────────────┘  │
+│                                       │
+├───────────────────────────────────────┤
+│  👍 Like · 💬 Comment · ↻ Repost · ↗ │  ← .post__actions
+└───────────────────────────────────────┘
+```
+
+## HTML structure
+
+```html
+<article class="post">
+  <header class="post__header">
+    <div class="avatar avatar--grad-blue">JR</div>
+    <div class="post__meta">
+      <div class="post__author">Jordan Reeves</div>
+      <div class="post__byline">@jreeves · 2h</div>
+    </div>
+    <button class="btn btn--ghost btn--icon post__overflow" aria-label="More options">
+      <span class="material-symbols-rounded">more_horiz</span>
+    </button>
+  </header>
+
+  <div class="post__body">
+    <p>Excited to share that we're launching our new design system today...</p>
+  </div>
+
+  <footer class="post__actions">
+    <button class="post__action" aria-label="Like">
+      <span class="material-symbols-rounded">thumb_up</span>
+      <span class="post__action-count">24</span>
+    </button>
+    <button class="post__action" aria-label="Comment">
+      <span class="material-symbols-rounded">comment</span>
+      <span class="post__action-count">8</span>
+    </button>
+    <button class="post__action" aria-label="Repost">
+      <span class="material-symbols-rounded">repeat</span>
+    </button>
+    <button class="post__action" aria-label="Share">
+      <span class="material-symbols-rounded">ios_share</span>
+    </button>
+  </footer>
+</article>
+```
+
+## Token usage
+
+| Property | Token |
+|---|---|
+| Background | `--bg-surface` |
+| Border | `1px solid var(--border)` |
+| Border radius | `--radius-lg` |
+| Shadow | `--shadow-sm` |
+| Padding | `--s-6` |
+| Author name | `--text-md` / `--fw-semibold` |
+| Byline | `--text-sm` / `--fg-muted` |
+| Body text | `--text-base` / `--lh-normal` |
+| Action icons | `--fg-muted`, hover `--fg` |
+| Like count | `--text-sm` / `--fg-muted` |
+
+## Variants
+
+### Default post
+
+Plain text post with no media.
+
+### Liked state
+
+When the current user has liked a post, the like button fills with `--accent` and `font-variation-settings: 'FILL' 1`:
+
+```html
+<button class="post__action post__action--liked" aria-label="Unlike">
+  <span class="material-symbols-rounded" style="color:var(--accent); font-variation-settings:'FILL' 1;">
+    thumb_up
+  </span>
+  <span class="post__action-count" style="color:var(--accent-fg);">25</span>
+</button>
+```
+
+### With image attachment
+
+```html
+<div class="post__attachment post__attachment--image">
+  <img src="/post-image.jpg" alt="Post attachment" loading="lazy" />
+</div>
+```
+
+### With link preview
+
+```html
+<div class="post__attachment post__attachment--link">
+  <img class="post__link-thumb" src="/og-image.jpg" alt="" />
+  <div class="post__link-meta">
+    <div class="post__link-domain">davinci.design</div>
+    <div class="post__link-title">Davinci Design System launches v2</div>
+    <div class="post__link-desc">A complete, layered design system...</div>
+  </div>
+</div>
+```
+
+## Usage guidance
+
+**Do:**
+- Always include the overflow menu (`more_horiz`) for contextual actions
+- Keep post body text unstyled — let the user's content breathe without interference
+- Lazy-load all media attachments
+- Truncate long posts with a "see more" expand at ~5 lines
+
+**Don't:**
+- Add decorative borders or backgrounds inside the post body
+- Add padding inside `.post__body` beyond the inherited `--s-6` from `.post`
+- Change the reaction icon set without updating the accessible `aria-label` values
+
+---
+
+## Storybook
+
+<StorybookEmbed story="components-post--default" height={360} title="Post — default" />
+
+<StorybookEmbed story="components-post--liked" height={360} title="Post — liked state" />
+
+<StorybookEmbed story="components-post--with-image" height={500} title="Post — with image attachment" />

@@ -1,0 +1,128 @@
+---
+title: Profile
+sidebar_label: Profile
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Profile
+
+The Profile pattern assembles the full user (or company) profile page. It consists of a hero header section, a tabbed content area, and an optional sidebar with contextual panels.
+
+## When to use
+
+Use this pattern for:
+- Individual user profiles (`/in/username`)
+- Company / organization pages (`/company/name`)
+- The layout is shared — the content within tabs differs between person and company types
+
+## Layout
+
+```
+┌─────────────────────────────────────────────────┐
+│  Cover image / gradient                         │  ← .profile__cover
+├─────────────────────────────────────────────────┤
+│  [Avatar --xl]  Name            [Connect ▸]     │  ← .profile__header
+│                 Headline                        │
+│                 Location · Connections          │
+├────────────────────────────┬────────────────────┤
+│  About                     │  People also       │  ← .profile__body
+│  Activity                  │  viewed            │
+│  [Post] [Post] [Post]      │                    │
+│                            │  Sidebar panels    │
+└────────────────────────────┴────────────────────┘
+```
+
+## HTML structure
+
+```html
+<div class="profile-page">
+
+  <!-- Cover -->
+  <div class="profile__cover" style="background: linear-gradient(135deg, var(--blue-3), var(--sand-3));">
+    <!-- Optional cover photo -->
+  </div>
+
+  <!-- Header -->
+  <div class="profile__header panel">
+    <div class="profile__identity">
+      <div class="avatar avatar--xl">
+        <img src="/photo.jpg" alt="Jordan Reeves" />
+      </div>
+      <div class="profile__info">
+        <h1 class="profile__name">Jordan Reeves</h1>
+        <p class="profile__headline">Product Designer at Davinci · ex-Figma</p>
+        <p class="profile__meta">
+          <span>San Francisco, CA</span>
+          <span class="profile__meta-sep">·</span>
+          <a href="#connections">342 connections</a>
+        </p>
+      </div>
+    </div>
+    <div class="profile__cta">
+      <button class="btn btn--primary">Connect</button>
+      <button class="btn btn--secondary">Message</button>
+      <button class="btn btn--ghost btn--icon" aria-label="More options">
+        <span class="material-symbols-rounded">more_horiz</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <nav class="profile__tabs" role="tablist">
+    <button class="profile__tab profile__tab--active" role="tab" aria-selected="true">
+      Activity
+    </button>
+    <button class="profile__tab" role="tab" aria-selected="false">
+      About
+    </button>
+    <button class="profile__tab" role="tab" aria-selected="false">
+      Experience
+    </button>
+  </nav>
+
+  <!-- Body -->
+  <div class="profile__body">
+    <div class="profile__main">
+      <!-- Tab content — Activity feed, About, Experience, etc. -->
+    </div>
+    <aside class="profile__sidebar">
+      <!-- Sidebar panels: People also viewed, Company info, etc. -->
+    </aside>
+  </div>
+
+</div>
+```
+
+## Token usage
+
+| Property | Token |
+|---|---|
+| Cover height | 200px |
+| Avatar offset | `-60px` top (overlaps cover) |
+| Header padding | `--s-7` |
+| Name font | `--text-3xl` / `--fw-bold` |
+| Headline font | `--text-base` / `--fg-muted` |
+| Meta font | `--text-sm` / `--fg-subtle` |
+| Tab font | `--text-sm` / `--fw-medium` |
+| Active tab indicator | `2px solid var(--accent)` bottom |
+| Body gap | `--s-7` |
+| Sidebar width | 300px |
+
+## Company page differences
+
+For organization pages, use `.avatar--square` on the avatar (rounded rectangle instead of circle). Replace "Connect" with "Follow". Replace the Connections count with a follower count. Add an "About" panel in the sidebar with company size, industry, and website.
+
+## Mobile
+
+On mobile (< 768px):
+- The sidebar collapses and is hidden by default
+- Tabs scroll horizontally if they overflow
+- The CTA buttons stack vertically
+- Cover height reduces to 120px
+
+---
+
+## Storybook
+
+<StorybookEmbed story="patterns-profile--default" height={700} title="Profile page" />

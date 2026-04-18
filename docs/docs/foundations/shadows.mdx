@@ -1,0 +1,69 @@
+---
+title: Shadows
+sidebar_label: Shadows
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Shadows
+
+Davinci's shadow system uses warm, subtle layered shadows to create a five-step elevation ramp. Shadows are tuned for dark backgrounds — they use semi-transparent black with low opacity so they read on both dark and light surfaces.
+
+## Shadow tokens
+
+<TokenTable tokens={[
+  { name: '--shadow-xs',    description: 'Barely lifted — pill buttons, small chips, subtle borders' },
+  { name: '--shadow-sm',    description: 'Slightly raised — default card elevation' },
+  { name: '--shadow-md',    description: 'Raised surface — panels, sidecards, interactive cards' },
+  { name: '--shadow-lg',    description: 'Floating element — sticky headers, inline menus' },
+  { name: '--shadow-xl',    description: 'High elevation — modals, dialogs, popovers' },
+  { name: '--shadow-focus', description: 'Focus ring — 3px spread of blue-8 at 40% opacity' },
+]} />
+
+## Elevation ramp
+
+Each shadow is composed of two layers: a crisp, close shadow for the surface edge and a softer, larger spread for the ambient lift. This two-layer approach produces a more natural depth than a single blur.
+
+| Token | Layers | Use case |
+|---|---|---|
+| `--shadow-xs` | `0 1px 2px` × 1 | Minimal lift, hairline |
+| `--shadow-sm` | `0 1px 2px` + `0 1px 3px` | Default cards |
+| `--shadow-md` | `0 2px 4px` + `0 4px 8px` | Panels, surfaces |
+| `--shadow-lg` | `0 4px 8px` + `0 12px 24px` | Sticky, floating |
+| `--shadow-xl` | `0 8px 16px` + `0 24px 48px` | Dialogs, overlays |
+
+## Focus shadow
+
+`--shadow-focus` is a special-purpose shadow used as a focus indicator. It uses `color-mix` to produce a 40% opacity version of `--blue-8`:
+
+```css
+--shadow-focus: 0 0 0 3px color-mix(in srgb, var(--blue-8) 40%, transparent);
+```
+
+Apply it via `box-shadow` on interactive elements in their `:focus-visible` state:
+
+```css
+.btn:focus-visible {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+```
+
+## Usage guidelines
+
+- **Cards at rest** → `--shadow-sm`
+- **Cards on hover** → upgrade to `--shadow-md`
+- **Sticky panels** → `--shadow-lg`
+- **Modals/dialogs** → `--shadow-xl`
+- **All focusable elements** → `--shadow-focus` on `:focus-visible`
+
+**Avoid** combining multiple elevation shadows on the same element. Each element should occupy exactly one elevation step. Let the hierarchy speak through consistent shadow use, not accumulation.
+
+**Note:** In dark mode the shadows are subtle by design — the dark background makes shadows less visible, and overuse can create a heavy, muddy feel. Use `--bg-surface`, `--bg-elevated`, and `--border` to signal elevation alongside shadows.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-shadows--all-shadows" height={400} title="Shadow tokens" />

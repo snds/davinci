@@ -1,0 +1,186 @@
+/* ============================================================
+   Davinci Design System — Docusaurus theme integration
+   Imports live design tokens and overrides Docusaurus vars
+   ============================================================ */
+
+@import '../../../colors_and_type.css';
+@import '../../../ui_kits/web_app/davinci.css';
+
+/* ---------- Map Davinci tokens → Docusaurus vars ---------- */
+:root {
+  --ifm-color-primary: var(--blue-9);
+  --ifm-color-primary-dark: var(--blue-10);
+  --ifm-color-primary-darker: var(--blue-8);
+  --ifm-color-primary-darkest: var(--blue-7);
+  --ifm-color-primary-light: var(--blue-8);
+  --ifm-color-primary-lighter: var(--blue-7);
+  --ifm-color-primary-lightest: var(--blue-6);
+  --ifm-background-color: var(--bg);
+  --ifm-background-surface-color: var(--bg-surface);
+  --ifm-font-family-base: var(--font-body);
+  --ifm-font-family-monospace: var(--font-mono);
+  --ifm-font-color-base: var(--fg);
+  --ifm-code-font-size: 0.9em;
+  --ifm-navbar-background-color: var(--bg-subtle);
+  --ifm-footer-background-color: var(--bg-subtle);
+  --ifm-navbar-shadow: 0 1px 0 var(--border);
+  --ifm-toc-border-color: var(--border);
+  --ifm-hr-border-color: var(--border);
+  --ifm-menu-color-background-active: var(--bg-selected);
+  --ifm-menu-color-background-hover: var(--bg-hover);
+  --ifm-table-border-color: var(--border);
+  --ifm-link-color: var(--accent-fg);
+  --ifm-link-hover-color: var(--accent);
+  --ifm-heading-color: var(--fg);
+  --ifm-blockquote-border-color: var(--border-strong);
+  --ifm-blockquote-color: var(--fg-muted);
+  --ifm-code-background: var(--bg-surface);
+  --ifm-pre-background: var(--bg-subtle);
+}
+
+/* ---------- Body background with noise pattern ---------- */
+body {
+  background-color: var(--bg);
+  background-image: var(--bg-pattern);
+  background-repeat: repeat;
+  background-size: auto;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  background-color: color-mix(in srgb, var(--bg-subtle) 90%, transparent);
+}
+
+.navbar__title {
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-snug);
+  color: var(--fg);
+}
+
+/* ---------- Sidebar ---------- */
+.menu__link--active {
+  color: var(--accent-fg);
+}
+
+.menu__link {
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+
+.menu__list-item-collapsible:hover,
+.menu__link:hover {
+  background-color: var(--bg-hover);
+}
+
+/* ---------- Doc content ---------- */
+.markdown {
+  --ifm-h1-font-size: var(--text-4xl);
+  --ifm-h2-font-size: var(--text-2xl);
+  --ifm-h3-font-size: var(--text-xl);
+}
+
+.markdown h1 {
+  letter-spacing: var(--ls-tight);
+  font-weight: var(--fw-heavy);
+  margin-bottom: var(--s-5);
+}
+
+.markdown h2 {
+  letter-spacing: var(--ls-snug);
+  font-weight: var(--fw-bold);
+  margin-top: var(--s-10);
+  padding-top: var(--s-7);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.markdown h3 {
+  font-weight: var(--fw-semibold);
+  margin-top: var(--s-8);
+}
+
+/* ---------- Code blocks ---------- */
+code {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface) !important;
+  color: var(--accent-fg);
+  font-size: var(--text-sm);
+}
+
+.prism-code {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- Tables ---------- */
+table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  font-size: var(--text-sm);
+}
+
+th {
+  background-color: var(--bg-surface);
+  color: var(--fg-muted);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  letter-spacing: var(--ls-wider);
+}
+
+tr:nth-child(even) {
+  background-color: var(--bg-subtle);
+}
+
+/* ---------- Admonitions ---------- */
+.admonition {
+  border-radius: var(--radius-lg);
+  border-left-width: 3px;
+}
+
+/* ---------- Pagination ---------- */
+.pagination-nav__link {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+
+.pagination-nav__link:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  border-top: 1px solid var(--border);
+}
+
+.footer__title {
+  color: var(--fg-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wider);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---------- Utility ---------- */
+.docusaurus-mt-lg {
+  margin-top: var(--s-8);
+}
+
+/* ---------- Hero / intro section ---------- */
+.hero--primary {
+  background: linear-gradient(135deg, var(--blue-3) 0%, var(--bg-subtle) 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---------- Search ---------- */
+.navbar__search-input {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+}

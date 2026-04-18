@@ -1,0 +1,98 @@
+---
+title: Avatars
+sidebar_label: Avatars
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Avatars
+
+Avatars represent a person or entity throughout the UI. They support three display modes: user photo, user initials with a gradient background, and a fallback silhouette icon. All avatars are circular (`--radius-full`).
+
+## Sizes
+
+| Size class | Diameter | Font size | Use case |
+|---|---|---|---|
+| `.avatar--xs` | 24px | 10px | Compact lists, comment threads |
+| `.avatar--sm` | 32px | 12px | Nav, sidebars, card bylines |
+| `.avatar` (default) | 40px | 14px | Post author, feed cards |
+| `.avatar--lg` | 56px | 18px | Profile header, hovercard |
+| `.avatar--xl` | 80px | 24px | Profile page hero |
+| `.avatar--2xl` | 120px | 32px | Settings, onboarding |
+
+## Gradient variants
+
+When a user has no photo, initials are displayed on a gradient background. Each gradient is assigned deterministically (e.g. based on user ID modulo) to ensure the same user always gets the same color.
+
+The available gradient classes are:
+
+| Class | Colors |
+|---|---|
+| `.avatar--grad-blue` | `--blue-4` → `--blue-8` |
+| `.avatar--grad-yellow` | `--yellow-4` → `--yellow-8` |
+| `.avatar--grad-green` | `green-4` → `green-8` |
+| `.avatar--grad-red` | `red-4` → `red-8` |
+| `.avatar--grad-sand` | `--sand-5` → `--sand-9` |
+
+```html
+<!-- Photo avatar -->
+<div class="avatar">
+  <img src="/path/to/photo.jpg" alt="Jordan Reeves" />
+</div>
+
+<!-- Initials with gradient -->
+<div class="avatar avatar--grad-blue">JR</div>
+
+<!-- Fallback icon -->
+<div class="avatar avatar--grad-sand">
+  <span class="material-symbols-rounded">person</span>
+</div>
+```
+
+## Company / entity avatars
+
+For organizations, use `.avatar--square` to apply `--radius-lg` instead of `--radius-full`:
+
+```html
+<div class="avatar avatar--lg avatar--square avatar--grad-blue">AC</div>
+```
+
+## Online indicator
+
+Add `.avatar--online` to render a green dot indicator at bottom-right:
+
+```html
+<div class="avatar avatar--online">
+  <img src="/photo.jpg" alt="Alex Chen" />
+</div>
+```
+
+## Stacked avatars
+
+Use `.avatar-stack` to overlap a group of avatars:
+
+```html
+<div class="avatar-stack">
+  <div class="avatar avatar--sm"><img src="..." alt="..." /></div>
+  <div class="avatar avatar--sm avatar--grad-yellow">BC</div>
+  <div class="avatar avatar--sm avatar--grad-blue">+5</div>
+</div>
+```
+
+## Usage guidance
+
+**Do:**
+- Always provide meaningful `alt` text for photo avatars
+- Use the deterministic gradient assignment so users recognize their own avatar color
+- Use `.avatar--sm` in dense lists, `.avatar` in cards, `.avatar--lg` or larger only for profile-level contexts
+
+**Don't:**
+- Resize avatars with arbitrary values — always use a size token
+- Use avatars as decorative flourishes without user identity context
+- Show initials longer than 2 characters
+
+---
+
+## Storybook
+
+<StorybookEmbed story="primitives-avatar--all-sizes" height={300} title="Avatar sizes and variants" />

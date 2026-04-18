@@ -1,0 +1,142 @@
+---
+title: Icons
+sidebar_label: Icons
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Icons
+
+Davinci uses [Material Symbols Rounded](https://fonts.google.com/icons) as its icon system. This is a variable font from Google Fonts that supports optical size, weight, fill, and grade axes — giving a single icon font enormous expressive range.
+
+## Setup
+
+Icons are loaded via Google Fonts in `colors_and_type.css`:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+```
+
+No SVG files, no icon components, no sprite sheets. Just a `<span>` with a ligature:
+
+```html
+<span class="material-symbols-rounded">home</span>
+```
+
+## Font variation axes
+
+Material Symbols Rounded supports four variation axes:
+
+| Axis | Range | Description |
+|---|---|---|
+| `opsz` (Optical Size) | 20–48 | Stroke weight adjusts for small/large display |
+| `wght` (Weight) | 100–700 | Stroke thickness |
+| `FILL` | 0–1 | Outlined (0) vs filled (1) |
+| `GRAD` (Grade) | -50–200 | Subtle weight without affecting layout |
+
+## Default settings
+
+Davinci uses these axis values by default in `davinci.css`:
+
+```css
+.material-symbols-rounded {
+  font-variation-settings:
+    'opsz' 24,
+    'wght' 400,
+    'FILL' 0,
+    'GRAD' 0;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+```
+
+## Using icons in context
+
+### Size
+
+Override font-size to scale icons. Common sizes align with the type scale:
+
+```css
+.icon--xs  { font-size: 16px; }
+.icon--sm  { font-size: 18px; }
+.icon--md  { font-size: 20px; }  /* default */
+.icon--lg  { font-size: 24px; }
+.icon--xl  { font-size: 28px; }
+.icon--2xl { font-size: 32px; }
+```
+
+### Filled variant
+
+Use `font-variation-settings` to fill an icon:
+
+```html
+<span class="material-symbols-rounded" style="font-variation-settings: 'FILL' 1;">
+  favorite
+</span>
+```
+
+### Color
+
+Icons inherit `color` from their parent. Use semantic tokens:
+
+```html
+<!-- Accent icon -->
+<span class="material-symbols-rounded" style="color: var(--accent);">star</span>
+
+<!-- Muted icon -->
+<span class="material-symbols-rounded" style="color: var(--fg-muted);">schedule</span>
+
+<!-- Success icon -->
+<span class="material-symbols-rounded" style="color: var(--success);">check_circle</span>
+```
+
+## Common icons in Davinci
+
+| Icon name | Ligature | Context |
+|---|---|---|
+| Home | `home` | Nav: home feed |
+| Search | `search` | Nav: search |
+| Notifications | `notifications` | Nav: alerts |
+| Person | `person` | Profile, avatar fallback |
+| People | `people` | Network, connections |
+| Work | `work` | Jobs section |
+| Chat | `chat` | Messages |
+| Thumb up | `thumb_up` | Post like reaction |
+| Comment | `comment` | Post comments |
+| Repeat | `repeat` | Post repost |
+| Share | `ios_share` | Post share |
+| More horiz | `more_horiz` | Overflow menus |
+| Add | `add` | New post, create |
+| Close | `close` | Dismiss, cancel |
+| Edit | `edit` | Edit action |
+| Delete | `delete` | Delete action |
+| Image | `image` | Attach photo |
+| Link | `link` | Attach URL |
+| Business | `business` | Company avatar fallback |
+
+## Accessibility
+
+Always provide accessible labels for icon-only buttons:
+
+```html
+<!-- Icon-only button: use aria-label -->
+<button class="btn btn--ghost btn--icon" aria-label="Share post">
+  <span class="material-symbols-rounded" aria-hidden="true">ios_share</span>
+</button>
+
+<!-- Icon + label: hide icon from screen readers -->
+<button class="btn btn--primary">
+  <span class="material-symbols-rounded" aria-hidden="true">add</span>
+  New Post
+</button>
+```
+
+---
+
+## Storybook
+
+<StorybookEmbed story="primitives-icon--icon-grid" height={500} title="Icon grid" />

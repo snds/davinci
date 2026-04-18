@@ -1,0 +1,120 @@
+---
+title: Feed
+sidebar_label: Feed
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Feed
+
+The Feed is the primary content pattern — the central column of Davinci's home page. It composes the Composer at the top and a vertical sequence of Post cards below, with optional filtering controls.
+
+## When to use
+
+The Feed pattern applies anywhere a user-generated content stream needs to be displayed:
+- Home feed — posts from connections
+- Network feed — discovery content
+- Profile feed — posts by a specific user
+- Company page feed — posts by an organization
+
+## Layout
+
+The feed occupies the **center column** of the three-column desktop layout:
+
+```
+┌──────────┐  ┌──────────────────┐  ┌──────────┐
+│          │  │                  │  │          │
+│ Left     │  │   Feed           │  │ Right    │
+│ Rail     │  │   (640px max)    │  │ Rail     │
+│ 240px    │  │                  │  │ 320px    │
+│          │  │                  │  │          │
+└──────────┘  └──────────────────┘  └──────────┘
+```
+
+On mobile, the feed is full-width and the rails collapse into tab navigation.
+
+## Composition
+
+```html
+<main class="feed" role="main">
+  <!-- Composer at top -->
+  <div class="feed__composer">
+    <!-- <Composer /> -->
+  </div>
+
+  <!-- Optional sort/filter bar -->
+  <div class="feed__filter-bar">
+    <button class="btn btn--ghost btn--sm feed__sort-btn feed__sort-btn--active">
+      <span class="material-symbols-rounded">auto_awesome</span>
+      Top
+    </button>
+    <button class="btn btn--ghost btn--sm feed__sort-btn">
+      <span class="material-symbols-rounded">schedule</span>
+      Recent
+    </button>
+  </div>
+
+  <!-- Post list -->
+  <ol class="feed__list" aria-label="Feed posts">
+    <li class="feed__item">
+      <!-- <Post /> -->
+    </li>
+    <li class="feed__item">
+      <!-- <Post /> -->
+    </li>
+    <!-- ... -->
+  </ol>
+
+  <!-- Load more -->
+  <div class="feed__load-more">
+    <button class="btn btn--secondary">Load more posts</button>
+  </div>
+</main>
+```
+
+## Token usage
+
+| Property | Token |
+|---|---|
+| Feed max-width | 640px |
+| Gap between items | `--s-5` |
+| Filter bar bg | `--bg-subtle` |
+| Filter bar border | `1px solid var(--border)` |
+| Filter bar radius | `--radius-lg` |
+| Load more padding | `--s-8` top |
+
+## Infinite scroll vs pagination
+
+Davinci feed uses **cursor-based infinite scroll** with a sentinel element at the bottom of the list. The "Load more" button is a fallback for accessibility and users with reduced motion preferences.
+
+## Empty state
+
+When the feed has no content:
+
+```html
+<div class="feed__empty">
+  <span class="material-symbols-rounded" style="font-size:48px; color:var(--fg-subtle);">
+    dynamic_feed
+  </span>
+  <h3>Your feed is empty</h3>
+  <p>Connect with people to see their posts here.</p>
+  <a class="btn btn--primary" href="/network">Explore Network</a>
+</div>
+```
+
+## Loading state
+
+Use a skeleton list of 3–5 `.post.post--skeleton` elements that pulse with a `--bg-surface` → `--bg-elevated` shimmer animation while the first page loads.
+
+## Accessibility
+
+- The feed list is an `<ol>` with `aria-label="Feed posts"`
+- Each `<li>` contains an `<article>` (the Post component)
+- The Composer is preceded by a visually-hidden "Create a post" heading
+- Live region announcement when new posts arrive above the viewport: `aria-live="polite"`
+
+---
+
+## Storybook
+
+<StorybookEmbed story="patterns-feed--default" height={700} title="Feed pattern" />

@@ -1,0 +1,83 @@
+---
+title: Pills
+sidebar_label: Pills
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Pills
+
+Pills are compact, inline status indicators, category tags, and count badges. They are always `--radius-full` (fully rounded), use the `--text-xs` or `--text-sm` type scale, and come in several semantic variants.
+
+## Base anatomy
+
+A pill consists of optional icon + label + optional count. All parts are optional independently, but at least one must be present.
+
+```html
+<span class="pill">Default</span>
+<span class="pill pill--accent">Accent</span>
+<span class="pill pill--success">Active</span>
+<span class="pill pill--danger">Deleted</span>
+<span class="pill pill--warning">Pending</span>
+```
+
+## Variants
+
+| Class | Background | Text | Border | Use case |
+|---|---|---|---|---|
+| `.pill` | `--bg-surface` | `--fg-muted` | `--border` | Neutral category, default tag |
+| `.pill--accent` | `--accent-subtle` | `--accent-fg` | `--accent-border` | Selected, active, featured |
+| `.pill--alt` | `--alt-subtle` | `--alt-fg` | none | Brand highlight, new, featured |
+| `.pill--success` | `--green-a3` | `--success-fg` | none | Online, active, published |
+| `.pill--danger` | `--red-a3` | `--danger-fg` | none | Error, deleted, banned |
+| `.pill--warning` | (amber-a3) | `--warning-fg` | none | Pending, review needed |
+| `.pill--ghost` | transparent | `--fg-subtle` | `--border-subtle` | Secondary categorization |
+
+## Sizes
+
+| Class | Height | Font | Padding |
+|---|---|---|---|
+| `.pill--sm` | 18px | `--text-2xs` | 2px 6px |
+| `.pill` (default) | 22px | `--text-xs` | 3px 8px |
+| `.pill--lg` | 28px | `--text-sm` | 4px 12px |
+
+## With icon
+
+```html
+<span class="pill pill--success">
+  <span class="material-symbols-rounded" style="font-size:12px; font-variation-settings:'FILL' 1;">
+    circle
+  </span>
+  Online
+</span>
+```
+
+## Count pill
+
+Use `.pill--count` for numeric badges (notification counts, result totals):
+
+```html
+<span class="pill pill--accent pill--count">12</span>
+```
+
+For counts over 99, show `99+`.
+
+## Usage guidance
+
+**Do:**
+- Use pills for categorical information (e.g. job type: Full-time, Remote)
+- Use `.pill--success` / `.pill--danger` for clear binary status (Online / Offline)
+- Use `.pill--accent` for the currently selected filter or active navigation state
+- Keep pill labels short — 1–3 words maximum
+
+**Don't:**
+- Use pills as buttons (use `.btn` instead)
+- Use more than 2–3 pills in a single row without overflow handling
+- Use `.pill--danger` for anything other than a genuine error or destructive state (it creates unnecessary alarm)
+- Mix size variants in the same horizontal group
+
+---
+
+## Storybook
+
+<StorybookEmbed story="primitives-pill--all-variants" height={280} title="Pill variants" />

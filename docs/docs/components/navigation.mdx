@@ -1,0 +1,176 @@
+---
+title: Navigation
+sidebar_label: Navigation
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Navigation
+
+Davinci has two navigation components: **TopNav** — the horizontal page header — and **NavList** — the vertical sidebar navigation used in the left rail.
+
+---
+
+## TopNav
+
+The TopNav is the global site header. It contains the Davinci logo, primary navigation links, a search bar, and user-level controls (notifications, messages, profile).
+
+### Anatomy
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  [Logo]   [Search ________________]   [🔔] [💬] [Avatar ▾]     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### HTML structure
+
+```html
+<nav class="topnav" role="navigation" aria-label="Main navigation">
+  <!-- Logo -->
+  <a class="topnav__logo" href="/" aria-label="Davinci home">
+    <!-- SVG logo mark -->
+  </a>
+
+  <!-- Search -->
+  <div class="topnav__search">
+    <span class="material-symbols-rounded topnav__search-icon">search</span>
+    <input
+      type="search"
+      class="topnav__search-input"
+      placeholder="Search"
+      aria-label="Search Davinci"
+    />
+  </div>
+
+  <!-- Actions -->
+  <div class="topnav__actions">
+    <button class="btn btn--ghost btn--icon topnav__action" aria-label="Notifications">
+      <span class="material-symbols-rounded">notifications</span>
+      <span class="topnav__badge" aria-label="3 unread">3</span>
+    </button>
+    <button class="btn btn--ghost btn--icon topnav__action" aria-label="Messages">
+      <span class="material-symbols-rounded">chat</span>
+    </button>
+    <button class="topnav__profile" aria-label="Profile menu" aria-haspopup="true">
+      <div class="avatar avatar--sm avatar--grad-blue">JR</div>
+      <span class="material-symbols-rounded topnav__caret">expand_more</span>
+    </button>
+  </div>
+</nav>
+```
+
+### Token usage
+
+| Property | Token |
+|---|---|
+| Background | `--bg-subtle` (with blur) |
+| Border bottom | `1px solid var(--border)` |
+| Height | 56px |
+| Logo area | `--s-5` padding |
+| Search input bg | `--bg-surface` |
+| Badge bg | `--accent` / `--fg-on-accent` |
+
+### Notification badge
+
+Use `.topnav__badge` on notification count. Badge is a 16px circle, `--accent` background, white text, `--text-2xs` font. For counts > 9, show `9+`.
+
+---
+
+## NavList
+
+NavList is the vertical sidebar navigation. It appears in the left rail and provides icon + label navigation links for the main sections of the product.
+
+### Anatomy
+
+```
+  [🏠] Home
+  [🔍] Search
+  [🔔] Notifications
+  [💬] Messages
+  ─────────────
+  [👥] Network
+  [💼] Jobs
+  ─────────────
+  [👤] Profile
+  [⚙] Settings
+```
+
+### HTML structure
+
+```html
+<nav class="nav-list" role="navigation" aria-label="Sidebar navigation">
+  <ul class="nav-list__items">
+    <li>
+      <a class="nav-list__item nav-list__item--active" href="/feed" aria-current="page">
+        <span class="material-symbols-rounded nav-list__icon" style="font-variation-settings:'FILL' 1;">
+          home
+        </span>
+        <span class="nav-list__label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a class="nav-list__item" href="/search">
+        <span class="material-symbols-rounded nav-list__icon">search</span>
+        <span class="nav-list__label">Search</span>
+      </a>
+    </li>
+    <li>
+      <a class="nav-list__item" href="/notifications">
+        <span class="material-symbols-rounded nav-list__icon">notifications</span>
+        <span class="nav-list__label">Notifications</span>
+        <span class="nav-list__count pill pill--accent pill--count">5</span>
+      </a>
+    </li>
+    <li>
+      <a class="nav-list__item" href="/messages">
+        <span class="material-symbols-rounded nav-list__icon">chat</span>
+        <span class="nav-list__label">Messages</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="nav-list__divider"></div>
+
+  <ul class="nav-list__items">
+    <li>
+      <a class="nav-list__item" href="/network">
+        <span class="material-symbols-rounded nav-list__icon">people</span>
+        <span class="nav-list__label">Network</span>
+      </a>
+    </li>
+    <li>
+      <a class="nav-list__item" href="/jobs">
+        <span class="material-symbols-rounded nav-list__icon">work</span>
+        <span class="nav-list__label">Jobs</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+```
+
+### Token usage
+
+| Property | Token |
+|---|---|
+| Item padding | `--s-3` vertical / `--s-4` horizontal |
+| Item border radius | `--radius-md` |
+| Active bg | `--bg-selected` |
+| Active label | `--accent-fg` |
+| Active icon fill | `FILL: 1` |
+| Hover bg | `--bg-hover` |
+| Label font | `--text-sm` / `--fw-medium` |
+| Divider | `1px solid var(--border-subtle)` |
+| Count pill | `.pill--accent .pill--count` |
+
+### Active state
+
+The active page uses `.nav-list__item--active` with `aria-current="page"`. Icons for the active item use filled variant (`FILL: 1`) to reinforce the current location.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="components-topnav--default" height={80} title="TopNav" />
+
+<StorybookEmbed story="components-navlist--default" height={420} title="NavList" />

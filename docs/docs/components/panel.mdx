@@ -1,0 +1,106 @@
+---
+title: Panel
+sidebar_label: Panel
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Panel
+
+Panel is the primary surface container in Davinci. It wraps any bounded region of related content — a profile summary, a list of connections, an ad unit, a settings section. It provides consistent spacing, surface color, border, and optional header/footer regions.
+
+## Anatomy
+
+```
+┌─────────────────────────────────┐  ← border: 1px solid --border
+│ Panel Header                    │  ← .panel__header
+│  Title          [Action button] │
+├─────────────────────────────────┤  ← border-bottom: 1px solid --border
+│                                 │
+│  Panel Body                     │  ← .panel__body
+│  (slot for any content)         │
+│                                 │
+└─────────────────────────────────┘
+```
+
+## HTML structure
+
+```html
+<!-- Basic panel -->
+<div class="panel">
+  <div class="panel__body">
+    Content goes here
+  </div>
+</div>
+
+<!-- Panel with header -->
+<div class="panel">
+  <div class="panel__header">
+    <h3 class="panel__title">Network</h3>
+  </div>
+  <div class="panel__body">
+    Content goes here
+  </div>
+</div>
+
+<!-- Panel with header action -->
+<div class="panel">
+  <div class="panel__header">
+    <h3 class="panel__title">Connections</h3>
+    <a class="btn btn--ghost btn--sm" href="#">See all</a>
+  </div>
+  <div class="panel__body">
+    Content goes here
+  </div>
+</div>
+```
+
+## Token usage
+
+| Property | Token |
+|---|---|
+| Background | `--bg-surface` |
+| Border | `1px solid var(--border)` |
+| Border radius | `--radius-lg` |
+| Shadow | `--shadow-sm` |
+| Header padding | `--s-5` vertical, `--s-6` horizontal |
+| Body padding | `--s-6` |
+| Header border | `1px solid var(--border)` |
+| Title font | `--text-md` / `--fw-semibold` |
+
+## Variants
+
+### Plain panel (no header)
+
+When the panel's purpose is self-evident from its contents — e.g. an ad unit, a profile summary card — omit the header entirely. Just use `.panel > .panel__body`.
+
+### Panel with section header
+
+The most common variant. Use whenever the panel holds a list of items or requires a title to disambiguate from adjacent panels.
+
+### Panel with action
+
+Add a button or link to the header's right side for "see all" navigation, "edit", or section-level settings. Always use `.btn--ghost .btn--sm` for these actions — never a Primary button in a panel header.
+
+### Flush panel
+
+For panels embedded in rail layouts where inner padding of a list item already provides spacing, add `.panel--flush` to remove `.panel__body` padding.
+
+## Usage guidance
+
+**Do:**
+- Use panels as the standard container for all rail content
+- Keep panel content focused — one logical group per panel
+- Use the header only when the panel contains multiple item types or the content type isn't obvious
+- Stack panels vertically with `--s-5` or `--s-6` gap
+
+**Don't:**
+- Nest panels inside panels
+- Place primary actions inside panels — panels are informational/navigational containers
+- Use custom background colors on panels — always `--bg-surface`
+
+---
+
+## Storybook
+
+<StorybookEmbed story="components-panel--default" height={400} title="Panel variants" />

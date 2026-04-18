@@ -1,0 +1,107 @@
+---
+title: Buttons
+sidebar_label: Buttons
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Buttons
+
+Buttons are the primary interactive trigger. Davinci provides four semantic variants and three sizes. Every button shares the same base shape: `--radius-md` corners, Inter Medium label, and a `--shadow-focus` focus ring.
+
+## Variants
+
+| Variant | Token usage | When to use |
+|---|---|---|
+| **Primary** | `--accent` fill, `--fg-on-accent` text | The single most important action on a view |
+| **Secondary** | `--bg-surface` fill, `--border` stroke, `--fg` text | Complementary actions, secondary CTAs |
+| **Outline** | Transparent fill, `--accent-border` stroke, `--accent-fg` text | Moderate-emphasis action in an accent context |
+| **Ghost** | No fill, no border, `--fg-muted` text | Low-emphasis — cancel, back, tertiary nav |
+
+### Primary
+
+Solid `--accent` (`--blue-9`) fill. White text. On hover, deepens to `--accent-hover` (`--blue-10`). Use for the most important action in a region — one primary button per section maximum.
+
+```html
+<button class="btn btn--primary">Publish Post</button>
+```
+
+### Secondary
+
+Surface-colored fill with a 1px `--border` stroke. Used alongside Primary when a second action is needed at equal prominence (e.g. "Save Draft" next to "Publish").
+
+```html
+<button class="btn btn--secondary">Save Draft</button>
+```
+
+### Outline
+
+Transparent fill, `--accent-border` stroke, `--accent-fg` text. Use in blue-tinted contexts (info banners, selected state regions) where the solid Primary would feel too heavy.
+
+```html
+<button class="btn btn--outline">View Details</button>
+```
+
+### Ghost
+
+No fill, no border. Relies on text color alone. Used for cancel actions, tertiary controls, navigation items that behave like buttons. On hover, shows a subtle `--bg-hover` tint.
+
+```html
+<button class="btn btn--ghost">Cancel</button>
+```
+
+## Sizes
+
+| Size class | Height | Font | Padding |
+|---|---|---|---|
+| `.btn--sm` | 28px | `--text-sm` / 500 | `--s-3` × `--s-4` |
+| `.btn` (default) | 36px | `--text-md` / 500 | `--s-4` × `--s-5` |
+| `.btn--lg` | 44px | `--text-base` / 600 | `--s-5` × `--s-7` |
+
+## Icon buttons
+
+Add a Material Symbol icon before the label using `<span class="material-symbols-rounded">`. The icon inherits button size.
+
+```html
+<button class="btn btn--primary">
+  <span class="material-symbols-rounded" style="font-size:18px;">add</span>
+  New Post
+</button>
+```
+
+For a circular icon-only button, add `.btn--icon`:
+
+```html
+<button class="btn btn--ghost btn--icon" aria-label="Edit">
+  <span class="material-symbols-rounded">edit</span>
+</button>
+```
+
+## Disabled state
+
+Add `disabled` or `aria-disabled="true"`. Buttons reduce to `--fg-disabled` text, `--border-subtle` border, and `0.5` opacity with `cursor: not-allowed`.
+
+```html
+<button class="btn btn--primary" disabled>Publish Post</button>
+```
+
+## Usage do's and don'ts
+
+**Do:**
+- Use at most one Primary button per visible region
+- Pair Primary + Ghost for confirm/cancel dialogs
+- Use Secondary for actions that modify state but are not the primary CTA
+- Always include visible text with icon buttons (unless the icon is universally understood and space is genuinely constrained)
+- Apply `aria-label` to icon-only buttons
+
+**Don't:**
+- Use Primary for destructive actions — use a danger variant or Secondary + confirmation dialog
+- Place two Primary buttons side by side
+- Use Ghost for the primary action on a page
+- Make buttons too small for touch targets — minimum 44px touch target recommended
+
+---
+
+## Storybook
+
+<StorybookEmbed story="primitives-button--all-variants" height={350} title="Button variants" />

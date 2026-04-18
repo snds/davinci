@@ -1,0 +1,127 @@
+---
+title: Composer
+sidebar_label: Composer
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Composer
+
+The Composer is the primary post-creation interface. It appears at the top of the feed and as a full-screen modal for rich post creation. It combines a user avatar, a content-editable text area, a media toolbar, and a publish button.
+
+## Anatomy
+
+```
+┌────────────────────────────────────────────────┐
+│ [Avatar]  What's on your mind?                 │  ← .composer__trigger (collapsed)
+└────────────────────────────────────────────────┘
+
+Expanded state:
+┌────────────────────────────────────────────────┐
+│ [Avatar]                                       │
+│         [Content editable area]                │  ← .composer__body
+│          What's on your mind?                  │
+│                                                │
+├────────────────────────────────────────────────┤
+│  📷  🔗  😊  📄          [Publish →]          │  ← .composer__toolbar
+└────────────────────────────────────────────────┘
+```
+
+## States
+
+### Collapsed (trigger)
+
+Shows a minimal input affordance — avatar + placeholder text styled like a ghost input. Clicking anywhere in this area expands to the full composer.
+
+```html
+<div class="composer composer--collapsed">
+  <div class="avatar avatar--grad-blue">JR</div>
+  <div class="composer__trigger">What's on your mind?</div>
+</div>
+```
+
+### Expanded
+
+Full composer with editable area and toolbar. Usually triggered by click on the collapsed state or a "New Post" button. Can be shown inline (feed top) or in a modal.
+
+```html
+<div class="composer composer--expanded">
+  <div class="composer__header">
+    <div class="avatar">
+      <img src="/me.jpg" alt="My avatar" />
+    </div>
+    <div class="composer__body">
+      <div
+        class="composer__input"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Post content"
+        data-placeholder="What's on your mind?"
+      ></div>
+    </div>
+  </div>
+
+  <footer class="composer__toolbar">
+    <div class="composer__actions">
+      <button class="btn btn--ghost btn--icon" aria-label="Add photo">
+        <span class="material-symbols-rounded">image</span>
+      </button>
+      <button class="btn btn--ghost btn--icon" aria-label="Add link">
+        <span class="material-symbols-rounded">link</span>
+      </button>
+      <button class="btn btn--ghost btn--icon" aria-label="Add emoji">
+        <span class="material-symbols-rounded">mood</span>
+      </button>
+      <button class="btn btn--ghost btn--icon" aria-label="Attach document">
+        <span class="material-symbols-rounded">attach_file</span>
+      </button>
+    </div>
+    <button class="btn btn--primary" id="publish-btn" disabled>
+      Publish
+      <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span>
+    </button>
+  </footer>
+</div>
+```
+
+## Token usage
+
+| Property | Token |
+|---|---|
+| Background | `--bg-surface` |
+| Border | `1px solid var(--border)` |
+| Border radius | `--radius-lg` |
+| Input placeholder | `--fg-subtle` |
+| Input text | `--fg` |
+| Toolbar border | `1px solid var(--border-subtle)` |
+| Toolbar padding | `--s-4` vertical / `--s-5` horizontal |
+
+## Behavior
+
+- **Character count**: Display a circular progress indicator near the publish button when content exceeds 80% of the 3000-character limit
+- **Publish disabled**: The Publish button is `disabled` until the content area has at least one non-whitespace character
+- **Attachments**: When media is added, show a thumbnail strip above the toolbar with remove (×) controls on each item
+- **@mentions**: Trigger a person picker dropdown when `@` is typed inline
+- **Keyboard**: `Cmd/Ctrl + Enter` submits; `Escape` collapses/closes
+
+## Usage guidance
+
+**Do:**
+- Always show the user's own avatar in the composer — it provides personal context and signals authorship
+- Keep the toolbar icons minimal — 4–6 actions maximum in the default toolbar
+- Disable Publish until there is content
+- Support keyboard shortcuts for power users
+
+**Don't:**
+- Overflow the toolbar with low-frequency actions — put them in an overflow menu
+- Show the full expanded composer by default without user interaction
+- Use the Composer outside of feed and modal contexts
+
+---
+
+## Storybook
+
+<StorybookEmbed story="components-composer--default" height={280} title="Composer — default" />
+
+<StorybookEmbed story="components-composer--expanded" height={340} title="Composer — expanded" />

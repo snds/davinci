@@ -1,0 +1,54 @@
+---
+title: Radii
+sidebar_label: Radii
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Radii
+
+Davinci uses a 7-step radius scale from near-sharp (2px) to fully circular (9999px). The scale is intentionally conservative — the system looks clean and modern without rounded-rectangle excess.
+
+## Radius tokens
+
+<TokenTable tokens={[
+  { name: '--radius-xs',   description: '2px — subtle rounding, checkboxes, close badges' },
+  { name: '--radius-sm',   description: '4px — small chips, code spans, tight buttons' },
+  { name: '--radius-md',   description: '6px — default interactive elements, inputs, tags' },
+  { name: '--radius-lg',   description: '8px — cards, panels, dropdowns, menus' },
+  { name: '--radius-xl',   description: '12px — larger cards, modal panels' },
+  { name: '--radius-2xl',  description: '16px — large modals, sheets, floating cards' },
+  { name: '--radius-full', description: '9999px — pills, avatars, circular icon buttons' },
+]} />
+
+## Assignment guide
+
+Each component layer has a recommended default radius:
+
+| Context | Token | Reason |
+|---|---|---|
+| Checkbox, radio | `--radius-xs` | Near-square for form fidelity |
+| Code inline, micro badge | `--radius-sm` | Subtle, technical |
+| Button (default) | `--radius-md` | Soft without being bubbly |
+| Input, select | `--radius-md` | Matches button for form alignment |
+| Dropdown menu | `--radius-lg` | Floating panel feel |
+| Card, Panel | `--radius-lg` | Consistent surface container |
+| Modal dialog | `--radius-xl` or `--radius-2xl` | Floating, premium feel |
+| Avatar | `--radius-full` | Standard circular avatar |
+| Pill / tag | `--radius-full` | Standard pill shape |
+| Icon button (round) | `--radius-full` | Circular affordance |
+
+## Usage guidelines
+
+**Be consistent per component type.** All cards should use the same radius. All inputs should use the same radius. Visual inconsistency at the radius level is immediately noticeable and makes the UI feel unpolished.
+
+**Inner/outer radius relationships.** When nesting rounded elements (e.g. an avatar inside a card), the inner element's radius should be slightly smaller than the outer container's. Use `--radius-full` for avatars regardless of the containing card's radius.
+
+**Don't mix radius tokens** within a single component — for example, a card with different corner radii per side.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-radii--all-radii" height={350} title="Radius tokens" />
