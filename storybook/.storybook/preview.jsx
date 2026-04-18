@@ -76,6 +76,11 @@ const preview = {
         date: /Date$/i,
       },
     },
+    options: {
+      storySort: {
+        order: ['Foundations', 'Primitives', 'Components', 'Patterns'],
+      },
+    },
   },
 };
 
