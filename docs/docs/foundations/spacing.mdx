@@ -1,0 +1,79 @@
+---
+title: Spacing
+sidebar_label: Spacing
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Spacing
+
+Davinci uses a 4-px base spacing scale with 15 named steps. The scale follows a growth curve that moves from micro increments at the low end (2px) to large layout values at the top (128px), with a soft doubling rhythm from step 3 onward.
+
+## The scale
+
+<TokenTable tokens={[
+  { name: '--s-0',  description: '0px — explicit zero, resets' },
+  { name: '--s-1',  description: '2px — hairline offset, subtle nudges' },
+  { name: '--s-2',  description: '4px — icon gap, tight inline spacing' },
+  { name: '--s-3',  description: '8px — compact padding, button icon gaps' },
+  { name: '--s-4',  description: '12px — small padding, tag spacing' },
+  { name: '--s-5',  description: '16px — default horizontal padding, gap between small items' },
+  { name: '--s-6',  description: '20px — comfortable padding for small components' },
+  { name: '--s-7',  description: '24px — standard card padding, section gap' },
+  { name: '--s-8',  description: '32px — large component padding, section separation' },
+  { name: '--s-9',  description: '40px — wide padding, medium layout gap' },
+  { name: '--s-10', description: '48px — tall section gaps' },
+  { name: '--s-11', description: '64px — large layout spacing' },
+  { name: '--s-12', description: '80px — section-to-section vertical rhythm' },
+  { name: '--s-13', description: '96px — major section breaks' },
+  { name: '--s-14', description: '128px — hero / page-level spacing' },
+]} />
+
+## Scale visualization
+
+The scale at a glance — each bar represents the step width:
+
+| Step | Value | Common use |
+|---|---|---|
+| `--s-1` | 2px | Hairline |
+| `--s-2` | 4px | Icon gap |
+| `--s-3` | 8px | Button inner gap |
+| `--s-4` | 12px | Tag padding |
+| `--s-5` | 16px | Default padding |
+| `--s-6` | 20px | Medium padding |
+| `--s-7` | 24px | Card padding |
+| `--s-8` | 32px | Large padding |
+| `--s-9` | 40px | Section gap |
+| `--s-10` | 48px | Tall gap |
+
+## Usage guidelines
+
+### Within components
+- Use `--s-3` (8px) for gaps between tightly related elements (icon + label, avatar + name)
+- Use `--s-4` (12px) or `--s-5` (16px) for padding inside small components (pills, badges, compact buttons)
+- Use `--s-5` (16px) or `--s-6` (20px) for standard button and input padding
+- Use `--s-7` (24px) for card and panel internal padding
+
+### Between components
+- Use `--s-5` (16px) for gaps in lists and grids of similar components
+- Use `--s-7` (24px) between distinct sections within a panel
+- Use `--s-8` (32px) or `--s-9` (40px) between major page sections
+
+### Layout
+- Feed column max-width: 640px, centered with auto margins
+- Left rail: 240–280px fixed
+- Right rail: 300–340px fixed
+- Main content + rails use `--s-7` or `--s-8` gutters
+
+## Don'ts
+
+- **Don't** use arbitrary pixel values — always pick the nearest step
+- **Don't** use spacing tokens for font sizes (use `--text-*` tokens)
+- **Don't** mix `px` values and spacing tokens in the same component
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-spacing--spacing-scale" height={500} title="Spacing scale" />

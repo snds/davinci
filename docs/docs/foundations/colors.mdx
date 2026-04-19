@@ -1,0 +1,170 @@
+---
+title: Colors
+sidebar_label: Colors
+---
+
+import ColorSwatch from '@site/src/components/ColorSwatch';
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Colors
+
+Davinci's color system is built on [Radix Colors](https://www.radix-ui.com/colors) — a mathematically balanced, perceptually uniform palette. Each scale has 12 steps with predictable meaning across both light and dark themes.
+
+## Scale anatomy
+
+Every scale follows this structure:
+
+| Steps | Purpose |
+|---|---|
+| 1–2 | Page and subtle backgrounds |
+| 3–5 | Component backgrounds (default, hover, active) |
+| 6–8 | Borders (subtle, default, strong) |
+| 9–10 | Solid fills — badges, buttons, interactive elements |
+| 11 | Low-contrast text on colored backgrounds |
+| 12 | High-contrast text |
+
+## Palette scales
+
+### Sand — neutral
+
+Sand is the neutral backbone of the entire UI. Used for backgrounds, surfaces, borders, and body text. All `bg-*`, `fg-*`, and `border-*` semantic tokens resolve to sand values.
+
+<ColorSwatch
+  title="Sand scale"
+  vars={[
+    '--sand-1','--sand-2','--sand-3','--sand-4','--sand-5','--sand-6',
+    '--sand-7','--sand-8','--sand-9','--sand-10','--sand-11','--sand-12'
+  ]}
+/>
+
+### Blue — primary
+
+Blue is the primary brand color. Used for interactive elements, links, focus rings, and accent highlights. The `--accent` semantic token resolves to `--blue-9`.
+
+<ColorSwatch
+  title="Blue scale"
+  vars={[
+    '--blue-1','--blue-2','--blue-3','--blue-4','--blue-5','--blue-6',
+    '--blue-7','--blue-8','--blue-9','--blue-10','--blue-11','--blue-12'
+  ]}
+/>
+
+### Yellow — brand alt
+
+Yellow is the secondary brand color. Used sparingly for high-visibility highlights, the Davinci logo dot, and editorial accent moments. The `--alt` semantic token resolves to `--yellow-9`.
+
+<ColorSwatch
+  title="Yellow scale"
+  vars={[
+    '--yellow-1','--yellow-2','--yellow-3','--yellow-4','--yellow-5','--yellow-6',
+    '--yellow-7','--yellow-8','--yellow-9','--yellow-10','--yellow-11','--yellow-12'
+  ]}
+/>
+
+### Functional scales
+
+These one-off scales provide standard status colors. Only a handful of steps are defined since they're used only for semantic status indicators.
+
+<ColorSwatch
+  title="Functional colors"
+  vars={[
+    '--green-9','--green-10','--green-11','--green-a3',
+    '--red-9','--red-10','--red-11','--red-a3',
+    '--amber-9','--amber-11',
+    '--gray-a3','--gray-a6'
+  ]}
+/>
+
+---
+
+## Semantic tokens
+
+Semantic tokens abstract the raw palette into purpose-driven names. Always use semantic tokens in components — never hardcode raw scale values. This ensures both themes work automatically.
+
+### Backgrounds
+
+<TokenTable tokens={[
+  { name: '--bg',           description: 'Page background — outermost level' },
+  { name: '--bg-subtle',    description: 'Slightly elevated background — navbar, sidebar, footer' },
+  { name: '--bg-surface',   description: 'Card and panel surfaces' },
+  { name: '--bg-elevated',  description: 'Elevated elements — dropdowns, tooltips' },
+  { name: '--bg-hover',     description: 'Interactive hover state background' },
+  { name: '--bg-active',    description: 'Pressed / active state background' },
+  { name: '--bg-selected',  description: 'Selected item background (blue-tinted)' },
+]} />
+
+### Foreground / text
+
+<TokenTable tokens={[
+  { name: '--fg',           description: 'Primary text — headings, body' },
+  { name: '--fg-muted',     description: 'Secondary text — labels, captions' },
+  { name: '--fg-subtle',    description: 'Tertiary text — placeholders, timestamps' },
+  { name: '--fg-disabled',  description: 'Disabled text and icons' },
+  { name: '--fg-on-accent', description: 'Text on blue solid fills (always white)' },
+  { name: '--fg-on-alt',    description: 'Text on yellow solid fills (dark brown)' },
+]} />
+
+### Borders
+
+<TokenTable tokens={[
+  { name: '--border',        description: 'Default border — most separators and containers' },
+  { name: '--border-subtle', description: 'Lighter border — inner dividers, row separators' },
+  { name: '--border-strong', description: 'Emphatic border — focus indicators, selected states' },
+  { name: '--border-focus',  description: 'Focus ring color — keyboard navigation' },
+]} />
+
+### Accent (blue)
+
+<TokenTable tokens={[
+  { name: '--accent',        description: 'Primary interactive color — buttons, links' },
+  { name: '--accent-hover',  description: 'Hover state for accent elements' },
+  { name: '--accent-subtle', description: 'Tinted background for accent regions' },
+  { name: '--accent-fg',     description: 'Colored text on light/dark backgrounds' },
+  { name: '--accent-border', description: 'Border color in accent-tinted contexts' },
+]} />
+
+### Alt (yellow)
+
+<TokenTable tokens={[
+  { name: '--alt',        description: 'Secondary brand color — used sparingly' },
+  { name: '--alt-hover',  description: 'Hover state for alt elements' },
+  { name: '--alt-subtle', description: 'Tinted background for alt regions' },
+  { name: '--alt-fg',     description: 'Yellow-toned text on neutral backgrounds' },
+]} />
+
+### Status
+
+<TokenTable tokens={[
+  { name: '--success',     description: 'Positive state — success messages, online indicator' },
+  { name: '--success-fg',  description: 'Success text on neutral background' },
+  { name: '--danger',      description: 'Destructive state — errors, delete actions' },
+  { name: '--danger-fg',   description: 'Danger text on neutral background' },
+  { name: '--warning',     description: 'Cautionary state — warnings, alerts' },
+  { name: '--warning-fg',  description: 'Warning text on neutral background' },
+]} />
+
+---
+
+## Usage guidelines
+
+**Do** use semantic tokens in all component code:
+```css
+/* Good */
+.card { background: var(--bg-surface); border: 1px solid var(--border); }
+
+/* Avoid — breaks light/dark theming */
+.card { background: #222221; border: 1px solid #3b3a37; }
+```
+
+**Do** use raw scale values only in the token definitions themselves (in `colors_and_type.css`).
+
+**Do** use `--accent-subtle` and `--accent-border` together for tinted container regions (e.g. info banners, highlighted rows).
+
+**Avoid** mixing sand and blue raw values as background/foreground pairs outside of semantic token overrides.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-colors--all-colors" height={500} title="All color tokens" />

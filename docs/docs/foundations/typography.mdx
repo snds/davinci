@@ -1,0 +1,101 @@
+---
+title: Typography
+sidebar_label: Typography
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Typography
+
+Davinci's type system is built on **Inter** for UI text and **JetBrains Mono** for code. A 13-step type scale covers every context from dense micro-labels to large display headings, with matching line-height and letter-spacing tokens.
+
+## Font families
+
+<TokenTable tokens={[
+  { name: '--font-display', description: 'Display and heading text — Inter with system fallbacks' },
+  { name: '--font-body',    description: 'Body and UI text — same as display' },
+  { name: '--font-mono',    description: 'Code, tokens, technical labels — JetBrains Mono' },
+]} />
+
+Both display and body use the same font stack: Inter → system-ui → -apple-system → Segoe UI → Roboto. The distinction exists for semantic clarity and potential future differentiation.
+
+## Type scale
+
+The scale is fixed-size (px), desktop-first. All font-size tokens are available as CSS variables.
+
+<TokenTable tokens={[
+  { name: '--text-2xs',  description: '11px — micro labels, badges, keyboard shortcuts' },
+  { name: '--text-xs',   description: '12px — table headers, captions, timestamps' },
+  { name: '--text-sm',   description: '13px — secondary text, form labels, sidebar items' },
+  { name: '--text-md',   description: '14px — compact body, button labels' },
+  { name: '--text-base', description: '15px — default body text' },
+  { name: '--text-lg',   description: '17px — emphasized body, card titles' },
+  { name: '--text-xl',   description: '20px — section subheadings (h3)' },
+  { name: '--text-2xl',  description: '24px — page subheadings (h2)' },
+  { name: '--text-3xl',  description: '30px — page headings (h2 variants)' },
+  { name: '--text-4xl',  description: '38px — large headings (h1)' },
+  { name: '--text-5xl',  description: '48px — hero headings' },
+  { name: '--text-6xl',  description: '60px — display text' },
+  { name: '--text-7xl',  description: '76px — masthead / maximum display' },
+]} />
+
+## Line heights
+
+<TokenTable tokens={[
+  { name: '--lh-tight',  description: '1.1 — Display headings, large type' },
+  { name: '--lh-snug',   description: '1.25 — H2, H3, card titles' },
+  { name: '--lh-normal', description: '1.5 — Body text, default' },
+  { name: '--lh-loose',  description: '1.7 — Long-form reading text' },
+]} />
+
+## Weights
+
+<TokenTable tokens={[
+  { name: '--fw-regular',  description: '400 — Body, secondary labels' },
+  { name: '--fw-medium',   description: '500 — Emphasized body, interactive labels' },
+  { name: '--fw-semibold', description: '600 — Subheadings, card titles, strong emphasis' },
+  { name: '--fw-bold',     description: '700 — H2, H3, section headings' },
+  { name: '--fw-heavy',    description: '800 — H1, display, hero text' },
+]} />
+
+## Letter spacing
+
+<TokenTable tokens={[
+  { name: '--ls-tight',  description: '-0.02em — Large headings, display text' },
+  { name: '--ls-snug',   description: '-0.01em — H2, H3 headings' },
+  { name: '--ls-normal', description: '0 — Body text' },
+  { name: '--ls-wide',   description: '0.02em — Small emphasized labels' },
+  { name: '--ls-wider',  description: '0.08em — ALL CAPS labels, table headers, tags' },
+]} />
+
+## Heading defaults
+
+The base CSS in `colors_and_type.css` applies sensible defaults to HTML heading elements:
+
+| Element | Size | Weight | Line height | Letter spacing |
+|---|---|---|---|---|
+| `h1` | `--text-5xl` | `--fw-heavy` | `--lh-tight` | `--ls-tight` |
+| `h2` | `--text-3xl` | `--fw-bold` | `--lh-snug` | `--ls-snug` |
+| `h3` | `--text-xl` | `--fw-semibold` | `--lh-snug` | `--ls-snug` |
+| `h4` | `--text-lg` | `--fw-semibold` | `--lh-normal` | `--ls-normal` |
+| `h5` | `--text-md` | `--fw-semibold` | `--lh-normal` | `--ls-normal` |
+| `h6` | `--text-sm` | `--fw-semibold` | `--lh-normal` | `--ls-wide` |
+
+## Usage guidelines
+
+**Body text** — use `--text-base` / `--fw-regular` / `--lh-normal` for most content. Switch to `--text-md` in dense layouts (sidebars, tables, forms).
+
+**Labels and captions** — `--text-xs` or `--text-sm` with `--fw-medium` and `--ls-wide` for uppercase labels. Use `--fg-muted` for secondary labels, `--fg-subtle` for tertiary.
+
+**Code** — always use `--font-mono`. Default to `--text-sm`. Pair with `--bg-surface` background and `--border-subtle` border for inline code.
+
+**Headings** — follow the table above. Avoid skipping levels (e.g. h1 → h3). Letter spacing at large sizes (-0.02em) prevents Inter from feeling too loose.
+
+**Don't** override fonts with system fonts in components — Inter provides a consistent platform feel.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-typography--type-scale" height={600} title="Typography scale" />

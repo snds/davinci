@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Davinci Design System</title>
+  <link rel="stylesheet" href="colors_and_type.css">
+  <style>
+    body { padding: 48px 40px; min-height: 100vh; }
+    .logo { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+    .logo img { height: 28px; }
+    .logo-text { font-size: var(--text-xl); font-weight: var(--fw-bold); color: var(--fg); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .section-label {
+      font-size: var(--text-xs); font-weight: var(--fw-semibold);
+      letter-spacing: var(--ls-wider); text-transform: uppercase;
+      color: var(--fg-muted); margin: 32px 0 12px; grid-column: 1/-1;
+    }
+    a.card {
+      display: block; padding: 16px 18px;
+      background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg); color: var(--fg);
+      text-decoration: none; transition: background var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out);
+    }
+    a.card:hover { background: var(--bg-elevated); border-color: var(--border); }
+    a.card .title { font-size: var(--text-sm); font-weight: var(--fw-medium); color: var(--fg); }
+    a.card .sub { font-size: var(--text-xs); color: var(--fg-muted); margin-top: 2px; }
+    .theme-toggle {
+      position: fixed; top: 20px; right: 24px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      color: var(--fg-muted); border-radius: var(--radius-full);
+      padding: 6px 14px; font-size: var(--text-xs); font-weight: var(--fw-medium);
+      cursor: pointer; font-family: var(--font-body);
+      transition: background var(--dur-fast) var(--ease-out);
+    }
+    .theme-toggle:hover { background: var(--bg-elevated); color: var(--fg); }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggle()">Toggle theme</button>
+  <div class="logo">
+    <img src="assets/logo-wordmark.svg" alt="Davinci">
+  </div>
+
+  <div class="grid">
+    <div class="section-label">Colors</div>
+    <a class="card" href="preview/colors-brand.html">
+      <div class="title">Brand</div><div class="sub">Blue &amp; yellow scales</div>
+    </a>
+    <a class="card" href="preview/colors-neutral.html">
+      <div class="title">Neutral</div><div class="sub">Sand scale</div>
+    </a>
+    <a class="card" href="preview/colors-semantic.html">
+      <div class="title">Semantic</div><div class="sub">Status &amp; role tokens</div>
+    </a>
+    <a class="card" href="preview/colors-themes.html">
+      <div class="title">Themes</div><div class="sub">Dark &amp; light modes</div>
+    </a>
+
+    <div class="section-label">Typography</div>
+    <a class="card" href="preview/type-display.html">
+      <div class="title">Display</div><div class="sub">Headings &amp; scale</div>
+    </a>
+    <a class="card" href="preview/type-body.html">
+      <div class="title">Body</div><div class="sub">Paragraph &amp; label styles</div>
+    </a>
+    <a class="card" href="preview/type-mono.html">
+      <div class="title">Mono</div><div class="sub">Code &amp; mono styles</div>
+    </a>
+
+    <div class="section-label">Spacing &amp; Layout</div>
+    <a class="card" href="preview/spacing-scale.html">
+      <div class="title">Scale</div><div class="sub">4px base grid</div>
+    </a>
+    <a class="card" href="preview/spacing-radii.html">
+      <div class="title">Radii</div><div class="sub">Border radius tokens</div>
+    </a>
+    <a class="card" href="preview/spacing-shadows.html">
+      <div class="title">Shadows</div><div class="sub">Elevation system</div>
+    </a>
+
+    <div class="section-label">Components</div>
+    <a class="card" href="preview/components-buttons.html">
+      <div class="title">Buttons</div><div class="sub">All variants &amp; states</div>
+    </a>
+    <a class="card" href="preview/components-inputs.html">
+      <div class="title">Inputs</div><div class="sub">Form controls</div>
+    </a>
+    <a class="card" href="preview/components-badges.html">
+      <div class="title">Badges</div><div class="sub">Status indicators</div>
+    </a>
+    <a class="card" href="preview/components-avatars.html">
+      <div class="title">Avatars</div><div class="sub">User representations</div>
+    </a>
+    <a class="card" href="preview/components-cards.html">
+      <div class="title">Cards</div><div class="sub">Content containers</div>
+    </a>
+    <a class="card" href="preview/components-menu-tabs.html">
+      <div class="title">Menus &amp; Tabs</div><div class="sub">Navigation patterns</div>
+    </a>
+
+    <div class="section-label">Brand</div>
+    <a class="card" href="preview/brand-logo-icons.html">
+      <div class="title">Logo &amp; Icons</div><div class="sub">Mark, wordmark, iconography</div>
+    </a>
+  </div>
+
+  <script>
+    function toggle() {
+      const html = document.documentElement;
+      html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+---
+title: Rails
+sidebar_label: Rails
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Rails
+
+Rails are the left and right fixed-width columns that flank the center feed in Davinci's desktop layout. They hold navigational, contextual, and discovery panels that persist as the user scrolls.
+
+## When to use
+
+Rails appear on:
+- Home feed page
+- Network page
+- Jobs page
+- Search results
+
+They are hidden on profile pages (which use their own sidebar layout), messaging pages, and mobile breakpoints.
+
+## Left Rail
+
+The left rail is **240px wide** and contains the user's own identity and primary navigation.
+
+### Contents
+
+1. **Profile card** — user's avatar, name, headline, and a link to their profile
+2. **NavList** — primary site navigation (Home, Network, Jobs, Notifications, Messages)
+3. Optional: **Shortcuts** or **Groups** panel
+
+```html
+<aside class="rail rail--left" aria-label="Left sidebar">
+  <!-- Identity card -->
+  <div class="panel rail__identity">
+    <div class="rail__cover" style="background: linear-gradient(135deg, var(--blue-3), var(--sand-3));"></div>
+    <div class="rail__profile">
+      <div class="avatar avatar--lg">
+        <img src="/me.jpg" alt="My profile" />
+      </div>
+      <div class="rail__profile-info">
+        <a class="rail__profile-name" href="/in/me">Jordan Reeves</a>
+        <p class="rail__profile-headline">Product Designer</p>
+      </div>
+    </div>
+    <div class="rail__stats">
+      <div class="rail__stat">
+        <span class="rail__stat-label">Profile views</span>
+        <span class="rail__stat-value" style="color: var(--accent-fg);">142</span>
+      </div>
+      <div class="rail__stat">
+        <span class="rail__stat-label">Post impressions</span>
+        <span class="rail__stat-value" style="color: var(--accent-fg);">3,820</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-list panel" aria-label="Main navigation">
+    <!-- NavList items -->
+  </nav>
+</aside>
+```
+
+### Token usage
+
+| Property | Token |
+|---|---|
+| Width | 240px |
+| Gap between panels | `--s-5` |
+| Cover height | 64px |
+| Profile name | `--text-sm` / `--fw-semibold` |
+| Headline | `--text-xs` / `--fg-muted` |
+| Stat label | `--text-xs` / `--fg-subtle` |
+| Stat value | `--text-sm` / `--fw-semibold` / `--accent-fg` |
+
+---
+
+## Right Rail
+
+The right rail is **300–320px wide** and contains discovery and contextual content — ads, suggested connections, trending topics.
+
+### Contents
+
+1. **Ad unit** — sponsored content panel (labeled "Promoted")
+2. **People you may know** — connection suggestions panel
+3. **Trending** — optional trending topics or company news
+
+```html
+<aside class="rail rail--right" aria-label="Right sidebar">
+  <!-- Suggested connections -->
+  <div class="panel">
+    <div class="panel__header">
+      <h3 class="panel__title">People you may know</h3>
+    </div>
+    <div class="panel__body">
+      <ul class="suggestion-list">
+        <li class="suggestion">
+          <div class="avatar avatar--sm avatar--grad-yellow">AC</div>
+          <div class="suggestion__info">
+            <div class="suggestion__name">Alex Chen</div>
+            <div class="suggestion__meta">Designer at Figma · 12 mutual</div>
+          </div>
+          <button class="btn btn--outline btn--sm">Connect</button>
+        </li>
+        <!-- more suggestions -->
+      </ul>
+      <a class="btn btn--ghost btn--sm" href="/network">See all suggestions</a>
+    </div>
+  </div>
+
+  <!-- Ad unit -->
+  <div class="panel rail__ad" aria-label="Sponsored">
+    <div class="rail__ad-label">Promoted</div>
+    <img class="rail__ad-image" src="/ad-image.jpg" alt="Ad" loading="lazy" />
+    <div class="rail__ad-body">
+      <p class="rail__ad-headline">Design faster with Figma</p>
+      <p class="rail__ad-meta">figma.com</p>
+    </div>
+  </div>
+</aside>
+```
+
+### Token usage
+
+| Property | Token |
+|---|---|
+| Width | 300px |
+| Gap between panels | `--s-5` |
+| Suggestion item gap | `--s-4` vertical |
+| Suggestion name | `--text-sm` / `--fw-medium` |
+| Suggestion meta | `--text-xs` / `--fg-muted` |
+| Ad label | `--text-2xs` / `--fg-subtle` / `--ls-wider` |
+
+## Sticky behavior
+
+Both rails use `position: sticky; top: calc(56px + var(--s-5))` to stay fixed relative to the viewport as the center column scrolls. The `56px` accounts for the TopNav height.
+
+If rail contents are taller than the viewport, the rail scrolls independently with `overflow-y: auto` and hidden scrollbars.
+
+## Responsive
+
+| Breakpoint | Behavior |
+|---|---|
+| ≥ 1200px | Both rails visible |
+| 900–1199px | Left rail only; right rail hidden |
+| < 900px | Both rails hidden; navigation moves to bottom tab bar |
+
+---
+
+## Storybook
+
+<StorybookEmbed story="patterns-leftrail--default" height={600} title="Left Rail" />
+
+<StorybookEmbed story="patterns-rightrail--default" height={600} title="Right Rail" />

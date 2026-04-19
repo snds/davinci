@@ -1,0 +1,200 @@
+---
+title: Post
+sidebar_label: Post
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import DocsCallout from '@site/src/components/DocsCallout';
+
+# Post
+
+Post is the central content unit of the Davinci feed. It renders a structured social post with author identity, timestamp, body text, optional media attachments, and a reaction bar.
+
+<LiveDemo
+  title="Full post card"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40">JD</div>
+      <div class="post__who">
+        <div class="post__name">Jane Doe</div>
+        <div class="post__role">Senior Product Designer · Davinci Co.</div>
+        <div class="post__time">
+          <span class="material-symbols-rounded" style="font-size:13px;">schedule</span>
+          2h
+        </div>
+      </div>
+      <button class="btn btn--ghost btn--icon" aria-label="More">
+        <span class="material-symbols-rounded">more_horiz</span>
+      </button>
+    </div>
+    <div class="post__body">Excited to share that the new design system docs just shipped!
+
+Built with the same CSS it documents — fully dog-fooded. The token-to-component pipeline is finally documented end to end.</div>
+    <div class="post__reactions">
+      <span>👍 · ❤️ · 🎉  <strong>42</strong></span>
+      <span>12 comments</span>
+    </div>
+    <div class="post__actions">
+      <button class="post__action active">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">chat_bubble_outline</span>
+        Comment
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">repeat</span>
+        Repost
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">send</span>
+        Send
+      </button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Anatomy
+
+```
+┌───────────────────────────────────────┐
+│ [Avatar]  Author Name          [•••]  │  ← .post__header
+│           Role · Company              │
+│           2h                          │
+├───────────────────────────────────────┤
+│                                       │
+│  Post body text goes here.            │  ← .post__body
+│                                       │
+├───────────────────────────────────────┤
+│  👍 ❤️ 🎉 42          12 comments     │  ← .post__reactions
+├───────────────────────────────────────┤
+│  Like · Comment · Repost · Send       │  ← .post__actions
+└───────────────────────────────────────┘
+```
+
+## HTML structure
+
+```html
+<div class="panel">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40">JD</div>
+      <div class="post__who">
+        <div class="post__name">Jane Doe</div>
+        <div class="post__role">Senior Designer · Company</div>
+        <div class="post__time">2h</div>
+      </div>
+      <button class="btn btn--ghost btn--icon" aria-label="More options">
+        <span class="material-symbols-rounded">more_horiz</span>
+      </button>
+    </div>
+
+    <div class="post__body">Post content goes here.</div>
+
+    <div class="post__reactions">
+      <span>👍 ❤️ 42</span>
+      <span>12 comments</span>
+    </div>
+
+    <div class="post__actions">
+      <button class="post__action">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+## With link attachment
+
+<LiveDemo
+  title="Post with link attachment"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="post">
+    <div class="post__header">
+      <div class="avatar avatar--40 avatar--g2">MK</div>
+      <div class="post__who">
+        <div class="post__name">Marcus Kim</div>
+        <div class="post__role">Engineering Lead · Build Co.</div>
+        <div class="post__time">5h</div>
+      </div>
+    </div>
+    <div class="post__body">This article on token-first design systems is required reading for anyone building a design system in 2025.</div>
+    <div class="post__attachment">
+      <div class="post__attachment-img"></div>
+      <div class="post__attachment-body">
+        <strong>Stop Paying for Design System Docs</strong>
+        <span style="color:var(--fg-muted);">Build them yourself with Docusaurus + your own CSS</span>
+      </div>
+    </div>
+    <div class="post__actions">
+      <button class="post__action">
+        <span class="material-symbols-rounded">thumb_up</span>
+        Like
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">chat_bubble_outline</span>
+        Comment
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">repeat</span>
+        Repost
+      </button>
+      <button class="post__action">
+        <span class="material-symbols-rounded">send</span>
+        Send
+      </button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+---
+
+## Action states
+
+Add `.active` to a `.post__action` to show the engaged state (`--accent-fg` color).
+
+<LiveDemo
+  title="Active action state"
+  html={`<div class="panel" style="max-width:400px;">
+  <div class="post__actions" style="margin:0;border:none;">
+    <button class="post__action active">
+      <span class="material-symbols-rounded">thumb_up</span>
+      Liked
+    </button>
+    <button class="post__action">
+      <span class="material-symbols-rounded">chat_bubble_outline</span>
+      Comment
+    </button>
+    <button class="post__action">
+      <span class="material-symbols-rounded">repeat</span>
+      Repost
+    </button>
+    <button class="post__action">
+      <span class="material-symbols-rounded">send</span>
+      Send
+    </button>
+  </div>
+</div>`}
+  pad="0"
+/>
+
+<DocsCallout type="note">
+Post body uses `white-space: pre-wrap` to preserve line breaks. Sanitize all user-submitted content before inserting into `.post__body` to prevent XSS.
+</DocsCallout>
+
+---
+
+## Storybook
+
+<StorybookEmbed story="components-post--default" height={500} title="Post component" />

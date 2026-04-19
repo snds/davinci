@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Design System Preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3000"],
+      "port": 3000,
+      "cwd": ".",
+      "description": "Serves the full project root — access preview/ HTML files at http://localhost:3000/preview/"
+    },
+    {
+      "name": "Web App UI Kit",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3001"],
+      "port": 3001,
+      "cwd": "ui_kits/web_app",
+      "description": "Serves the React UI kit app at http://localhost:3001/"
+    }
+  ]
+}
