@@ -1,0 +1,45 @@
+---
+title: Empty State
+description: The Empty State component from shadcn/ui, themed with Davinci design tokens.
+category: shadcn/Components
+sidebar_position: 50
+---
+
+import { EmptyState } from '@davinci/ui/components/ui/empty-state';
+
+# Empty State
+
+The Empty State component from shadcn/ui, themed with Davinci design tokens.
+
+## Usage
+
+```jsx
+import { EmptyState } from '@davinci/ui/components/ui/empty-state';
+
+export default function Example() {
+  return (
+    <EmptyState>
+      {/* content */}
+    </EmptyState>
+  );
+}
+```
+
+## Theming
+
+This component inherits all values from the Davinci token system via the
+shadcn bridge layer (`@davinci/tokens/shadcn-bridge.css`). No per-component
+overrides are required — change Davinci semantic tokens to update the appearance
+system-wide.
+
+| shadcn var | Davinci token | Role |
+|------------|---------------|------|
+| `--primary` | `--accent` | Primary action color |
+| `--background` | `--bg` | Page background |
+| `--foreground` | `--fg` | Default text |
+| `--border` | `--border` | Borders and dividers |
+| `--ring` | `--border-focus` | Focus ring |
+
+## Storybook
+
+View live examples in Storybook under **shadcn › EmptyState**.

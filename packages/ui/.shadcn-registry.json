@@ -1,0 +1,235 @@
+{
+  "components": {
+    "accordion": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:53:31.502Z",
+      "style": "new-york"
+    },
+    "alert-dialog": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:53:41.289Z",
+      "style": "new-york"
+    },
+    "alert": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:53:44.872Z",
+      "style": "new-york"
+    },
+    "aspect-ratio": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:53:54.608Z",
+      "style": "new-york"
+    },
+    "avatar": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:04.241Z",
+      "style": "new-york"
+    },
+    "badge": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:13.779Z",
+      "style": "new-york"
+    },
+    "breadcrumb": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:23.423Z",
+      "style": "new-york"
+    },
+    "button": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:33.280Z",
+      "style": "new-york"
+    },
+    "calendar": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:44.091Z",
+      "style": "new-york"
+    },
+    "card": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:47.828Z",
+      "style": "new-york"
+    },
+    "carousel": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:54:57.744Z",
+      "style": "new-york"
+    },
+    "chart": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:07.847Z",
+      "style": "new-york"
+    },
+    "checkbox": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:17.513Z",
+      "style": "new-york"
+    },
+    "collapsible": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:27.050Z",
+      "style": "new-york"
+    },
+    "command": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:36.781Z",
+      "style": "new-york"
+    },
+    "context-menu": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:46.577Z",
+      "style": "new-york"
+    },
+    "dialog": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:55:56.340Z",
+      "style": "new-york"
+    },
+    "drawer": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:05.858Z",
+      "style": "new-york"
+    },
+    "dropdown-menu": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:15.602Z",
+      "style": "new-york"
+    },
+    "form": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:26.012Z",
+      "style": "new-york"
+    },
+    "hover-card": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:35.587Z",
+      "style": "new-york"
+    },
+    "input-otp": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:44.967Z",
+      "style": "new-york"
+    },
+    "input": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:48.477Z",
+      "style": "new-york"
+    },
+    "label": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:56:58.098Z",
+      "style": "new-york"
+    },
+    "menubar": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:07.856Z",
+      "style": "new-york"
+    },
+    "navigation-menu": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:17.565Z",
+      "style": "new-york"
+    },
+    "pagination": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:27.381Z",
+      "style": "new-york"
+    },
+    "popover": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:37.077Z",
+      "style": "new-york"
+    },
+    "progress": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:47.019Z",
+      "style": "new-york"
+    },
+    "radio-group": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:57:56.552Z",
+      "style": "new-york"
+    },
+    "resizable": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:06.058Z",
+      "style": "new-york"
+    },
+    "scroll-area": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:15.507Z",
+      "style": "new-york"
+    },
+    "select": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:25.216Z",
+      "style": "new-york"
+    },
+    "separator": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:35.004Z",
+      "style": "new-york"
+    },
+    "sheet": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:44.635Z",
+      "style": "new-york"
+    },
+    "sidebar": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:55.348Z",
+      "style": "new-york"
+    },
+    "skeleton": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:58:58.864Z",
+      "style": "new-york"
+    },
+    "slider": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:08.361Z",
+      "style": "new-york"
+    },
+    "sonner": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:18.039Z",
+      "style": "new-york"
+    },
+    "switch": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:27.608Z",
+      "style": "new-york"
+    },
+    "table": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:31.243Z",
+      "style": "new-york"
+    },
+    "tabs": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:40.845Z",
+      "style": "new-york"
+    },
+    "textarea": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:44.360Z",
+      "style": "new-york"
+    },
+    "toggle-group": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T03:59:54.188Z",
+      "style": "new-york"
+    },
+    "toggle": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T04:00:04.117Z",
+      "style": "new-york"
+    },
+    "tooltip": {
+      "version": "unknown",
+      "updatedAt": "2026-05-15T04:00:13.882Z",
+      "style": "new-york"
+    }
+  },
+  "fetchedAt": "2026-05-15T04:00:13.882Z"
+}
