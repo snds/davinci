@@ -1,0 +1,65 @@
+---
+title: Aspect Ratio
+sidebar_position: 22
+description: Constrains any child to a fixed width-to-height ratio using Radix AspectRatio.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Aspect Ratio
+
+A layout utility that forces its child to maintain a specific width-to-height ratio regardless of available space. Built on `@radix-ui/react-aspect-ratio`. Use it for image thumbnails, video embeds, map tiles, and any content that must stay proportional as its container resizes.
+
+```bash
+cd packages/ui && npx shadcn@latest add aspect-ratio
+```
+
+## Common ratios
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '16px', margin: '24px 0' }}>
+  {[
+    { label: '16 : 9',  ratio: '16/9',  gradient: 'linear-gradient(135deg,#4f46e5,#7c3aed)', desc: 'Widescreen video, hero images' },
+    { label: '4 : 3',   ratio: '4/3',   gradient: 'linear-gradient(135deg,#0891b2,#0e7490)', desc: 'Traditional video, presentations' },
+    { label: '1 : 1',   ratio: '1/1',   gradient: 'linear-gradient(135deg,#7c3aed,#a855f7)', desc: 'Square — avatars, Instagram' },
+    { label: '3 : 2',   ratio: '3/2',   gradient: 'linear-gradient(135deg,#059669,#10b981)', desc: 'Standard DSLR photography' },
+    { label: '2 : 3',   ratio: '2/3',   gradient: 'linear-gradient(135deg,#dc2626,#ef4444)', desc: 'Portrait — mobile images' },
+    { label: '21 : 9',  ratio: '21/9',  gradient: 'linear-gradient(135deg,#d97706,#f59e0b)', desc: 'Ultra-wide cinematic' },
+  ].map(({ label, ratio, gradient, desc }) => (
+    <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ aspectRatio: ratio, background: gradient, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 600, fontSize: '13px', letterSpacing: '0.04em' }}>
+        {label}
+      </div>
+      <p style={{ margin: 0, fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', lineHeight: '1.4' }}>{desc}</p>
+    </div>
+  ))}
+</div>
+
+## Usage
+
+```jsx
+import { AspectRatio } from '@davinci/ui/components/ui/aspect-ratio';
+
+{/* 16:9 video thumbnail */}
+<div className="w-full max-w-sm">
+  <AspectRatio ratio={16 / 9}>
+    <img
+      src="/thumbnail.jpg"
+      alt="Video thumbnail"
+      className="h-full w-full rounded-md object-cover"
+    />
+  </AspectRatio>
+</div>
+
+{/* Square avatar */}
+<div className="w-16">
+  <AspectRatio ratio={1}>
+    <img src="/avatar.jpg" alt="Avatar" className="h-full w-full rounded-full object-cover" />
+  </AspectRatio>
+</div>
+```
+
+The `ratio` prop accepts any number (default `1`). Use fractional expressions like `16/9`, `4/3`, or `1/1` for clarity. The child must fill the full width and height of the container (`h-full w-full`).
+
+## Preview
+
+<StorybookEmbed story="components-aspectratio--sixteen-by-nine" height={320} />

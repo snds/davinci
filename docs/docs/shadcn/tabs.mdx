@@ -1,0 +1,72 @@
+---
+title: Tabs
+sidebar_position: 40
+description: Radix Tabs — layered content panels with keyboard navigation.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Tabs
+
+Built on `@radix-ui/react-tabs`. Keyboard-navigable (arrow keys), ARIA-compliant, and supports horizontal or vertical orientation.
+
+```bash
+cd packages/ui && npx shadcn@latest add tabs
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Tabs` | Root — manages active state |
+| `TabsList` | Container for the trigger row |
+| `TabsTrigger` | Individual tab button |
+| `TabsContent` | Panel shown when its tab is active |
+
+## Usage
+
+```jsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@davinci/ui/components/ui/tabs';
+
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="activity">Activity</TabsTrigger>
+    <TabsTrigger value="settings">Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <p>Overview content…</p>
+  </TabsContent>
+  <TabsContent value="activity">
+    <p>Activity feed…</p>
+  </TabsContent>
+  <TabsContent value="settings">
+    <p>Settings form…</p>
+  </TabsContent>
+</Tabs>
+```
+
+## Controlled
+
+```jsx
+const [tab, setTab] = React.useState('overview');
+
+<Tabs value={tab} onValueChange={setTab}>
+  {/* … */}
+</Tabs>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| TabsList background | `--bg-subtle` |
+| Active trigger | `--bg-surface` / `--fg` (card-like) |
+| Inactive trigger | `--fg-muted` |
+| Active trigger shadow | `--shadow-sm` |
+| Content area | transparent |
+
+## Preview
+
+<StorybookEmbed story="components-tabs--default" height={280} />

@@ -1,0 +1,91 @@
+---
+title: Form
+sidebar_position: 31
+description: Accessible form primitives built on react-hook-form with Zod validation.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Form
+
+Composable form field wrappers that connect `react-hook-form` field state to Radix-based input components. Handles error messages, labels, descriptions, and `aria` attributes automatically. Pair with a Zod schema for type-safe validation.
+
+```bash
+cd packages/ui && npx shadcn@latest add form
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Form` | Wraps react-hook-form's `FormProvider` |
+| `FormField` | Subscribes to a single field by `name` |
+| `FormItem` | Layout wrapper that provides a unique `id` context |
+| `FormLabel` | Accessible `<label>` — auto-links to the control |
+| `FormControl` | Passes `id`, `aria-describedby`, and `aria-invalid` to the child input |
+| `FormDescription` | Helper text below the input |
+| `FormMessage` | Renders validation error or custom message |
+
+## Usage
+
+```jsx
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  Form, FormField, FormItem, FormLabel, FormControl,
+  FormDescription, FormMessage,
+} from '@davinci/ui/components/ui/form';
+import { Input } from '@davinci/ui/components/ui/input';
+import { Button } from '@davinci/ui/components/ui/button';
+
+const schema = z.object({
+  username: z.string().min(2, { message: 'Username must be at least 2 characters.' }),
+});
+
+export function ProfileForm() {
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: { username: '' },
+  });
+
+  function onSubmit(values: z.infer<typeof schema>) {
+    console.log(values);
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>This is your public display name.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+## Notes
+
+- Install peer dependencies: `npm install react-hook-form zod @hookform/resolvers`
+- `FormMessage` renders nothing when there is no error — no need for conditional rendering.
+- Use `FormControl` as the direct parent of any input primitive so it can inject the correct `aria-*` attributes.
+
+## Preview
+
+<StorybookEmbed story="components-form--email-form" height={400} />

@@ -1,0 +1,96 @@
+---
+title: Resizable
+sidebar_position: 41
+description: Drag-to-resize panel layouts with horizontal and vertical split support.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Resizable
+
+Drag-to-resize panel groups for split-view layouts. Built on `react-resizable-panels`. Use it for editor+preview splits, sidebar+content layouts, and any UI where users should be able to control pane proportions.
+
+```bash
+cd packages/ui && npx shadcn@latest add resizable
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `ResizablePanelGroup` | Root — sets layout `direction` |
+| `ResizablePanel` | Individual resizable pane |
+| `ResizableHandle` | Drag handle between panels |
+
+## Layout patterns
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px', margin: '24px 0' }}>
+
+  <div>
+    <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Horizontal split</p>
+    <div style={{ height: '100px', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', overflow: 'hidden', display: 'flex' }}>
+      <div style={{ width: '30%', background: 'var(--ifm-color-emphasis-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Sidebar</div>
+      <div style={{ width: '4px', background: 'var(--ifm-color-emphasis-300)', cursor: 'col-resize', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '2px', height: '20px', background: 'var(--ifm-color-emphasis-400)', borderRadius: '1px' }} />
+      </div>
+      <div style={{ flex: 1, background: 'var(--ifm-color-emphasis-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Content</div>
+    </div>
+  </div>
+
+  <div>
+    <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Vertical split</p>
+    <div style={{ height: '100px', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, background: 'var(--ifm-color-emphasis-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Top</div>
+      <div style={{ height: '4px', background: 'var(--ifm-color-emphasis-300)', cursor: 'row-resize', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ height: '2px', width: '20px', background: 'var(--ifm-color-emphasis-400)', borderRadius: '1px' }} />
+      </div>
+      <div style={{ flex: 1, background: 'var(--ifm-color-emphasis-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Bottom</div>
+    </div>
+  </div>
+
+  <div>
+    <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Three panels</p>
+    <div style={{ height: '100px', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', overflow: 'hidden', display: 'flex' }}>
+      <div style={{ width: '25%', background: 'var(--ifm-color-emphasis-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--ifm-color-emphasis-600)' }}>Nav</div>
+      <div style={{ width: '3px', background: 'var(--ifm-color-emphasis-300)' }} />
+      <div style={{ flex: 1, background: 'var(--ifm-color-emphasis-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--ifm-color-emphasis-600)' }}>Main</div>
+      <div style={{ width: '3px', background: 'var(--ifm-color-emphasis-300)' }} />
+      <div style={{ width: '25%', background: 'var(--ifm-color-emphasis-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--ifm-color-emphasis-600)' }}>Panel</div>
+    </div>
+  </div>
+
+</div>
+
+## Usage
+
+```jsx
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from '@davinci/ui/components/ui/resizable';
+
+// Horizontal split
+<ResizablePanelGroup direction="horizontal" className="min-h-[200px] rounded-lg border">
+  <ResizablePanel defaultSize={25}>
+    <div className="flex h-full items-center justify-center p-4">Sidebar</div>
+  </ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={75}>
+    <div className="flex h-full items-center justify-center p-4">Content</div>
+  </ResizablePanel>
+</ResizablePanelGroup>
+
+// Vertical split
+<ResizablePanelGroup direction="vertical" className="min-h-[400px]">
+  <ResizablePanel defaultSize={50}>Top</ResizablePanel>
+  <ResizableHandle withHandle />
+  <ResizablePanel defaultSize={50}>Bottom</ResizablePanel>
+</ResizablePanelGroup>
+```
+
+Pass `withHandle` to `ResizableHandle` to show a visible grip icon. `defaultSize` is a percentage (0–100); sibling panels should sum to 100.
+
+## Preview
+
+<StorybookEmbed story="components-resizable--horizontal" height={280} />

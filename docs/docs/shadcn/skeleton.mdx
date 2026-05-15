@@ -1,0 +1,80 @@
+---
+title: Skeleton
+sidebar_position: 44
+description: Animated placeholder that mimics content shape while data is loading.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Skeleton
+
+Pulse-animated placeholder used to communicate loading state and prevent layout shift. No Radix dependency — just a `div` with an animated background pulse. Size it to match the real content it replaces.
+
+```bash
+cd packages/ui && npx shadcn@latest add skeleton
+```
+
+## Common patterns
+
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px', margin: '24px 0' }}>
+
+  <div style={{ padding: '16px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px' }}>
+    <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Card</p>
+    <div style={{ height: '120px', borderRadius: '6px', background: 'var(--ifm-color-emphasis-200)', marginBottom: '10px' }} />
+    <div style={{ height: '14px', width: '75%', borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)', marginBottom: '6px' }} />
+    <div style={{ height: '12px', width: '55%', borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)', marginBottom: '6px' }} />
+    <div style={{ height: '12px', width: '90%', borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)' }} />
+  </div>
+
+  <div style={{ padding: '16px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px' }}>
+    <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Profile row</p>
+    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--ifm-color-emphasis-200)', flexShrink: 0 }} />
+      <div style={{ flex: 1 }}>
+        <div style={{ height: '14px', width: '60%', borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)', marginBottom: '6px' }} />
+        <div style={{ height: '12px', width: '85%', borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)' }} />
+      </div>
+    </div>
+  </div>
+
+  <div style={{ padding: '16px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px' }}>
+    <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: 600, color: 'var(--ifm-color-emphasis-500)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Table rows</p>
+    {[80, 65, 90, 70, 75].map((w, i) => (
+      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <div style={{ height: '12px', width: `${w * 0.35}%`, borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)' }} />
+        <div style={{ height: '12px', width: `${w * 0.45}%`, borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)' }} />
+        <div style={{ height: '12px', width: `${w * 0.2}%`, borderRadius: '4px', background: 'var(--ifm-color-emphasis-200)' }} />
+      </div>
+    ))}
+  </div>
+
+</div>
+
+## Usage
+
+```jsx
+import { Skeleton } from '@davinci/ui/components/ui/skeleton';
+
+// Card with header and body lines
+<div className="flex flex-col gap-3 p-4">
+  <Skeleton className="h-40 w-full rounded-md" />
+  <Skeleton className="h-4 w-[250px]" />
+  <Skeleton className="h-4 w-[200px]" />
+  <Skeleton className="h-4 w-[175px]" />
+</div>
+
+// Avatar + text row
+<div className="flex items-center gap-3">
+  <Skeleton className="h-10 w-10 rounded-full" />
+  <div className="flex flex-col gap-2">
+    <Skeleton className="h-4 w-[150px]" />
+    <Skeleton className="h-3 w-[100px]" />
+  </div>
+</div>
+```
+
+Size with `h-*` and `w-*` utilities to match the real content dimensions exactly.
+
+## Preview
+
+<StorybookEmbed story="components-skeleton--card-skeleton" height={340} />

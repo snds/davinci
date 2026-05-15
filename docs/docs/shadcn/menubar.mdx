@@ -1,0 +1,97 @@
+---
+title: Menubar
+sidebar_position: 36
+description: Desktop-style horizontal menu bar with nested menus and keyboard navigation.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Menubar
+
+Persistent horizontal menu bar modelled after native application menus (File, Edit, View…). Built on `@radix-ui/react-menubar`.
+
+```bash
+cd packages/ui && npx shadcn@latest add menubar
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Menubar` | Root container |
+| `MenubarMenu` | Wraps a single top-level menu |
+| `MenubarTrigger` | Button that opens a menu |
+| `MenubarContent` | Dropdown panel |
+| `MenubarItem` | Clickable menu item |
+| `MenubarSeparator` | Horizontal divider |
+| `MenubarLabel` | Non-interactive group label |
+| `MenubarCheckboxItem` | Item with a checked state |
+| `MenubarRadioGroup` | Container for radio-style items |
+| `MenubarRadioItem` | Single radio item within a group |
+| `MenubarShortcut` | Keyboard shortcut hint (right-aligned) |
+| `MenubarSub` | Wrapper for a nested submenu |
+| `MenubarSubTrigger` | Item that opens the submenu |
+| `MenubarSubContent` | Nested dropdown panel |
+
+## Usage
+
+```jsx
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+} from '@davinci/ui/components/ui/menubar';
+
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>
+        New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+      </MenubarItem>
+      <MenubarItem>
+        New Window <MenubarShortcut>⌘N</MenubarShortcut>
+      </MenubarItem>
+      <MenubarSeparator />
+      <MenubarSub>
+        <MenubarSubTrigger>Share</MenubarSubTrigger>
+        <MenubarSubContent>
+          <MenubarItem>Email link</MenubarItem>
+          <MenubarItem>Copy link</MenubarItem>
+        </MenubarSubContent>
+      </MenubarSub>
+      <MenubarSeparator />
+      <MenubarItem>
+        Print <MenubarShortcut>⌘P</MenubarShortcut>
+      </MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+
+  <MenubarMenu>
+    <MenubarTrigger>View</MenubarTrigger>
+    <MenubarContent>
+      <MenubarCheckboxItem checked>Show Toolbar</MenubarCheckboxItem>
+      <MenubarSeparator />
+      <MenubarRadioGroup value="compact">
+        <MenubarRadioItem value="compact">Compact</MenubarRadioItem>
+        <MenubarRadioItem value="comfortable">Comfortable</MenubarRadioItem>
+      </MenubarRadioGroup>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Preview
+
+<StorybookEmbed story="components-menubar--default" height={260} />

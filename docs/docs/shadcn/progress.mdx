@@ -1,0 +1,41 @@
+---
+title: Progress
+sidebar_position: 39
+description: Horizontal progress bar that communicates task completion from 0–100.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Progress
+
+Horizontal bar that visualises the completion percentage of a task. Built on `@radix-ui/react-progress`.
+
+```bash
+cd packages/ui && npx shadcn@latest add progress
+```
+
+## Usage
+
+```jsx
+import { Progress } from '@davinci/ui/components/ui/progress';
+
+// Static
+<Progress value={60} />
+
+// Controlled — update value over time
+const [progress, setProgress] = React.useState(0);
+
+React.useEffect(() => {
+  const timer = setTimeout(() => setProgress(80), 500);
+  return () => clearTimeout(timer);
+}, []);
+
+<Progress value={progress} className="w-[60%]" />
+```
+
+The `value` prop accepts `0–100`. When `value` is `null` or `undefined` the bar renders in an indeterminate state.
+
+## Preview
+
+<StorybookEmbed story="components-progress--static" height={220} />

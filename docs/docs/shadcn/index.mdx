@@ -1,0 +1,118 @@
+---
+title: shadcn/ui
+sidebar_label: Overview
+sidebar_position: 1
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+
+# shadcn/ui
+
+Davinci integrates [shadcn/ui](https://ui.shadcn.com) as a first-class component library. Components live in `packages/ui/src/components/ui/` and are themed entirely through the Davinci token system — no per-component overrides needed.
+
+## How it works
+
+shadcn/ui is not a traditional npm package. The CLI copies component source code directly into your repo so you own it entirely. The theming is handled through three coordinated layers:
+
+```
+Radix Colors palette  (palette.css)
+        ↓
+Davinci semantic tokens  (colors_and_type.css)
+        ↓
+shadcn variable bridge  (packages/tokens/shadcn-bridge.css)
+        ↓
+Tailwind v4 @theme  (packages/ui/src/styles/globals.css)
+        ↓
+shadcn components  (bg-primary, text-foreground, …)
+```
+
+When you change a Davinci semantic token, every shadcn component that uses the mapped value updates automatically — both in dark and light theme.
+
+## Token bridge
+
+`packages/tokens/shadcn-bridge.css` maps every shadcn CSS variable name to the correct Davinci token:
+
+| shadcn var | Davinci token | Radix step | Role |
+|------------|---------------|------------|------|
+| `--primary` | `--accent` | blue-9 | Primary fill — buttons, links |
+| `--primary-foreground` | `--fg-on-accent` | white | Text on primary fills |
+| `--background` | `--bg` | sand-1 | Page background |
+| `--foreground` | `--fg` | sand-12 | Default text |
+| `--card` | `--bg-surface` | sand-3 / white | Card and panel fills |
+| `--card-foreground` | `--fg` | sand-12 | Card text |
+| `--popover` | `--bg-elevated` | sand-4 / white | Popover fill |
+| `--secondary` | `--bg-subtle` | sand-2 | Secondary fills |
+| `--secondary-foreground` | `--fg-muted` | sand-11 | Secondary text |
+| `--muted` | `--bg-surface` | sand-3 | Muted surface |
+| `--muted-foreground` | `--fg-muted` | sand-11 | Placeholder, helper text |
+| `--accent` (shadcn) | `--accent-subtle` | blue-3 | Ghost/hover highlight |
+| `--accent-foreground` | `--accent-fg` | blue-11 | Text in accent context |
+| `--destructive` | `--danger` | red-9 | Destructive actions |
+| `--border` | `--border` | sand-6 | Default borders |
+| `--input` | `--border` | sand-6 | Input borders |
+| `--ring` | `--border-focus` | blue-8 | Focus rings |
+| `--chart-1…5` | Davinci chromatic | blue, teal, violet, amber, tomato | Chart color sequence |
+
+> **Naming collision** — Both Davinci and shadcn define a variable called `--accent`, but with different meanings. Davinci's `--accent` is the primary blue fill (blue-9). shadcn's `--accent` is a hover highlight surface. The bridge resolves this by using `--shadcn-accent` internally, which maps to Davinci's `--accent-subtle`.
+
+## Adding a component
+
+```bash
+# 1. Install into packages/ui
+cd packages/ui
+npx shadcn@latest add button
+
+# 2. Generate Storybook story and doc stub (from project root)
+cd ../..
+node scripts/generate-stories.js --components button
+node scripts/generate-docs.js --components button
+```
+
+Story lands at `storybook/src/stories/shadcn/Button.stories.jsx`.  
+Doc stub lands at `docs/docs/shadcn/button.mdx`.  
+Both are yours to edit — they are **never overwritten** by the generator.
+
+## Keeping components up to date
+
+```bash
+# Full dependency sync (Radix + shadcn + regenerate stories/docs)
+node scripts/sync.js
+
+# shadcn components only
+node scripts/sync-shadcn.js
+
+# Dry run — see what would change
+node scripts/sync.js --check
+```
+
+The GitHub Actions workflow `.github/workflows/sync-design-system.yml` runs this automatically every Monday and opens a pull request when updates are found.
+
+## Recommended starting set
+
+These components cover the majority of UI needs:
+
+| Component | Install command | Category |
+|-----------|----------------|----------|
+| button | `npx shadcn@latest add button` | Inputs |
+| input | `npx shadcn@latest add input` | Inputs |
+| textarea | `npx shadcn@latest add textarea` | Inputs |
+| select | `npx shadcn@latest add select` | Inputs |
+| checkbox | `npx shadcn@latest add checkbox` | Inputs |
+| switch | `npx shadcn@latest add switch` | Inputs |
+| card | `npx shadcn@latest add card` | Layout |
+| separator | `npx shadcn@latest add separator` | Layout |
+| dialog | `npx shadcn@latest add dialog` | Overlays |
+| sheet | `npx shadcn@latest add sheet` | Overlays |
+| popover | `npx shadcn@latest add popover` | Overlays |
+| tooltip | `npx shadcn@latest add tooltip` | Overlays |
+| tabs | `npx shadcn@latest add tabs` | Navigation |
+| dropdown-menu | `npx shadcn@latest add dropdown-menu` | Navigation |
+| badge | `npx shadcn@latest add badge` | Display |
+| avatar | `npx shadcn@latest add avatar` | Display |
+| table | `npx shadcn@latest add table` | Display |
+| alert | `npx shadcn@latest add alert` | Feedback |
+| toast | `npx shadcn@latest add toast` | Feedback |
+
+## Full component catalog
+
+See the sidebar for individual component pages. Each page documents props, variants, usage examples, and how the component maps to Davinci tokens.

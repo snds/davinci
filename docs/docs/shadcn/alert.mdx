@@ -1,0 +1,73 @@
+---
+title: Alert
+sidebar_position: 55
+description: Callout box for feedback messages. Default and destructive variants.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Alert
+
+An inline callout box. No Radix dependency. Use for confirmations, warnings, and errors that appear in the page flow — not for toast notifications.
+
+```bash
+cd packages/ui && npx shadcn@latest add alert
+```
+
+## Variants
+
+| Variant | Use case |
+|---------|----------|
+| `default` | Info, success, neutral feedback |
+| `destructive` | Error, data loss risk, irreversible action |
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Alert` | Container |
+| `AlertTitle` | Heading — bold, short |
+| `AlertDescription` | Body — supporting detail |
+
+## Usage
+
+```jsx
+import { Alert, AlertTitle, AlertDescription } from '@davinci/ui/components/ui/alert';
+import { InfoIcon, AlertTriangleIcon } from 'lucide-react';
+
+// Default
+<Alert>
+  <InfoIcon className="h-4 w-4" />
+  <AlertTitle>Heads up</AlertTitle>
+  <AlertDescription>
+    Your free trial expires in 3 days. Upgrade to continue.
+  </AlertDescription>
+</Alert>
+
+// Destructive
+<Alert variant="destructive">
+  <AlertTriangleIcon className="h-4 w-4" />
+  <AlertTitle>Error</AlertTitle>
+  <AlertDescription>
+    Your session has expired. Please sign in again.
+  </AlertDescription>
+</Alert>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Default border | `--border` |
+| Default icon/title | `--fg` |
+| Destructive border | `--danger-fg` |
+| Destructive icon/title | `--danger-fg` |
+
+## vs. Toast
+
+Use **Alert** for persistent, in-page feedback that the user must read. Use **Toast** for transient confirmations triggered by an action (saved, deleted, etc.).
+
+## Preview
+
+<StorybookEmbed story="components-alert--default" height={280} />

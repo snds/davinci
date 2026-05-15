@@ -1,0 +1,46 @@
+---
+title: Slider
+sidebar_position: 45
+description: Drag-to-select numeric value along a horizontal track.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Slider
+
+Range input that lets users select a numeric value by dragging a thumb along a track. Built on `@radix-ui/react-slider`.
+
+```bash
+cd packages/ui && npx shadcn@latest add slider
+```
+
+## Usage
+
+```jsx
+import { Slider } from '@davinci/ui/components/ui/slider';
+
+// Uncontrolled — single thumb, 0–100
+<Slider defaultValue={[50]} max={100} step={1} className="w-[60%]" />
+
+// Controlled
+const [volume, setVolume] = React.useState([75]);
+
+<Slider
+  value={volume}
+  onValueChange={setVolume}
+  max={100}
+  step={1}
+  className="w-[60%]"
+/>
+<p>Volume: {volume[0]}</p>
+
+// Range — two thumbs
+<Slider defaultValue={[20, 80]} max={100} step={5} />
+```
+
+`defaultValue` and `value` accept an array. A single-element array gives one thumb; two elements give a range slider.
+
+## Preview
+
+<StorybookEmbed story="components-slider--default" height={220} />

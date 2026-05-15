@@ -1,0 +1,94 @@
+---
+title: Command
+sidebar_position: 28
+description: Keyboard-first command palette built on the cmdk library.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Command
+
+A fast, composable command palette with fuzzy search. Built on the `cmdk` library. Can render standalone or inside a `Popover` to create combobox and search-select patterns.
+
+```bash
+cd packages/ui && npx shadcn@latest add command
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Command` | Root container — manages state and filtering |
+| `CommandInput` | The search field |
+| `CommandList` | Scrollable results container |
+| `CommandEmpty` | Shown when no items match the query |
+| `CommandGroup` | A labeled section within CommandList |
+| `CommandItem` | A selectable result row |
+| `CommandSeparator` | Horizontal rule between groups |
+| `CommandShortcut` | Right-aligned keyboard shortcut label |
+
+## Usage
+
+```jsx
+import {
+  Command, CommandInput, CommandList, CommandEmpty,
+  CommandGroup, CommandItem, CommandSeparator, CommandShortcut,
+} from '@davinci/ui/components/ui/command';
+
+<Command className="rounded-lg border shadow-md">
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup heading="Suggestions">
+      <CommandItem>
+        <span>Calendar</span>
+      </CommandItem>
+      <CommandItem>
+        <span>Search Emoji</span>
+      </CommandItem>
+    </CommandGroup>
+    <CommandSeparator />
+    <CommandGroup heading="Settings">
+      <CommandItem>
+        <span>Profile</span>
+        <CommandShortcut>⌘P</CommandShortcut>
+      </CommandItem>
+      <CommandItem>
+        <span>Settings</span>
+        <CommandShortcut>⌘S</CommandShortcut>
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+```
+
+### As a combobox (inside Popover)
+
+```jsx
+import { Popover, PopoverTrigger, PopoverContent } from '@davinci/ui/components/ui/popover';
+import { Button } from '@davinci/ui/components/ui/button';
+import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@davinci/ui/components/ui/command';
+
+<Popover>
+  <PopoverTrigger asChild>
+    <Button variant="outline">Select framework...</Button>
+  </PopoverTrigger>
+  <PopoverContent className="w-[200px] p-0">
+    <Command>
+      <CommandInput placeholder="Search..." />
+      <CommandList>
+        <CommandEmpty>No results.</CommandEmpty>
+        <CommandGroup>
+          <CommandItem onSelect={() => setValue('next')}>Next.js</CommandItem>
+          <CommandItem onSelect={() => setValue('vite')}>Vite</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  </PopoverContent>
+</Popover>
+```
+
+## Preview
+
+<StorybookEmbed story="components-command--default" height={400} />

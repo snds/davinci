@@ -1,0 +1,88 @@
+---
+title: Calendar
+sidebar_position: 24
+description: Date picker calendar UI built on react-day-picker.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Calendar
+
+An interactive calendar for selecting dates, date ranges, or multiple dates. Built on `react-day-picker`. Typically used as the popover body inside a DatePicker pattern rather than rendered inline on its own.
+
+```bash
+cd packages/ui && npx shadcn@latest add calendar
+```
+
+## Usage
+
+```jsx
+import * as React from 'react';
+import { Calendar } from '@davinci/ui/components/ui/calendar';
+
+export function CalendarDemo() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+
+  return (
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      className="rounded-md border"
+    />
+  );
+}
+```
+
+### Range selection
+
+```jsx
+import { DateRange } from 'react-day-picker';
+
+const [range, setRange] = React.useState<DateRange | undefined>();
+
+<Calendar
+  mode="range"
+  selected={range}
+  onSelect={setRange}
+  numberOfMonths={2}
+/>
+```
+
+### Multiple selection
+
+```jsx
+const [days, setDays] = React.useState<Date[]>([]);
+
+<Calendar
+  mode="multiple"
+  selected={days}
+  onSelect={setDays}
+/>
+```
+
+## Key props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `mode` | `"single" \| "multiple" \| "range"` | Selection mode |
+| `selected` | `Date \| Date[] \| DateRange` | Controlled selected value |
+| `onSelect` | function | Called when selection changes |
+| `disabled` | `Matcher \| Matcher[]` | Dates to disable (e.g. past dates, weekends) |
+| `numberOfMonths` | `number` | How many months to display side-by-side |
+| `initialFocus` | `boolean` | Auto-focus the calendar on mount |
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Selected day background | `--primary` |
+| Selected day text | `--primary-fg` |
+| Today indicator | `--accent` |
+| Disabled day text | `--fg-disabled` |
+| Navigation buttons | `--fg-muted` |
+
+## Preview
+
+<StorybookEmbed story="components-calendar--default" height={440} />

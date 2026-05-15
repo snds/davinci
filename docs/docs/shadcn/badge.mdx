@@ -1,0 +1,51 @@
+---
+title: Badge
+sidebar_position: 50
+description: Short status label. Four variants — default, secondary, destructive, outline.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Badge
+
+A small non-interactive label for status, counts, or category tags. No Radix dependency. Renders as a `<div>` with `inline-flex`.
+
+```bash
+cd packages/ui && npx shadcn@latest add badge
+```
+
+## Variants
+
+| Variant | Background | Text | Use case |
+|---------|-----------|------|----------|
+| `default` | `--accent` (blue-9) | `--fg-on-accent` | Primary status, selected tag |
+| `secondary` | `--bg-subtle` | `--fg-muted` | Neutral label, count |
+| `destructive` | `--danger` (red-9) | `--fg-on-accent` | Error, rejected, deleted |
+| `outline` | transparent | `--fg` | Tag, category, read-only |
+
+## Usage
+
+```jsx
+import { Badge } from '@davinci/ui/components/ui/badge';
+
+<Badge>New</Badge>
+<Badge variant="secondary">Draft</Badge>
+<Badge variant="destructive">Failed</Badge>
+<Badge variant="outline">React</Badge>
+
+// With icon
+import { CheckIcon } from 'lucide-react';
+<Badge><CheckIcon className="mr-1 h-3 w-3" /> Verified</Badge>
+```
+
+## As link
+
+```jsx
+import { badgeVariants } from '@davinci/ui/components/ui/badge';
+<a href="/tags/react" className={badgeVariants({ variant: 'outline' })}>React</a>
+```
+
+## Preview
+
+<StorybookEmbed story="components-badge--all-variants" height={260} />

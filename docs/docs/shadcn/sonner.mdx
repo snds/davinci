@@ -1,0 +1,74 @@
+---
+title: Sonner
+sidebar_position: 46
+description: Toast notification system powered by the Sonner library.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Sonner
+
+Opinionated toast notification system. Built on the [Sonner](https://sonner.emilkowal.ski/) library by Emil Kowalski. Replaces the deprecated shadcn `toast` component.
+
+```bash
+cd packages/ui && npx shadcn@latest add sonner
+```
+
+## Usage
+
+Place `<Toaster />` once at the root of your application, then call `toast()` from anywhere.
+
+```jsx
+// app/layout.tsx (or root layout)
+import { Toaster } from '@davinci/ui/components/ui/sonner';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        {children}
+        <Toaster />
+      </body>
+    </html>
+  );
+}
+```
+
+```jsx
+// Any component
+import { toast } from 'sonner';
+
+// Basic
+toast('File saved.');
+
+// Variants
+toast.success('Changes published.');
+toast.error('Something went wrong.');
+toast.warning('Your session is about to expire.');
+toast.info('A new version is available.');
+
+// With description
+toast.success('Profile updated', {
+  description: 'Your changes will be visible immediately.',
+});
+
+// Action button
+toast('Invoice sent', {
+  action: {
+    label: 'Undo',
+    onClick: () => console.log('Undo'),
+  },
+});
+
+// Promise-based
+toast.promise(saveChanges(), {
+  loading: 'Saving…',
+  success: 'Saved!',
+  error: 'Could not save.',
+});
+```
+
+## Preview
+
+<StorybookEmbed story="components-sonner--default" height={260} />

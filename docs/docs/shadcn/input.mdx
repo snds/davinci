@@ -1,0 +1,61 @@
+---
+title: Input
+sidebar_position: 11
+description: Text input field — wraps a native <input> with Davinci border and focus tokens.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Input
+
+A styled wrapper around the native `<input>` element. No Radix dependency. Matches Davinci's panel surfaces and focus ring.
+
+```bash
+cd packages/ui && npx shadcn@latest add input
+```
+
+## Usage
+
+```jsx
+import { Input } from '@davinci/ui/components/ui/input';
+
+<Input placeholder="Search…" />
+<Input type="email" placeholder="you@example.com" />
+<Input type="password" placeholder="Password" />
+<Input disabled value="Read-only" />
+<Input type="file" />
+```
+
+## With Label
+
+```jsx
+import { Label } from '@davinci/ui/components/ui/label';
+<div className="grid w-full max-w-sm gap-1.5">
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" placeholder="you@example.com" />
+</div>
+```
+
+## With Button (search bar pattern)
+
+```jsx
+<div className="flex w-full max-w-sm gap-2">
+  <Input placeholder="Search…" />
+  <Button type="submit">Search</Button>
+</div>
+```
+
+## Theming
+
+| State | Davinci token |
+|-------|---------------|
+| Border | `--border` (sand-6) |
+| Background | `--bg` |
+| Placeholder | `--fg-subtle` |
+| Focus ring | `--border-focus` (blue-8) via `--ring` |
+| Disabled | opacity 50%, cursor not-allowed |
+
+## Preview
+
+<StorybookEmbed story="components-input--default" height={220} />

@@ -1,0 +1,71 @@
+---
+title: Toggle Group
+sidebar_position: 49
+description: A group of toggle buttons where one or multiple items can be active.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Toggle Group
+
+A set of related toggle buttons where either a single item or multiple items can be pressed simultaneously. Built on `@radix-ui/react-toggle-group`.
+
+```bash
+cd packages/ui && npx shadcn@latest add toggle-group
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `ToggleGroup` | Root — manages `type`, `value`, `onValueChange` |
+| `ToggleGroupItem` | Individual toggle button within the group |
+
+## Usage
+
+```jsx
+import { ToggleGroup, ToggleGroupItem } from '@davinci/ui/components/ui/toggle-group';
+import { AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+
+// Single selection — only one item active at a time
+<ToggleGroup type="single" defaultValue="center">
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <AlignLeft className="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <AlignCenter className="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <AlignRight className="h-4 w-4" />
+  </ToggleGroupItem>
+</ToggleGroup>
+
+// Multiple selection — any combination can be active
+<ToggleGroup type="multiple" defaultValue={['bold', 'italic']}>
+  <ToggleGroupItem value="bold">B</ToggleGroupItem>
+  <ToggleGroupItem value="italic">I</ToggleGroupItem>
+  <ToggleGroupItem value="underline">U</ToggleGroupItem>
+</ToggleGroup>
+
+// Controlled
+const [alignment, setAlignment] = React.useState('left');
+
+<ToggleGroup type="single" value={alignment} onValueChange={setAlignment}>
+  <ToggleGroupItem value="left">Left</ToggleGroupItem>
+  <ToggleGroupItem value="center">Center</ToggleGroupItem>
+  <ToggleGroupItem value="right">Right</ToggleGroupItem>
+</ToggleGroup>
+```
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `type` | `"single" \| "multiple"` | Selection mode |
+| `value` | `string` or `string[]` | Controlled active value(s) |
+| `onValueChange` | `(value) => void` | Change handler |
+| `variant` | `"default" \| "outline"` | Visual style (mirrors Toggle) |
+| `size` | `"sm" \| "default" \| "lg"` | Size (mirrors Toggle) |
+
+## Preview
+
+<StorybookEmbed story="components-togglegroup--single-alignment" height={240} />

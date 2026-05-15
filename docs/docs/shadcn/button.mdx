@@ -1,0 +1,95 @@
+---
+title: Button
+sidebar_position: 10
+description: Triggers an action or event. Six variants, three sizes, icon support.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Button
+
+Triggers an action or event — submitting a form, opening a dialog, or performing a destructive action. Built from a plain `<button>` element with no Radix dependency.
+
+```bash
+cd packages/ui && npx shadcn@latest add button
+```
+
+## Variants
+
+| Variant | Use case | Davinci mapping |
+|---------|----------|-----------------|
+| `default` | Primary action — one per view | `--accent` (blue-9) |
+| `secondary` | Secondary action | `--bg-subtle` surface |
+| `destructive` | Irreversible / danger | `--danger` (red-9) |
+| `outline` | Tertiary — bordered, no fill | `--border` |
+| `ghost` | In-context — no border or fill | `--bg-hover` on hover |
+| `link` | Inline text link style | `--accent-fg` |
+
+## Sizes
+
+| Size | Height | Padding | Font |
+|------|--------|---------|------|
+| `sm` | 32px | 12px | 13px |
+| `default` | 40px | 16px | 14px |
+| `lg` | 44px | 24px | 15px |
+| `icon` | 40×40px | — | icon only |
+
+## Usage
+
+```jsx
+import { Button } from '@davinci/ui/components/ui/button';
+
+// Basic
+<Button>Save changes</Button>
+<Button variant="secondary">Cancel</Button>
+<Button variant="destructive">Delete account</Button>
+<Button variant="outline">View details</Button>
+<Button variant="ghost">Dismiss</Button>
+<Button variant="link">Learn more</Button>
+
+// Sizes
+<Button size="sm">Small</Button>
+<Button size="lg">Large</Button>
+<Button size="icon"><PlusIcon /></Button>
+
+// With Lucide icons
+import { PlusIcon, ArrowRightIcon } from 'lucide-react';
+<Button><PlusIcon className="mr-2 h-4 w-4" /> Create post</Button>
+<Button variant="outline">Continue <ArrowRightIcon className="ml-2 h-4 w-4" /></Button>
+
+// Disabled
+<Button disabled>Saving…</Button>
+
+// Loading state (pattern)
+<Button disabled={isLoading}>
+  {isLoading ? <Loader2Icon className="mr-2 h-4 w-4 animate-spin" /> : null}
+  {isLoading ? 'Saving…' : 'Save changes'}
+</Button>
+
+// As link (polymorphic via asChild)
+import { Link } from 'react-router-dom';
+<Button asChild><Link to="/dashboard">Dashboard</Link></Button>
+```
+
+## Davinci-specific: Alt (Spotlight) variant
+
+The Davinci design system adds a `.btn--alt` class for the yellow Spotlight button. This is separate from shadcn's variant system and used in `davinci.css`. Use it for the single most important CTA per screen:
+
+```html
+<button class="btn btn--alt">Get started</button>
+```
+
+## Theming
+
+| Utility class | Resolves to | Davinci token |
+|---------------|-------------|---------------|
+| `bg-primary` | `var(--accent)` | blue-9 |
+| `text-primary-foreground` | `var(--fg-on-accent)` | white |
+| `bg-secondary` | `var(--bg-subtle)` | sand-2 |
+| `bg-destructive` | `var(--danger)` | red-9 |
+| `border-input` | `var(--border)` | sand-6 |
+
+## Preview
+
+<StorybookEmbed story="components-button--variants" height={280} />

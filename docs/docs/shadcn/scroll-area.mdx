@@ -1,0 +1,53 @@
+---
+title: Scroll Area
+sidebar_position: 42
+description: Cross-browser custom-styled scrollbar that wraps any overflow content.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Scroll Area
+
+Wraps overflow content with a consistently styled, cross-browser scrollbar. Built on `@radix-ui/react-scroll-area`. Use it anywhere native OS scrollbars would look inconsistent — sidebars, command palettes, long lists.
+
+```bash
+cd packages/ui && npx shadcn@latest add scroll-area
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `ScrollArea` | Root — the clipping viewport |
+| `ScrollBar` | Styled scrollbar track and thumb |
+
+## Usage
+
+```jsx
+import { ScrollArea, ScrollBar } from '@davinci/ui/components/ui/scroll-area';
+
+// Vertical scroll
+<ScrollArea className="h-72 w-48 rounded-md border">
+  <div className="p-4">
+    {items.map((item) => (
+      <div key={item} className="text-sm py-1">{item}</div>
+    ))}
+  </div>
+</ScrollArea>
+
+// Horizontal scroll
+<ScrollArea className="w-96 whitespace-nowrap rounded-md border">
+  <div className="flex gap-4 p-4">
+    {tags.map((tag) => (
+      <div key={tag} className="shrink-0 rounded bg-muted px-4 py-2 text-sm">{tag}</div>
+    ))}
+  </div>
+  <ScrollBar orientation="horizontal" />
+</ScrollArea>
+```
+
+`ScrollBar` defaults to `orientation="vertical"`. Add `<ScrollBar orientation="horizontal" />` when horizontal overflow is needed.
+
+## Preview
+
+<StorybookEmbed story="components-scrollarea--default" height={360} />

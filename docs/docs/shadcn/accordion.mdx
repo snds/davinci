@@ -1,0 +1,69 @@
+---
+title: Accordion
+sidebar_position: 20
+description: Vertically stacked collapsible sections built on Radix Accordion.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Accordion
+
+A set of vertically stacked panels that each expand/collapse to reveal their content. Built on `@radix-ui/react-accordion`. Supports both single-open and multi-open modes.
+
+```bash
+cd packages/ui && npx shadcn@latest add accordion
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Accordion` | Root provider — set `type` and `collapsible` here |
+| `AccordionItem` | A single panel with a unique `value` prop |
+| `AccordionTrigger` | The clickable header row — includes the chevron |
+| `AccordionContent` | The body that animates open/closed |
+
+## Usage
+
+```jsx
+import {
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent,
+} from '@davinci/ui/components/ui/accordion';
+
+<Accordion type="single" collapsible>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionContent>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-2">
+    <AccordionTrigger>Is it animated?</AccordionTrigger>
+    <AccordionContent>
+      Yes. The content panel animates open and closed using CSS transitions.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+For multiple panels open at once:
+
+```jsx
+<Accordion type="multiple">
+  {/* AccordionItems */}
+</Accordion>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Trigger text | `--fg` |
+| Border between items | `--border` |
+| Chevron icon | `--fg-muted` |
+| Content text | `--fg-muted` |
+
+## Preview
+
+<StorybookEmbed story="components-accordion--single" height={380} />

@@ -1,0 +1,76 @@
+---
+title: Context Menu
+sidebar_position: 29
+description: Right-click contextual menu built on Radix ContextMenu.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Context Menu
+
+A menu that appears on right-click (or long-press on touch) anchored to the pointer position. Built on `@radix-ui/react-context-menu`. Supports checkboxes, radio groups, keyboard shortcuts, and nested submenus.
+
+```bash
+cd packages/ui && npx shadcn@latest add context-menu
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `ContextMenu` | Root provider |
+| `ContextMenuTrigger` | The area that responds to right-click |
+| `ContextMenuContent` | The floating menu panel |
+| `ContextMenuItem` | A basic action row |
+| `ContextMenuCheckboxItem` | A toggleable checkbox row |
+| `ContextMenuRadioItem` | A radio-group option row |
+| `ContextMenuLabel` | Non-interactive section heading |
+| `ContextMenuSeparator` | Horizontal rule between groups |
+| `ContextMenuGroup` | Groups related items |
+| `ContextMenuSub` | Root for a nested submenu |
+| `ContextMenuSubTrigger` | Item row that opens the submenu |
+| `ContextMenuSubContent` | The submenu panel |
+| `ContextMenuShortcut` | Right-aligned keyboard shortcut label |
+
+## Usage
+
+```jsx
+import {
+  ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem,
+  ContextMenuCheckboxItem, ContextMenuSeparator, ContextMenuLabel,
+  ContextMenuShortcut, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent,
+} from '@davinci/ui/components/ui/context-menu';
+
+<ContextMenu>
+  <ContextMenuTrigger className="flex h-32 w-48 items-center justify-center rounded-md border border-dashed text-sm">
+    Right-click here
+  </ContextMenuTrigger>
+  <ContextMenuContent className="w-48">
+    <ContextMenuItem>
+      Back
+      <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuItem disabled>
+      Forward
+      <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuCheckboxItem checked={showBookmarks} onCheckedChange={setShowBookmarks}>
+      Show Bookmarks Bar
+    </ContextMenuCheckboxItem>
+    <ContextMenuSeparator />
+    <ContextMenuSub>
+      <ContextMenuSubTrigger>More Tools</ContextMenuSubTrigger>
+      <ContextMenuSubContent>
+        <ContextMenuItem>Save Page As…</ContextMenuItem>
+        <ContextMenuItem>Create Shortcut…</ContextMenuItem>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+  </ContextMenuContent>
+</ContextMenu>
+```
+
+## Preview
+
+<StorybookEmbed story="components-contextmenu--default" height={280} />

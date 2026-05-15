@@ -1,0 +1,65 @@
+---
+title: Card
+sidebar_position: 20
+description: Surface container with header, content, and footer sections.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Card
+
+A surface container built from semantic HTML. No Radix dependency. Uses Davinci's `--bg-surface` and `--border` tokens — matches the Davinci `<Panel>` aesthetically.
+
+```bash
+cd packages/ui && npx shadcn@latest add card
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Card` | Outer container — rounded, bordered surface |
+| `CardHeader` | Top section — title + description row |
+| `CardTitle` | Heading inside CardHeader |
+| `CardDescription` | Subtitle / helper text in CardHeader |
+| `CardContent` | Main body section |
+| `CardFooter` | Bottom section — typically actions |
+
+## Usage
+
+```jsx
+import {
+  Card, CardHeader, CardTitle, CardDescription,
+  CardContent, CardFooter,
+} from '@davinci/ui/components/ui/card';
+import { Button } from '@davinci/ui/components/ui/button';
+
+<Card className="w-[360px]">
+  <CardHeader>
+    <CardTitle>Account settings</CardTitle>
+    <CardDescription>Update your profile and preferences.</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Card body content goes here.</p>
+  </CardContent>
+  <CardFooter className="flex justify-between">
+    <Button variant="ghost">Cancel</Button>
+    <Button>Save changes</Button>
+  </CardFooter>
+</Card>
+```
+
+## Theming
+
+| Part | Tailwind class | Davinci token |
+|------|---------------|---------------|
+| Container | `bg-card` | `--bg-surface` |
+| Container text | `text-card-foreground` | `--fg` |
+| Border | `border` | `--border` |
+| Shadow | `shadow-sm` | `--shadow-sm` |
+| Description | `text-muted-foreground` | `--fg-muted` |
+
+## Preview
+
+<StorybookEmbed story="components-card--default" height={420} />
