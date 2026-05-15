@@ -1,1 +1,25 @@
 .DS_Store
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+.docusaurus/
+storybook-static/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / local tooling
+.claude-outer/
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+.env.*.local
