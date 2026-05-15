@@ -28,6 +28,11 @@ const config = {
 
   plugins: [tailwindPlugin],
 
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap',
+    'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+  ],
+
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 

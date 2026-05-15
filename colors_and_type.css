@@ -4,12 +4,10 @@
    Default theme: dark. Light available via [data-theme="light"]
    ============================================================ */
 
-/* ---------- Fonts (Google Fonts) ---------- */
-/* Display + body: Inter — default, modern-neutral workhorse
-   Mono: JetBrains Mono
-   Icons: Material Symbols Rounded */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+/* Fonts (Inter, JetBrains Mono, Material Symbols Rounded) are loaded by
+   the bundle entry point — @davinci/tokens/all.css for docs, or via
+   <link> injection in storybook/.storybook/preview.jsx. Direct importers
+   of this file are responsible for loading them. */
 
 /* Full Radix palette — all 31 scales, both themes, opaque + alpha + P3 */
 @import './palette.css';
