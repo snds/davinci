@@ -5,10 +5,30 @@ sidebar_label: Spacing
 
 import TokenTable from '@site/src/components/TokenTable';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Spacing
 
 Davinci uses a 4-px base spacing scale with 15 named steps. The scale follows a growth curve that moves from micro increments at the low end (2px) to large layout values at the top (128px), with a soft doubling rhythm from step 3 onward.
+
+<LiveDemo
+  title="Spacing scale visualization"
+  html={`<div style="display:flex;flex-direction:column;gap:6px;font-family:var(--font-mono);">
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-1</div><div style="height:20px;width:2px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">2px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-2</div><div style="height:20px;width:4px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">4px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-3</div><div style="height:20px;width:8px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">8px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-4</div><div style="height:20px;width:12px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">12px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-5</div><div style="height:20px;width:16px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">16px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-6</div><div style="height:20px;width:20px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">20px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-7</div><div style="height:20px;width:24px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">24px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-8</div><div style="height:20px;width:32px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">32px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-9</div><div style="height:20px;width:40px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">40px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-10</div><div style="height:20px;width:48px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">48px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-11</div><div style="height:20px;width:64px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">64px</div></div>
+  <div style="display:flex;align-items:center;gap:12px;"><div style="width:68px;font-size:11px;color:var(--fg-muted);">--s-12</div><div style="height:20px;width:80px;background:var(--accent);border-radius:3px;"></div><div style="font-size:11px;color:var(--fg-subtle);">80px</div></div>
+</div>`}
+  pad="24px"
+/>
 
 ## The scale
 

@@ -5,10 +5,26 @@ sidebar_label: Typography
 
 import TokenTable from '@site/src/components/TokenTable';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Typography
 
 Davinci's type system is built on **Inter** for UI text and **JetBrains Mono** for code. A 13-step type scale covers every context from dense micro-labels to large display headings, with matching line-height and letter-spacing tokens.
+
+<LiveDemo
+  title="Type scale"
+  html={`<div style="display:flex;flex-direction:column;gap:10px;">
+  <div style="font-family:var(--font-display);font-size:48px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;">Display / Hero</div>
+  <div style="font-family:var(--font-display);font-size:30px;font-weight:700;letter-spacing:-0.01em;line-height:1.25;">Page heading (h2)</div>
+  <div style="font-family:var(--font-display);font-size:20px;font-weight:600;line-height:1.25;">Section subheading (h3)</div>
+  <div style="font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.5;">Card title / emphasized body</div>
+  <div style="font-size:15px;font-weight:400;line-height:1.6;color:var(--fg);">Default body text — used for post content and long-form reading. Comfortable line height for extended passages.</div>
+  <div style="font-size:13px;font-weight:400;line-height:1.5;color:var(--fg-muted);">Secondary text — sidebar items, form labels, captions, metadata.</div>
+  <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--fg-subtle);">MICRO LABEL — table headers, badges, section tags</div>
+  <div style="font-family:var(--font-mono);font-size:13px;background:var(--bg-subtle);padding:8px 12px;border-radius:6px;border:1px solid var(--border-subtle);color:var(--alt-fg);">code · --font-mono · JetBrains Mono</div>
+</div>`}
+  pad="24px"
+/>
 
 ## Font families
 
@@ -93,6 +109,22 @@ The base CSS in `colors_and_type.css` applies sensible defaults to HTML heading 
 **Headings** — follow the table above. Avoid skipping levels (e.g. h1 → h3). Letter spacing at large sizes (-0.02em) prevents Inter from feeling too loose.
 
 **Don't** override fonts with system fonts in components — Inter provides a consistent platform feel.
+
+## Type scale contexts
+
+The same tokens serve different surfaces — context determines which steps are appropriate. Never use `--text-6xl` or `--text-7xl` inside a dense UI; reserve them for landing pages and marketing surfaces where breathing room is intentional.
+
+| Context | Heading | Body | Secondary | Label |
+|---|---|---|---|---|
+| **App UI** (feeds, panels, cards) | `--text-2xl` – `--text-3xl` | `--text-base` | `--text-sm` | `--text-xs` |
+| **Documentation** | `--text-4xl` (h1), `--text-2xl` (h2) | `--text-base` | `--text-sm` | `--text-2xs` |
+| **Marketing / hero** | `--text-5xl` – `--text-7xl` | `--text-lg` | `--text-base` | `--text-sm` |
+| **Dense / data tables** | — | `--text-sm` – `--text-md` | `--text-xs` | `--text-2xs` |
+| **Mobile** | Step down 1–2 from desktop | Same as desktop | Same | Same |
+
+:::tip Scale down on mobile
+When using `--text-5xl` or larger in a hero or page title, step down one size on viewports below `--bp-sm`. A `--text-7xl` headline at 76px fills a 390px screen edge to edge and becomes illegible.
+:::
 
 ---
 

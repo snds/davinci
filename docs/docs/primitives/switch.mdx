@@ -1,0 +1,107 @@
+---
+title: Switch
+sidebar_label: Switch
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+
+# Switch
+
+Switch is a binary on/off toggle with a sliding thumb. Use it for settings that take effect immediately — unlike a checkbox, a switch implies instant action, not form submission.
+
+<LiveDemo
+  title="Switch states"
+  html={`<div style="display:flex;flex-direction:column;gap:12px;">
+  <label class="switch">
+    <div class="switch__track">
+      <div class="switch__thumb"></div>
+    </div>
+    <span>Email notifications</span>
+  </label>
+  <label class="switch switch--on">
+    <div class="switch__track">
+      <div class="switch__thumb"></div>
+    </div>
+    <span>Push notifications</span>
+  </label>
+  <label class="switch switch--on">
+    <div class="switch__track">
+      <div class="switch__thumb"></div>
+    </div>
+    <span>Open to work</span>
+  </label>
+  <label class="switch" style="opacity:0.4;pointer-events:none;">
+    <div class="switch__track">
+      <div class="switch__thumb"></div>
+    </div>
+    <span>Premium feature (disabled)</span>
+  </label>
+</div>`}
+  pad="24px"
+/>
+
+## Real-world: settings panel
+
+<LiveDemo
+  title="Settings switches"
+  html={`<div class="panel" style="max-width:380px;">
+  <div class="panel__header"><span>Privacy settings</span></div>
+  <div class="panel__body" style="display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:13px;font-weight:600;">Show profile views</div>
+        <div style="font-size:12px;color:var(--fg-muted);">Let others see when you viewed their profile</div>
+      </div>
+      <label class="switch switch--on">
+        <div class="switch__track"><div class="switch__thumb"></div></div>
+      </label>
+    </div>
+    <hr class="separator" />
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:13px;font-weight:600;">Targeted ads</div>
+        <div style="font-size:12px;color:var(--fg-muted);">Allow personalized ads based on activity</div>
+      </div>
+      <label class="switch">
+        <div class="switch__track"><div class="switch__thumb"></div></div>
+      </label>
+    </div>
+    <hr class="separator" />
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:13px;font-weight:600;">Data sharing</div>
+        <div style="font-size:12px;color:var(--fg-muted);">Share anonymized data with partners</div>
+      </div>
+      <label class="switch switch--on">
+        <div class="switch__track"><div class="switch__thumb"></div></div>
+      </label>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<!-- Off state -->
+<label class="switch">
+  <div class="switch__track">
+    <div class="switch__thumb"></div>
+  </div>
+  <span>Email notifications</span>
+</label>
+
+<!-- On state — add switch--on to the root label -->
+<label class="switch switch--on">
+  <div class="switch__track">
+    <div class="switch__thumb"></div>
+  </div>
+  <span>Push notifications</span>
+</label>
+```
+
+<DocsCallout type="info">
+  The on/off state is CSS-driven via `.switch--on`. Toggle this class with JS on click. For accessibility, add `role="switch"` and `aria-checked="true/false"` to the root element.
+</DocsCallout>

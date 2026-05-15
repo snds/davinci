@@ -15,6 +15,7 @@ Buttons are the primary interactive trigger. Davinci provides four semantic vari
   title="All button variants"
   html={`<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
   <button class="btn btn--primary">Primary</button>
+  <button class="btn btn--alt">Spotlight</button>
   <button class="btn btn--secondary">Secondary</button>
   <button class="btn btn--outline">Outline</button>
   <button class="btn btn--ghost">Ghost</button>
@@ -26,8 +27,9 @@ Buttons are the primary interactive trigger. Davinci provides four semantic vari
 
 | Variant | Token usage | When to use |
 |---|---|---|
-| **Primary** | `--accent` fill, `--fg-on-accent` text | The single most important action on a view |
-| **Secondary** | `--bg-surface` fill, `--border` stroke, `--fg` text | Complementary actions, secondary CTAs |
+| **Primary** | `--accent` gradient, `--fg-on-accent` text | The single most important action on a view |
+| **Spotlight** | `--alt` (yellow) gradient, `--fg-on-alt` text | One-per-page CTA — reserved for premium/conversion moments |
+| **Secondary** | `--bg-surface` fill (gradient in light mode), `--border` stroke | Complementary actions, secondary CTAs |
 | **Outline** | Transparent fill, `--accent-border` stroke, `--accent-fg` text | Moderate-emphasis action in an accent context |
 | **Ghost** | No fill, no border, `--fg-muted` text | Low-emphasis — cancel, back, tertiary nav |
 
@@ -97,6 +99,23 @@ No fill, no border. Relies on text color alone. Used for cancel actions, tertiar
 
 ```html
 <button class="btn btn--ghost">Cancel</button>
+```
+
+### Spotlight (Alt)
+
+Gold `--alt` (`--yellow-9`) gradient with dark `--fg-on-alt` text. Reserved for the single highest-priority conversion action on a page — a LinkedIn Premium upsell, a featured job application, a plan upgrade. **Limit one per page.** Do not pair alongside a Primary button.
+
+<LiveDemo
+  title=".btn.btn--alt"
+  html={`<div style="display:flex;gap:8px;align-items:center;">
+  <button class="btn btn--alt">Try Premium Free</button>
+  <button class="btn btn--alt btn--sm">Upgrade</button>
+</div>`}
+  pad="20px 24px"
+/>
+
+```html
+<button class="btn btn--alt">Try Premium Free</button>
 ```
 
 ---
@@ -195,7 +214,7 @@ Use at most one Primary button per visible region. Pair Primary + Ghost for conf
 </DocsCallout>
 
 <DocsCallout type="danger" title="Don't">
-Don't use Primary for destructive actions. Don't place two Primary buttons side by side. Don't use Ghost for the primary action on a page.
+Don't use Primary for destructive actions. Don't place two Primary buttons side by side. Don't use Ghost for the primary action on a page. Don't use Spotlight (alt/yellow) alongside Primary — each page should have at most one of either.
 </DocsCallout>
 
 ---

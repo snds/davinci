@@ -1,0 +1,81 @@
+---
+title: Textarea
+sidebar_label: Textarea
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Textarea
+
+Textarea is the multiline text field primitive. It inherits the same border, focus ring, and token system as `.input`.
+
+<LiveDemo
+  title="Textarea variants"
+  html={`<div style="display:flex;flex-direction:column;gap:16px;max-width:420px;">
+  <div class="form-group">
+    <label class="label">About you</label>
+    <textarea class="textarea" rows="4" placeholder="Tell your network what you do and what you're passionate about…"></textarea>
+    <span class="form-hint">Shown on your public profile. Markdown supported.</span>
+  </div>
+  <div class="form-group">
+    <label class="label label--required">Message</label>
+    <textarea class="textarea" rows="3" placeholder="Write your message…"></textarea>
+  </div>
+  <div class="form-group">
+    <label class="label label--muted">Disabled</label>
+    <textarea class="textarea" disabled placeholder="Not editable"></textarea>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Real-world: post composer expanded
+
+<LiveDemo
+  title="Expanded composer"
+  html={`<div class="panel" style="max-width:540px;">
+  <div style="display:flex;gap:12px;padding:16px;">
+    <div class="avatar avatar--40">JD</div>
+    <div style="flex:1;">
+      <div style="font-weight:600;font-size:13px;margin-bottom:8px;">Jane Doe</div>
+      <textarea class="textarea" rows="4" placeholder="What do you want to talk about?"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded" style="font-size:18px;">image</span></button>
+          <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded" style="font-size:18px;">link</span></button>
+          <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded" style="font-size:18px;">tag</span></button>
+        </div>
+        <button class="btn btn--primary btn--sm">Post</button>
+      </div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<div class="form-group">
+  <label class="label">About you</label>
+  <textarea class="textarea" rows="4" placeholder="Describe yourself…"></textarea>
+  <span class="form-hint">Max 300 characters</span>
+</div>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.textarea', type: 'textarea', description: 'Multiline text input — surface bg, 1px border, 6px radius, focus ring, resize: vertical' },
+  { name: '.form-group', type: 'div', description: 'Flex column with 6px gap — pairs label + textarea + hint' },
+  { name: '.label', type: 'label', description: 'Form label — 13px semibold' },
+  { name: '.form-hint', type: 'span', description: 'Muted helper text' },
+]} />
+
+<DocsCallout type="note">
+  `.textarea` uses `white-space: pre-wrap` via browser default. Always sanitize user-submitted content before rendering it as HTML.
+</DocsCallout>

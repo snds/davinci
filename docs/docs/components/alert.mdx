@@ -1,0 +1,128 @@
+---
+title: Alert
+sidebar_label: Alert
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Alert
+
+Alert is a semantic inline banner for status messages — info, success, warning, and danger. Unlike a Toast, an Alert is persistent and inline within the page content.
+
+<LiveDemo
+  title="All alert variants"
+  html={`<div style="display:flex;flex-direction:column;gap:10px;max-width:480px;">
+  <div class="alert alert--info">
+    <span class="material-symbols-rounded alert__icon">info</span>
+    <div class="alert__body">
+      <div class="alert__title">Profile tips available</div>
+      <div class="alert__desc">Add 3 more skills to increase your profile score by 20 points.</div>
+    </div>
+  </div>
+  <div class="alert alert--success">
+    <span class="material-symbols-rounded alert__icon">check_circle</span>
+    <div class="alert__body">
+      <div class="alert__title">Application submitted</div>
+      <div class="alert__desc">Your application to Davinci Co. was sent successfully.</div>
+    </div>
+  </div>
+  <div class="alert alert--warning">
+    <span class="material-symbols-rounded alert__icon">warning</span>
+    <div class="alert__body">
+      <div class="alert__title">Incomplete profile</div>
+      <div class="alert__desc">Your profile is missing a headline. Recruiters are 2× more likely to contact candidates with headlines.</div>
+    </div>
+  </div>
+  <div class="alert alert--danger">
+    <span class="material-symbols-rounded alert__icon">error</span>
+    <div class="alert__body">
+      <div class="alert__title">Submission failed</div>
+      <div class="alert__desc">We couldn't process your request. Please try again or contact support.</div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Title-only variant
+
+<LiveDemo
+  title="Compact alerts"
+  html={`<div style="display:flex;flex-direction:column;gap:8px;max-width:480px;">
+  <div class="alert alert--info">
+    <span class="material-symbols-rounded alert__icon">info</span>
+    <div class="alert__body">Your session expires in 10 minutes.</div>
+  </div>
+  <div class="alert alert--success">
+    <span class="material-symbols-rounded alert__icon">check_circle</span>
+    <div class="alert__body">Settings saved successfully.</div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Real-world: form validation
+
+<LiveDemo
+  title="Form with alert"
+  html={`<div class="panel" style="max-width:400px;">
+  <div class="panel__header"><span>Edit profile</span></div>
+  <div class="panel__body" style="display:flex;flex-direction:column;gap:14px;">
+    <div class="alert alert--danger">
+      <span class="material-symbols-rounded alert__icon">error</span>
+      <div class="alert__body">
+        <div class="alert__title">Please fix the errors below</div>
+        <div class="alert__desc">Headline is required. Location must be a valid city.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label label--required">Headline</label>
+      <input class="input input--error" type="text" placeholder="e.g. Senior Product Designer" />
+      <span class="form-error"><span class="material-symbols-rounded" style="font-size:13px;">error</span>Headline is required</span>
+    </div>
+    <div class="form-group">
+      <label class="label">Location</label>
+      <input class="input" type="text" placeholder="City, Country" />
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn--secondary">Cancel</button>
+      <button class="btn btn--primary">Save changes</button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<div class="alert alert--info">
+  <span class="material-symbols-rounded alert__icon">info</span>
+  <div class="alert__body">
+    <div class="alert__title">Heads up</div>
+    <div class="alert__desc">Additional context goes here.</div>
+  </div>
+</div>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.alert', type: 'div', description: 'Base alert — flex row, 8px radius, subtle bg and border' },
+  { name: '.alert--info', type: 'modifier', description: 'Blue tint — informational messages' },
+  { name: '.alert--success', type: 'modifier', description: 'Green tint — confirmation and success' },
+  { name: '.alert--warning', type: 'modifier', description: 'Yellow tint — caution, incomplete state' },
+  { name: '.alert--danger', type: 'modifier', description: 'Red tint — errors, destructive warnings' },
+  { name: '.alert__icon', type: 'span', description: 'Leading Material Symbol icon' },
+  { name: '.alert__body', type: 'div', description: 'Content container for title + desc' },
+  { name: '.alert__title', type: 'div', description: 'Bold heading in display font' },
+  { name: '.alert__desc', type: 'div', description: 'Supporting muted text' },
+]} />
+
+<DocsCallout type="note">
+  Alert is for persistent, inline feedback. For ephemeral notifications that auto-dismiss, use **Toast** instead.
+</DocsCallout>

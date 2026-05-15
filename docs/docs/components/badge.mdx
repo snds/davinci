@@ -1,0 +1,108 @@
+---
+title: Badge
+sidebar_label: Badge
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Badge
+
+Badge is a compact numeric indicator used to surface unread counts on nav icons or notification bells. It is distinct from `.pill` — pills label categories; badges surface counts.
+
+<LiveDemo
+  title="Badge variants"
+  center
+  html={`<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+  <div style="position:relative;display:inline-flex;">
+    <span class="material-symbols-rounded" style="font-size:24px;color:var(--fg-muted);">notifications</span>
+    <span class="badge" style="position:absolute;top:-6px;right:-8px;">3</span>
+  </div>
+  <div style="position:relative;display:inline-flex;">
+    <span class="material-symbols-rounded" style="font-size:24px;color:var(--fg-muted);">chat_bubble</span>
+    <span class="badge" style="position:absolute;top:-6px;right:-8px;">12</span>
+  </div>
+  <div style="position:relative;display:inline-flex;">
+    <span class="material-symbols-rounded" style="font-size:24px;color:var(--fg-muted);">inbox</span>
+    <span class="badge" style="position:absolute;top:-6px;right:-8px;">99+</span>
+  </div>
+  <div style="position:relative;display:inline-flex;">
+    <span class="material-symbols-rounded" style="font-size:24px;color:var(--fg-muted);">person</span>
+    <span class="badge badge--dot" style="position:absolute;top:-2px;right:-2px;"></span>
+  </div>
+  <span class="badge badge--neutral">42</span>
+  <span class="badge badge--accent">New</span>
+</div>`}
+  pad="32px 24px"
+/>
+
+## On nav tabs
+
+<LiveDemo
+  title="Nav with badges"
+  html={`<div class="panel" style="max-width:320px;">
+  <ul class="nav-list">
+    <li class="active">
+      <span class="material-symbols-rounded">home</span>
+      Home
+    </li>
+    <li style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="material-symbols-rounded">group</span>
+        Network
+      </div>
+      <span class="badge">5</span>
+    </li>
+    <li style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="material-symbols-rounded">notifications</span>
+        Notifications
+      </div>
+      <span class="badge">24</span>
+    </li>
+    <li style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="material-symbols-rounded">chat_bubble_outline</span>
+        Messages
+      </div>
+      <span class="badge">3</span>
+    </li>
+  </ul>
+</div>`}
+  pad="16px"
+/>
+
+## HTML structure
+
+```html
+<!-- On an icon -->
+<div style="position: relative; display: inline-flex;">
+  <span class="material-symbols-rounded">notifications</span>
+  <span class="badge" style="position: absolute; top: -6px; right: -8px;">3</span>
+</div>
+
+<!-- Dot badge -->
+<div style="position: relative; display: inline-flex;">
+  <span class="material-symbols-rounded">person</span>
+  <span class="badge badge--dot" style="position: absolute; top: -2px; right: -2px;"></span>
+</div>
+
+<!-- Inline neutral -->
+<span class="badge badge--neutral">42</span>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.badge', type: 'span', description: 'Red notification badge — 18px min-width, bold 10px text' },
+  { name: '.badge--accent', type: 'modifier', description: 'Uses accent color instead of red' },
+  { name: '.badge--neutral', type: 'modifier', description: 'Subtle bg with muted text — for counts in non-urgent contexts' },
+  { name: '.badge--dot', type: 'modifier', description: '8×8px dot with no text — signals new activity without a count' },
+]} />
+
+<DocsCallout type="info">
+  Cap badge text at `99+` for counts above 99. A three-digit number breaks the circular shape.
+</DocsCallout>

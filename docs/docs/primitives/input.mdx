@@ -1,0 +1,124 @@
+---
+title: Input
+sidebar_label: Input
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Input
+
+Input is the single-line text field primitive. It pairs with `.label` and `.form-hint` to build accessible form groups.
+
+<LiveDemo
+  title="Input variants"
+  html={`<div style="display:flex;flex-direction:column;gap:16px;max-width:360px;">
+  <div class="form-group">
+    <label class="label">Default</label>
+    <input class="input" type="text" placeholder="Enter your name" />
+  </div>
+  <div class="form-group">
+    <label class="label">With hint</label>
+    <input class="input" type="email" placeholder="you@company.com" />
+    <span class="form-hint">We'll never share your email.</span>
+  </div>
+  <div class="form-group">
+    <label class="label label--required">Required field</label>
+    <input class="input input--error" type="text" value="bad input" />
+    <span class="form-error">
+      <span class="material-symbols-rounded" style="font-size:13px;">error</span>
+      This field is required
+    </span>
+  </div>
+  <div class="form-group">
+    <label class="label label--muted">Disabled</label>
+    <input class="input" type="text" placeholder="Not editable" disabled />
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## With leading icon
+
+<LiveDemo
+  title="Icon inputs"
+  html={`<div style="display:flex;flex-direction:column;gap:12px;max-width:360px;">
+  <div class="input-wrap">
+    <span class="material-symbols-rounded input-icon">search</span>
+    <input class="input" type="text" placeholder="Search people or companies…" />
+  </div>
+  <div class="input-wrap">
+    <span class="material-symbols-rounded input-icon">person</span>
+    <input class="input" type="text" placeholder="Username" />
+  </div>
+  <div class="input-wrap">
+    <span class="material-symbols-rounded input-icon">lock</span>
+    <input class="input" type="password" placeholder="Password" />
+    <span class="material-symbols-rounded input-icon input-icon--right" style="cursor:pointer;">visibility</span>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Sizes
+
+<LiveDemo
+  title="Input sizes"
+  html={`<div style="display:flex;flex-direction:column;gap:12px;max-width:360px;">
+  <input class="input input--sm" type="text" placeholder="Small input" />
+  <input class="input" type="text" placeholder="Default input" />
+  <input class="input input--lg" type="text" placeholder="Large input" />
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<!-- Basic form group -->
+<div class="form-group">
+  <label class="label label--required">Full name</label>
+  <input class="input" type="text" placeholder="Jane Doe" />
+  <span class="form-hint">Appears on your public profile</span>
+</div>
+
+<!-- Input with icon -->
+<div class="input-wrap">
+  <span class="material-symbols-rounded input-icon">search</span>
+  <input class="input" type="text" placeholder="Search…" />
+</div>
+
+<!-- Error state -->
+<div class="form-group">
+  <label class="label">Email</label>
+  <input class="input input--error" type="email" value="not-an-email" />
+  <span class="form-error">
+    <span class="material-symbols-rounded" style="font-size:13px;">error</span>
+    Please enter a valid email address
+  </span>
+</div>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.input', type: 'input', description: 'Base text input — surface bg, 1px border, 6px radius, focus ring' },
+  { name: '.input--sm', type: 'modifier', description: 'Smaller padding and font-size (12px)' },
+  { name: '.input--lg', type: 'modifier', description: 'Larger padding and font-size (14px)' },
+  { name: '.input--error', type: 'modifier', description: 'Red border + red focus ring for validation errors' },
+  { name: '.input-wrap', type: 'div', description: 'Relative wrapper for inputs with leading/trailing icons' },
+  { name: '.input-icon', type: 'span', description: 'Absolute-positioned icon inside .input-wrap' },
+  { name: '.input-icon--right', type: 'modifier', description: 'Positions icon on the right side' },
+  { name: '.form-group', type: 'div', description: 'Flex column wrapper with 6px gap — label + input + hint' },
+  { name: '.form-hint', type: 'span', description: 'Muted helper text below the input' },
+  { name: '.form-error', type: 'span', description: 'Red error message with optional icon' },
+  { name: '.label', type: 'label', description: 'Form field label — 13px semibold' },
+  { name: '.label--required', type: 'modifier', description: 'Appends a red asterisk after the label text' },
+]} />
+
+<DocsCallout type="warning" title="Validation">
+  Trigger `.input--error` and show `.form-error` only after a blur or form submit attempt — not while the user is actively typing. This avoids premature error states.
+</DocsCallout>

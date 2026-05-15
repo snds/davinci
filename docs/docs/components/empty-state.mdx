@@ -1,0 +1,178 @@
+---
+title: EmptyState
+sidebar_label: EmptyState
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import TokenTable from '@site/src/components/TokenTable';
+
+# EmptyState
+
+Used when a list, table, feed, or content area has no data to show. Provides consistent structure for the zero-state across the Davinci platform — replacing ad-hoc "nothing here" messages with a composable, accessible pattern.
+
+<LiveDemo
+  title="EmptyState variants"
+  html={`<div style="display:flex;flex-direction:column;gap:24px;">
+
+  <!-- Default: no results -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:8px;border:1px dashed var(--border);background:var(--bg-subtle);padding:48px 24px;text-align:center;">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;">
+      <span class="material-symbols-rounded" style="font-size:22px;color:var(--fg-muted);">search_off</span>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--fg);margin-bottom:6px;">No results found</div>
+      <div style="font-size:13px;color:var(--fg-muted);max-width:280px;">Try adjusting your search or filters to find what you're looking for.</div>
+    </div>
+  </div>
+
+  <!-- With action -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:8px;border:1px dashed var(--border);background:var(--bg-subtle);padding:48px 24px;text-align:center;">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;">
+      <span class="material-symbols-rounded" style="font-size:22px;color:var(--fg-muted);">post_add</span>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--fg);margin-bottom:6px;">No posts yet</div>
+      <div style="font-size:13px;color:var(--fg-muted);max-width:280px;">Share your first update with your network.</div>
+    </div>
+    <button class="btn btn--primary" style="font-size:13px;padding:8px 18px;">Create post</button>
+  </div>
+
+  <!-- Error state -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:8px;border:1px dashed var(--border);background:var(--bg-subtle);padding:48px 24px;text-align:center;">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;">
+      <span class="material-symbols-rounded" style="font-size:22px;color:var(--danger-fg);">error_outline</span>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--fg);margin-bottom:6px;">Failed to load</div>
+      <div style="font-size:13px;color:var(--fg-muted);max-width:280px;">Something went wrong fetching your feed. Please try again.</div>
+    </div>
+    <button class="btn btn--secondary" style="font-size:13px;padding:8px 18px;">Retry</button>
+  </div>
+
+</div>`}
+  pad="24px"
+/>
+
+## Installation
+
+```bash
+cd packages/ui && npx shadcn@latest add empty-state
+```
+
+Or copy directly from `packages/ui/src/components/ui/empty-state.jsx`.
+
+## Usage
+
+```jsx
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateAction,
+} from '@davinci/ui/components/ui/empty-state';
+import { Button } from '@davinci/ui/components/ui/button';
+import { SearchX } from 'lucide-react';
+
+export function NoResults() {
+  return (
+    <EmptyState>
+      <EmptyStateIcon>
+        <SearchX className="size-5" />
+      </EmptyStateIcon>
+      <EmptyStateTitle>No results found</EmptyStateTitle>
+      <EmptyStateDescription>
+        Try adjusting your search or filters to find what you're looking for.
+      </EmptyStateDescription>
+    </EmptyState>
+  );
+}
+```
+
+### With action
+
+```jsx
+<EmptyState>
+  <EmptyStateIcon>
+    <FilePlus className="size-5" />
+  </EmptyStateIcon>
+  <EmptyStateTitle>No posts yet</EmptyStateTitle>
+  <EmptyStateDescription>
+    Share your first update with your network.
+  </EmptyStateDescription>
+  <EmptyStateAction>
+    <Button onClick={handleCreate}>Create post</Button>
+  </EmptyStateAction>
+</EmptyState>
+```
+
+### Error / retry
+
+```jsx
+<EmptyState>
+  <EmptyStateIcon className="text-destructive">
+    <AlertCircle className="size-5" />
+  </EmptyStateIcon>
+  <EmptyStateTitle>Failed to load</EmptyStateTitle>
+  <EmptyStateDescription>
+    Something went wrong. Please try again.
+  </EmptyStateDescription>
+  <EmptyStateAction>
+    <Button variant="secondary" onClick={retry}>Retry</Button>
+  </EmptyStateAction>
+</EmptyState>
+```
+
+## Parts
+
+| Part | Description |
+|---|---|
+| `EmptyState` | Root container — dashed border, centered flex column |
+| `EmptyStateIcon` | Circular icon well — 48px, `bg-bg-surface` |
+| `EmptyStateTitle` | Primary message — `text-base`, `font-semibold` |
+| `EmptyStateDescription` | Supporting detail — `text-sm`, `text-muted-foreground`, max 280px wide |
+| `EmptyStateAction` | Flex row for one or two action buttons |
+
+## Design guidelines
+
+### When to use
+
+- Feed or list with zero items (no posts, no notifications, no search results)
+- Table with no rows matching the current filter
+- An error state where content failed to load with a retry path
+- Onboarding state prompting a first action
+
+### Icon choice
+
+Use a single icon that represents the missing content type, not a generic empty box. Prefer `lucide-react` icons scaled to `size-5` (20px) inside the `EmptyStateIcon` well.
+
+| State | Suggested icon |
+|---|---|
+| No search results | `SearchX` |
+| No posts / content | `FileText`, `Pencil` |
+| No notifications | `BellOff` |
+| No connections | `UserX` |
+| Error / failure | `AlertCircle` |
+| Empty inbox | `MailOpen` |
+
+### Copy guidelines
+
+- **Title**: 2–4 words, noun phrase. State what's missing, not what happened. _"No posts yet"_ not _"You haven't posted anything."_
+- **Description**: One sentence, 10–20 words. Explain why or what to do next.
+- **Action**: Match the primary CTA to the creation or resolution path. Offer at most one primary + one secondary action.
+
+### Sizing
+
+By default `EmptyState` fills its container. On mobile, the padding reduces automatically via `--page-inset-x`. For inline use (inside a panel or card), pass a `className` to constrain the width:
+
+```jsx
+<EmptyState className="py-8">
+  {/* compact variant for cards */}
+</EmptyState>
+```
+
+### Don'ts
+
+- **Don't** use EmptyState as a loading indicator — use `Skeleton` instead
+- **Don't** put multiple paragraphs in `EmptyStateDescription` — keep it to one short sentence
+- **Don't** use a destructive button as the primary action in an error state — use `secondary` and offer a safe retry path

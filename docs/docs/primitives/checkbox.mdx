@@ -1,0 +1,91 @@
+---
+title: Checkbox
+sidebar_label: Checkbox
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+
+# Checkbox
+
+Checkbox uses a custom-styled native `<input type="checkbox">` — no JS required. The checked state renders via a CSS `::after` checkmark.
+
+<LiveDemo
+  title="Checkbox variants"
+  html={`<div style="display:flex;flex-direction:column;gap:10px;">
+  <label class="checkbox-wrap">
+    <input type="checkbox" />
+    <span>Open to work</span>
+  </label>
+  <label class="checkbox-wrap">
+    <input type="checkbox" checked />
+    <span>Remote positions only</span>
+  </label>
+  <label class="checkbox-wrap">
+    <input type="checkbox" checked />
+    <span>Full-time roles</span>
+  </label>
+  <label class="checkbox-wrap">
+    <input type="checkbox" disabled />
+    <span style="opacity:0.4;">Premium only (upgrade required)</span>
+  </label>
+</div>`}
+  pad="24px"
+/>
+
+## Real-world: notification preferences
+
+<LiveDemo
+  title="Notification settings"
+  html={`<div class="panel" style="max-width:400px;">
+  <div class="panel__header"><span>Notification preferences</span></div>
+  <div class="panel__body" style="display:flex;flex-direction:column;gap:12px;">
+    <div>
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--fg-muted);margin-bottom:8px;">Activity</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label class="checkbox-wrap">
+          <input type="checkbox" checked />
+          <span>New connection requests</span>
+        </label>
+        <label class="checkbox-wrap">
+          <input type="checkbox" checked />
+          <span>Reactions on your posts</span>
+        </label>
+        <label class="checkbox-wrap">
+          <input type="checkbox" />
+          <span>Comments on your posts</span>
+        </label>
+      </div>
+    </div>
+    <hr class="separator" />
+    <div>
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--fg-muted);margin-bottom:8px;">Jobs</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label class="checkbox-wrap">
+          <input type="checkbox" checked />
+          <span>Matching job alerts</span>
+        </label>
+        <label class="checkbox-wrap">
+          <input type="checkbox" />
+          <span>Recruiter messages</span>
+        </label>
+      </div>
+    </div>
+    <button class="btn btn--primary btn--sm" style="align-self:flex-end;">Save preferences</button>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<label class="checkbox-wrap">
+  <input type="checkbox" checked />
+  <span>Remote positions only</span>
+</label>
+```
+
+<DocsCallout type="tip" title="Accessibility">
+  Wrapping `<input>` and `<span>` inside a `<label>` makes the entire row clickable without any JS. For groups of checkboxes, use a `<fieldset>` with a `<legend>` to provide a group label to screen readers.
+</DocsCallout>

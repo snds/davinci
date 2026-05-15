@@ -1,0 +1,123 @@
+---
+title: Dropdown
+sidebar_label: Dropdown
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Dropdown
+
+Dropdown is a positioned menu that opens below (or beside) a trigger. It uses `.dropdown` as the panel and `.dropdown__item` for each action. Nested: Button for the trigger.
+
+<LiveDemo
+  title="Dropdown anatomy"
+  html={`<div style="position:relative;max-width:240px;">
+  <button class="btn btn--secondary">
+    Options
+    <span class="material-symbols-rounded" style="font-size:16px;">expand_more</span>
+  </button>
+  <div class="dropdown" style="position:relative;top:auto;left:auto;margin-top:6px;animation:none;">
+    <div class="dropdown__label">Actions</div>
+    <button class="dropdown__item">
+      <span class="material-symbols-rounded">edit</span>
+      Edit post
+    </button>
+    <button class="dropdown__item">
+      <span class="material-symbols-rounded">bookmark_border</span>
+      Save post
+      <span class="dropdown__shortcut">⌘S</span>
+    </button>
+    <button class="dropdown__item">
+      <span class="material-symbols-rounded">share</span>
+      Share via…
+    </button>
+    <div class="dropdown__separator"></div>
+    <div class="dropdown__label">Manage</div>
+    <button class="dropdown__item">
+      <span class="material-symbols-rounded">notifications_off</span>
+      Unfollow
+    </button>
+    <button class="dropdown__item dropdown__item--danger">
+      <span class="material-symbols-rounded">flag</span>
+      Report post
+    </button>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## Right-aligned variant
+
+<LiveDemo
+  title="Right-aligned dropdown"
+  html={`<div style="position:relative;display:flex;justify-content:flex-end;">
+  <div>
+    <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded">more_horiz</span></button>
+    <div class="dropdown dropdown--right" style="position:relative;top:auto;right:auto;margin-top:6px;animation:none;">
+      <button class="dropdown__item">
+        <span class="material-symbols-rounded">person</span>
+        View profile
+      </button>
+      <button class="dropdown__item">
+        <span class="material-symbols-rounded">message</span>
+        Send message
+      </button>
+      <button class="dropdown__item">
+        <span class="material-symbols-rounded">person_add</span>
+        Follow
+      </button>
+      <div class="dropdown__separator"></div>
+      <button class="dropdown__item dropdown__item--danger">
+        <span class="material-symbols-rounded">block</span>
+        Block
+      </button>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+## HTML structure
+
+```html
+<div style="position: relative;">
+  <button class="btn btn--secondary">
+    Options
+    <span class="material-symbols-rounded">expand_more</span>
+  </button>
+
+  <!-- Toggle visibility with JS -->
+  <div class="dropdown">
+    <div class="dropdown__label">Actions</div>
+    <button class="dropdown__item">
+      <span class="material-symbols-rounded">edit</span>
+      Edit
+    </button>
+    <div class="dropdown__separator"></div>
+    <button class="dropdown__item dropdown__item--danger">
+      <span class="material-symbols-rounded">delete</span>
+      Delete
+    </button>
+  </div>
+</div>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.dropdown', type: 'div', description: 'Absolute-positioned menu panel — surface bg, border, shadow, 8px radius, z-index:100' },
+  { name: '.dropdown--right', type: 'modifier', description: 'Right-aligns the menu (left:auto, right:0)' },
+  { name: '.dropdown__item', type: 'button', description: 'Full-width action row — flex with gap, hover bg' },
+  { name: '.dropdown__item--danger', type: 'modifier', description: 'Red text + red hover bg for destructive actions' },
+  { name: '.dropdown__separator', type: 'div', description: '1px horizontal divider between groups' },
+  { name: '.dropdown__label', type: 'div', description: 'Group heading — uppercase 10px bold' },
+  { name: '.dropdown__shortcut', type: 'span', description: 'Right-aligned keyboard shortcut hint' },
+]} />
+
+<DocsCallout type="info">
+  Wrap the trigger and `.dropdown` in a `position: relative` container. Toggle `display: none` / `display: block` with JS. Add `aria-haspopup="menu"` and `aria-expanded` on the trigger.
+</DocsCallout>

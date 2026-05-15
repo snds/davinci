@@ -1,0 +1,158 @@
+---
+title: Data Table
+sidebar_label: Data Table
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
+import PropsTable from '@site/src/components/PropsTable';
+
+# Data Table
+
+Data Table renders structured tabular data with sortable headers, row hover states, selection, and status indicators. Nested components: Checkbox, Badge, Pill, Avatar, Button.
+
+<LiveDemo
+  title="Full data table"
+  html={`<div class="panel" style="overflow:auto;">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:36px;padding-left:14px;">
+          <label class="checkbox-wrap">
+            <input type="checkbox" />
+          </label>
+        </th>
+        <th>
+          Candidate
+          <span class="material-symbols-rounded sort-icon">unfold_more</span>
+        </th>
+        <th class="sorted">
+          Applied
+          <span class="material-symbols-rounded sort-icon">arrow_downward</span>
+        </th>
+        <th>Role</th>
+        <th>Stage</th>
+        <th>Score</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="selected">
+        <td style="padding-left:14px;">
+          <label class="checkbox-wrap"><input type="checkbox" checked /></label>
+        </td>
+        <td>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="avatar avatar--32">JD</div>
+            <div>
+              <div style="font-weight:600;">Jane Doe</div>
+              <div style="font-size:11px;color:var(--fg-muted);">jane@example.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="muted">2 days ago</td>
+        <td>Sr. Product Designer</td>
+        <td><span class="pill pill--accent">Interview</span></td>
+        <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress" style="width:60px;"><div class="progress__bar" style="width:88%;"></div></div><span style="font-size:11px;color:var(--fg-muted);">88%</span></div></td>
+        <td><button class="btn btn--ghost btn--icon btn--sm"><span class="material-symbols-rounded" style="font-size:16px;">more_horiz</span></button></td>
+      </tr>
+      <tr>
+        <td style="padding-left:14px;">
+          <label class="checkbox-wrap"><input type="checkbox" /></label>
+        </td>
+        <td>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="avatar avatar--32 avatar--g2">MK</div>
+            <div>
+              <div style="font-weight:600;">Marcus Kim</div>
+              <div style="font-size:11px;color:var(--fg-muted);">marcus@example.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="muted">5 days ago</td>
+        <td>Engineering Lead</td>
+        <td><span class="pill pill--success">Offer sent</span></td>
+        <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress progress--success" style="width:60px;"><div class="progress__bar" style="width:95%;"></div></div><span style="font-size:11px;color:var(--fg-muted);">95%</span></div></td>
+        <td><button class="btn btn--ghost btn--icon btn--sm"><span class="material-symbols-rounded" style="font-size:16px;">more_horiz</span></button></td>
+      </tr>
+      <tr>
+        <td style="padding-left:14px;">
+          <label class="checkbox-wrap"><input type="checkbox" /></label>
+        </td>
+        <td>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <div class="avatar avatar--32 avatar--g5">AR</div>
+            <div>
+              <div style="font-weight:600;">Aisha Rahman</div>
+              <div style="font-size:11px;color:var(--fg-muted);">aisha@example.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="muted">1 week ago</td>
+        <td>Product Manager</td>
+        <td><span class="pill">Screening</span></td>
+        <td><div style="display:flex;align-items:center;gap:6px;"><div class="progress progress--warning" style="width:60px;"><div class="progress__bar" style="width:62%;"></div></div><span style="font-size:11px;color:var(--fg-muted);">62%</span></div></td>
+        <td><button class="btn btn--ghost btn--icon btn--sm"><span class="material-symbols-rounded" style="font-size:16px;">more_horiz</span></button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--border-subtle);background:var(--bg-subtle);">
+    <span style="font-size:12px;color:var(--fg-muted);">1 of 3 selected · 24 total</span>
+    <nav class="pagination">
+      <button class="page-btn" disabled><span class="material-symbols-rounded" style="font-size:16px;">chevron_left</span></button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn"><span class="material-symbols-rounded" style="font-size:16px;">chevron_right</span></button>
+    </nav>
+  </div>
+</div>`}
+  pad="0"
+/>
+
+## HTML structure
+
+```html
+<div class="panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Name <span class="material-symbols-rounded sort-icon">unfold_more</span></th>
+        <th class="sorted">Date <span class="material-symbols-rounded sort-icon">arrow_downward</span></th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="selected">
+        <td>Jane Doe</td>
+        <td class="muted">2 days ago</td>
+        <td><span class="pill pill--accent">Active</span></td>
+        <td>
+          <button class="btn btn--ghost btn--icon btn--sm">
+            <span class="material-symbols-rounded">more_horiz</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+---
+
+## CSS classes
+
+<PropsTable props={[
+  { name: '.data-table', type: 'table', description: 'Full-width table — border-collapse, 13px font' },
+  { name: '.data-table th', type: 'th', description: 'Header cell — uppercase 11px, subtle bg, border-bottom, sortable cursor' },
+  { name: '.data-table th.sorted', type: 'modifier', description: 'Active sort column — sort icon turns accent' },
+  { name: '.data-table td', type: 'td', description: 'Body cell — 11px/12px padding, border-bottom' },
+  { name: '.data-table td.muted', type: 'modifier', description: 'Muted text color for secondary data' },
+  { name: '.data-table tr.selected', type: 'modifier', description: 'Selected row — --bg-selected background' },
+  { name: '.sort-icon', type: 'span', description: 'Sort indicator icon — 0.4 opacity by default, 1.0 when .sorted' },
+]} />
+
+<DocsCallout type="info">
+  The Data Table relies on Checkbox for row selection, Pill for status, Progress for scores, Avatar for people rows, and Button for row actions — all nested Davinci components used as-is.
+</DocsCallout>

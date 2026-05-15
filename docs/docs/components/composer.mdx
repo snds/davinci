@@ -4,10 +4,81 @@ sidebar_label: Composer
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
+import DocsCallout from '@site/src/components/DocsCallout';
 
 # Composer
 
 The Composer is the primary post-creation interface. It appears at the top of the feed and as a full-screen modal for rich post creation. It combines a user avatar, a content-editable text area, a media toolbar, and a publish button.
+
+<LiveDemo
+  title="Collapsed composer"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="composer">
+    <div class="avatar avatar--40">JD</div>
+    <div class="composer__input">What's on your mind?</div>
+    <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded">image</span></button>
+    <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded">videocam</span></button>
+  </div>
+  <div class="composer__actions">
+    <button class="composer__action">
+      <span class="material-symbols-rounded">image</span>
+      Photo
+    </button>
+    <button class="composer__action">
+      <span class="material-symbols-rounded">videocam</span>
+      Video
+    </button>
+    <button class="composer__action">
+      <span class="material-symbols-rounded">work</span>
+      Job
+    </button>
+    <button class="composer__action">
+      <span class="material-symbols-rounded">article</span>
+      Article
+    </button>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+<LiveDemo
+  title="Expanded composer"
+  html={`<div class="panel" style="max-width:540px;">
+  <div style="display:flex;gap:12px;padding:16px;">
+    <div class="avatar avatar--40">JD</div>
+    <div style="flex:1;">
+      <div style="font-weight:600;font-size:13px;margin-bottom:6px;">Jane Doe</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <button class="btn btn--secondary btn--sm" style="font-size:11px;">
+          <span class="material-symbols-rounded" style="font-size:14px;">public</span>
+          Anyone
+          <span class="material-symbols-rounded" style="font-size:14px;">expand_more</span>
+        </button>
+      </div>
+      <textarea class="textarea" rows="4" placeholder="What do you want to talk about?" style="border-color:var(--border-subtle);"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <div style="display:flex;gap:2px;">
+          <button class="btn btn--ghost btn--icon" style="color:var(--accent-fg);"><span class="material-symbols-rounded" style="font-size:18px;">image</span></button>
+          <button class="btn btn--ghost btn--icon" style="color:var(--accent-fg);"><span class="material-symbols-rounded" style="font-size:18px;">videocam</span></button>
+          <button class="btn btn--ghost btn--icon" style="color:var(--accent-fg);"><span class="material-symbols-rounded" style="font-size:18px;">link</span></button>
+          <button class="btn btn--ghost btn--icon" style="color:var(--accent-fg);"><span class="material-symbols-rounded" style="font-size:18px;">mood</span></button>
+          <button class="btn btn--ghost btn--icon" style="color:var(--accent-fg);"><span class="material-symbols-rounded" style="font-size:18px;">more_horiz</span></button>
+        </div>
+        <button class="btn btn--primary btn--sm">
+          Post
+          <span class="material-symbols-rounded" style="font-size:14px;">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+<DocsCallout type="note">
+  The expanded composer above uses `.textarea` from the primitives layer directly — the same CSS input primitive the rest of the system uses.
+</DocsCallout>
 
 ## Anatomy
 
