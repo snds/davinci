@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Avatar as ShadcnAvatar, AvatarImage, AvatarFallback } from '@davinci/ui/components/ui/avatar';
 
 const PORTRAIT_MAP = {
   'yara okonkwo':   'photo-1531123897727-8f129e1688ce',
@@ -20,12 +21,6 @@ const PORTRAIT_MAP = {
   'solomon reyes':  'photo-1500648767791-00dcc994a43e',
 };
 
-function hashCode(s) {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
-
 const FALLBACK_PORTRAITS = [
   'photo-1502823403499-6ccfcf4fb453', 'photo-1506794778202-cad84cf45f1d',
   'photo-1534528741775-53994a69daeb', 'photo-1580489944761-15a19d654956',
@@ -34,6 +29,12 @@ const FALLBACK_PORTRAITS = [
   'photo-1438761681033-6461ffad8d80', 'photo-1519085360753-af0119f7cbe7',
   'photo-1544005313-94ddf0286df2',   'photo-1531123897727-8f129e1688ce',
 ];
+
+function hashCode(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
 
 export function seededPhoto(seed, w = 200, h = 200, kind = 'face') {
   const safe = String(seed).toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'x';
@@ -55,34 +56,55 @@ export function maybePhoto(seed, w = 200, h = 200) {
   return seededPhoto(seed, w, h, 'face');
 }
 
-function Avatar({ initials, size = 40, variant = 'g1', photo, photoSeed, style }) {
-  const [broken, setBroken] = useState(false);
+// Gradient variant background colors (matching the original CSS classes)
+const GRADIENT_STYLES = {
+  g1: { background: 'linear-gradient(135deg, var(--blue-9), var(--blue-11))' },
+  g2: { background: 'linear-gradient(135deg, var(--violet-9), var(--violet-11))' },
+  g3: { background: 'linear-gradient(135deg, var(--teal-9), var(--teal-11))' },
+  g4: { background: 'linear-gradient(135deg, var(--amber-9), var(--amber-11))' },
+  g5: { background: 'linear-gradient(135deg, var(--tomato-9), var(--tomato-11))' },
+  g6: { background: 'linear-gradient(135deg, var(--pink-9), var(--pink-11))' },
+};
 
+function Avatar({ initials, size = 40, variant = 'g1', photo, photoSeed, style }) {
   let resolved = null;
   if (photo === null) resolved = null;
   else if (typeof photo === 'string') resolved = photo;
   else if (photoSeed) resolved = maybePhoto(photoSeed, size * 2, size * 2);
 
-  const showPhoto = resolved && !broken;
+  const gradientStyle = GRADIENT_STYLES[variant] || GRADIENT_STYLES.g1;
+  const borderRadius = style?.borderRadius ?? 'inherit';
 
   return (
-    <div
-      className={`avatar avatar--${size} avatar--${variant}`}
-      style={style}
+    <ShadcnAvatar
+      style={{
+        width: size,
+        height: size,
+        borderRadius,
+        flexShrink: 0,
+        ...style,
+      }}
     >
-      {showPhoto ? (
-        <img
+      {resolved && (
+        <AvatarImage
           src={resolved}
           alt=""
-          loading="lazy"
-          onError={() => setBroken(true)}
-          style={{
-            width: '100%', height: '100%', objectFit: 'cover',
-            borderRadius: 'inherit', display: 'block',
-          }}
+          style={{ objectFit: 'cover', borderRadius }}
         />
-      ) : initials}
-    </div>
+      )}
+      <AvatarFallback
+        style={{
+          ...gradientStyle,
+          color: 'white',
+          fontSize: size * 0.35,
+          fontWeight: 600,
+          letterSpacing: '-0.01em',
+          borderRadius,
+        }}
+      >
+        {initials}
+      </AvatarFallback>
+    </ShadcnAvatar>
   );
 }
 

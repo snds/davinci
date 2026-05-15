@@ -3,7 +3,7 @@ import NavList from '../../components/NavList';
 import Panel from '../../components/Panel';
 
 export default {
-  title: 'Components/NavList',
+  title: 'Patterns/NavList',
   component: NavList,
   parameters: {
     layout: 'padded',
