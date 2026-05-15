@@ -1,0 +1,14 @@
+/* ============================================================
+   @davinci/tokens — full bundle
+   Import this single file to get everything:
+     1. Radix Color palette (all 31 scales, both themes, P3)
+     2. Davinci semantic tokens + typography + spacing
+     3. shadcn/ui CSS variable bridge
+
+   Usage:
+     @import "@davinci/tokens/all.css";
+   ============================================================ */
+
+@import "../../palette.css";
+@import "../../colors_and_type.css";
+@import "./shadcn-bridge.css";

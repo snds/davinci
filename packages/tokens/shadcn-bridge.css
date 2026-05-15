@@ -1,0 +1,121 @@
+/* ============================================================
+   Davinci Design System — shadcn/ui CSS Variable Bridge
+
+   Maps shadcn/ui's expected CSS variable names to Davinci
+   semantic tokens. This is the ONLY file where shadcn vars
+   are defined; Davinci tokens are the source of truth.
+
+   Usage:
+     @import "@davinci/tokens/shadcn-bridge.css";
+
+   shadcn expects vars consumed by Tailwind utilities:
+     bg-background  → var(--background)
+     text-foreground → var(--foreground)
+     bg-primary     → var(--primary)
+     etc.
+
+   Tailwind v4 @theme reads these directly as color values.
+   ============================================================ */
+
+/* ---------- Dark (default) ---------- */
+:root,
+[data-theme="dark"] {
+  --background:              var(--bg);
+  --foreground:              var(--fg);
+
+  --card:                    var(--bg-surface);
+  --card-foreground:         var(--fg);
+
+  --popover:                 var(--bg-elevated);
+  --popover-foreground:      var(--fg);
+
+  /* shadcn --primary = Davinci accent (blue) */
+  --primary:                 var(--accent);
+  --primary-foreground:      var(--fg-on-accent);
+
+  /* shadcn --secondary = Davinci subtle surface */
+  --secondary:               var(--bg-subtle);
+  --secondary-foreground:    var(--fg-muted);
+
+  --muted:                   var(--bg-surface);
+  --muted-foreground:        var(--fg-muted);
+
+  /* shadcn --accent = hover/ghost highlight surface */
+  --shadcn-accent:           var(--accent-subtle);
+  --shadcn-accent-foreground: var(--accent-fg);
+
+  --destructive:             var(--danger);
+  --destructive-foreground:  var(--fg-on-accent);
+
+  --border:                  var(--border);
+  --input:                   var(--border);
+  --ring:                    var(--border-focus);
+
+  /* shadcn chart colors — mapped to Davinci chromatic scale */
+  --chart-1:                 var(--blue-9);
+  --chart-2:                 var(--teal-9);
+  --chart-3:                 var(--violet-9);
+  --chart-4:                 var(--amber-9);
+  --chart-5:                 var(--tomato-9);
+
+  /* shadcn sidebar */
+  --sidebar:                 var(--bg-subtle);
+  --sidebar-foreground:      var(--fg);
+  --sidebar-primary:         var(--accent);
+  --sidebar-primary-foreground: var(--fg-on-accent);
+  --sidebar-accent:          var(--bg-active);
+  --sidebar-accent-foreground: var(--fg);
+  --sidebar-border:          var(--border);
+  --sidebar-ring:            var(--border-focus);
+
+  /* shadcn radius — uses Davinci radius scale */
+  --shadcn-radius:           var(--radius-md);
+}
+
+/* ---------- Light ---------- */
+[data-theme="light"] {
+  --background:              var(--bg);
+  --foreground:              var(--fg);
+
+  --card:                    var(--bg-surface);
+  --card-foreground:         var(--fg);
+
+  --popover:                 var(--bg-elevated);
+  --popover-foreground:      var(--fg);
+
+  --primary:                 var(--accent);
+  --primary-foreground:      var(--fg-on-accent);
+
+  --secondary:               var(--bg-subtle);
+  --secondary-foreground:    var(--fg-muted);
+
+  --muted:                   var(--bg-surface);
+  --muted-foreground:        var(--fg-muted);
+
+  --shadcn-accent:           var(--accent-subtle);
+  --shadcn-accent-foreground: var(--accent-fg);
+
+  --destructive:             var(--danger);
+  --destructive-foreground:  var(--fg-on-accent);
+
+  --border:                  var(--border);
+  --input:                   var(--border);
+  --ring:                    var(--border-focus);
+
+  --chart-1:                 var(--blue-9);
+  --chart-2:                 var(--teal-9);
+  --chart-3:                 var(--violet-9);
+  --chart-4:                 var(--amber-9);
+  --chart-5:                 var(--tomato-9);
+
+  --sidebar:                 var(--bg-subtle);
+  --sidebar-foreground:      var(--fg);
+  --sidebar-primary:         var(--accent);
+  --sidebar-primary-foreground: var(--fg-on-accent);
+  --sidebar-accent:          var(--bg-active);
+  --sidebar-accent-foreground: var(--fg);
+  --sidebar-border:          var(--border);
+  --sidebar-ring:            var(--border-focus);
+
+  --shadcn-radius:           var(--radius-md);
+}

@@ -1,0 +1,26 @@
+{
+  "name": "davinci-design-system",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Davinci Design System — enterprise monorepo",
+  "workspaces": [
+    "packages/*",
+    "storybook",
+    "docs"
+  ],
+  "scripts": {
+    "storybook":          "npm run storybook -w storybook",
+    "docs":               "npm run start -w docs",
+    "sync":               "node scripts/sync.js",
+    "sync:radix":         "node scripts/sync-radix.js",
+    "sync:shadcn":        "node scripts/sync-shadcn.js",
+    "generate:palette":   "node scripts/generate-palette.js",
+    "generate:stories":   "node scripts/generate-stories.js",
+    "generate:docs":      "node scripts/generate-docs.js",
+    "check-updates":      "node scripts/check-updates.js"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

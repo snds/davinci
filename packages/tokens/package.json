@@ -1,0 +1,19 @@
+{
+  "name": "@davinci/tokens",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Davinci Design System — CSS design tokens (Radix Colors + semantic aliases + shadcn bridge)",
+  "type": "module",
+  "exports": {
+    "./palette.css":       "../../palette.css",
+    "./colors.css":        "../../colors_and_type.css",
+    "./shadcn-bridge.css": "./shadcn-bridge.css",
+    "./all.css":           "./all.css"
+  },
+  "files": [
+    "shadcn-bridge.css",
+    "all.css"
+  ],
+  "keywords": ["design-tokens", "css-variables", "radix-colors", "davinci"],
+  "license": "MIT"
+}
