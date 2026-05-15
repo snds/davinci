@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 /**
  * LivePreview
@@ -17,14 +18,17 @@ export default function LivePreview({
   padding = '24px',
 }) {
   const iframeRef = useRef(null);
+  const { siteConfig } = useDocusaurusContext();
+  // baseUrl includes trailing slash (e.g. "/davinci/" or "/")
+  const base = siteConfig.baseUrl.replace(/\/$/, '');
 
   const srcdoc = `<!DOCTYPE html>
 <html data-theme="${theme}" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/davinci/colors_and_type.css" />
-  <link rel="stylesheet" href="/davinci/davinci.css" />
+  <link rel="stylesheet" href="${base}/colors_and_type.css" />
+  <link rel="stylesheet" href="${base}/davinci.css" />
   <style>
     * { box-sizing: border-box; }
     body {
