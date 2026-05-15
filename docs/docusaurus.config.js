@@ -1,6 +1,17 @@
 // @ts-check
 const { themes } = require('prism-react-renderer');
 
+/** Inline Docusaurus plugin that wires @tailwindcss/postcss into the CSS pipeline. */
+async function tailwindPlugin() {
+  return {
+    name: 'docusaurus-tailwindcss',
+    configurePostCss(postcssOptions) {
+      postcssOptions.plugins.push(require('@tailwindcss/postcss'));
+      return postcssOptions;
+    },
+  };
+}
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Davinci Design System',
@@ -15,6 +26,8 @@ const config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
+  plugins: [tailwindPlugin],
+
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
@@ -24,7 +37,8 @@ const config = {
   },
 
   customFields: {
-    storybookUrl: 'http://localhost:6006',
+    // Override at build time: STORYBOOK_URL=https://storybook.example.com npm run build
+    storybookUrl: process.env.STORYBOOK_URL || 'http://localhost:6006',
   },
 
   markdown: {
@@ -59,7 +73,12 @@ const config = {
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,
-        respectPrefersColorScheme: true,
+        respectPrefersColorScheme: false,
+      },
+
+      tableOfContents: {
+        minHeadingLevel: 2,
+        maxHeadingLevel: 2,
       },
 
       navbar: {
@@ -70,36 +89,27 @@ const config = {
           srcDark: 'img/logo.svg',
         },
         items: [
+          { to: '/foundations/colors', activeBasePath: '/foundations', label: 'Foundations', position: 'left' },
           {
-            type: 'docSidebar',
-            sidebarId: 'docs',
-            position: 'left',
-            label: 'Foundations',
-            to: '/foundations/colors',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'docs',
-            position: 'left',
+            to: '/primitives/icons',
+            activeBaseRegex: '^/(primitives|shadcn/(button|input|textarea|label|badge|avatar|progress|slider|switch|checkbox|radio-group|toggle|toggle-group|separator|skeleton|aspect-ratio|scroll-area))',
             label: 'Primitives',
-            to: '/primitives/buttons',
+            position: 'left',
           },
           {
-            type: 'docSidebar',
-            sidebarId: 'docs',
-            position: 'left',
+            to: '/shadcn',
+            activeBaseRegex: '^/(shadcn(?!/(button|input|textarea|label|badge|avatar|progress|slider|switch|checkbox|radio-group|toggle|toggle-group|separator|skeleton|aspect-ratio|scroll-area))|components/empty-state)',
             label: 'Components',
-            to: '/components/panel',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'docs',
             position: 'left',
-            label: 'Patterns',
-            to: '/patterns/feed',
           },
           {
-            href: 'http://localhost:6006',
+            to: '/components/panel',
+            activeBaseRegex: '^/(components/(?:panel|post|composer|navigation)|patterns)',
+            label: 'Patterns',
+            position: 'left',
+          },
+          {
+            href: process.env.STORYBOOK_URL || 'http://localhost:6006',
             label: 'Storybook',
             position: 'right',
           },
@@ -118,15 +128,15 @@ const config = {
             title: 'Design System',
             items: [
               { label: 'Foundations', to: '/foundations/colors' },
-              { label: 'Primitives', to: '/primitives/buttons' },
-              { label: 'Components', to: '/components/panel' },
+              { label: 'Primitives', to: '/primitives/icons' },
+              { label: 'Components', to: '/shadcn' },
               { label: 'Patterns', to: '/patterns/feed' },
             ],
           },
           {
             title: 'Resources',
             items: [
-              { label: 'Storybook', href: 'http://localhost:6006' },
+              { label: 'Storybook', href: process.env.STORYBOOK_URL || 'http://localhost:6006' },
               { label: 'GitHub', href: 'https://github.com/snds/davinci' },
             ],
           },
