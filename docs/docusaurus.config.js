@@ -12,6 +12,32 @@ async function tailwindPlugin() {
   };
 }
 
+/**
+ * Drops Docusaurus's webpackbar progress plugin.
+ *
+ * webpackbar's WebpackBarPlugin extends webpack's ProgressPlugin and stores
+ * its own options ({name, color, reporters, ...}) on `this.options`. On the
+ * compiler `validate` hook, webpack re-validates `this.options` against the
+ * strict ProgressPlugin schema, which rejects those extra keys with a
+ * ValidationError. This surfaces on clean `npm ci` installs (CI) while a
+ * warm/incremental dev tree happens to skip the strict path. The progress
+ * bar is cosmetic, so removing the plugin is safe and makes the build
+ * deterministic across environments.
+ */
+function dropProgressBarPlugin() {
+  return {
+    name: 'davinci-drop-webpackbar',
+    configureWebpack(config) {
+      if (Array.isArray(config.plugins)) {
+        config.plugins = config.plugins.filter(
+          (p) => !p || p.constructor?.name !== 'WebpackBarPlugin',
+        );
+      }
+      return {};
+    },
+  };
+}
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Davinci Design System',
@@ -26,7 +52,7 @@ const config = {
   deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
-  plugins: [tailwindPlugin],
+  plugins: [tailwindPlugin, dropProgressBarPlugin],
 
   stylesheets: [
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap',
