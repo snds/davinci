@@ -114,6 +114,11 @@ const config = {
             position: 'left',
           },
           {
+            href: process.env.DEMO_URL || 'http://localhost:3001',
+            label: 'Live Demo',
+            position: 'right',
+          },
+          {
             href: process.env.STORYBOOK_URL || 'http://localhost:6006',
             label: 'Storybook',
             position: 'right',
