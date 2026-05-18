@@ -156,3 +156,30 @@ cd docs && npm run start
 ```
 
 Runs on `http://localhost:3002`.
+
+## Deployment
+
+The site auto-deploys to GitHub Pages on every push to
+`feat/docs-dogfood` (and via manual dispatch) through
+`.github/workflows/deploy-pages.yml`. Three artifacts are published
+under one Pages site:
+
+| Surface | URL |
+|---|---|
+| Docs (Docusaurus) | https://snds.github.io/davinci/ |
+| Storybook | https://snds.github.io/davinci/storybook/ |
+| Demo app (LinkedIn-style) | https://snds.github.io/davinci/app/ |
+
+Notes for whoever maintains this:
+
+- The workflow builds docs + Storybook, copies the no-build demo
+  app, and rewrites the demo's `../../colors_and_type.css` link to a
+  colocated copy so tokens resolve under `/app/`.
+- `docs/docusaurus.config.js` drops webpackbar via `configureWebpack`
+  — without it the production build fails on a clean `npm ci` with a
+  webpack `ProgressPlugin` schema `ValidationError`. Don't re-add it.
+- Pages source is **GitHub Actions** (not a branch). The
+  `github-pages` environment's deployment-branch policy must include
+  the trigger branch, or the deploy job is rejected.
+- To deploy from `main` instead, change the `on.push.branches` list
+  in the workflow and add `main` to the environment policy.
