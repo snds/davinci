@@ -33,3 +33,25 @@ export const Disabled = {
 export const Password = {
   render: () => <Input type="password" placeholder="Enter password" style={{ width: '280px' }} />,
 };
+
+export const Sizes = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '280px' }}>
+      <Input size="sm" placeholder="Small (sm)" />
+      <Input size="default" placeholder="Default" />
+      <Input size="lg" placeholder="Large (lg)" />
+    </div>
+  ),
+};
+
+// Mirrors the reference sheet's field states.
+export const States = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '280px' }}>
+      <Input placeholder="Ghost text (Optional)" />
+      <Input defaultValue="Strawberry jam" />
+      <Input aria-invalid defaultValue="bad input" aria-label="Field with error" />
+      <Input disabled placeholder="Disabled" />
+    </div>
+  ),
+};

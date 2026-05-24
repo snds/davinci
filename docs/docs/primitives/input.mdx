@@ -6,6 +6,7 @@ sidebar_label: Input
 import LiveDemo from '@site/src/components/LiveDemo';
 import DocsCallout from '@site/src/components/DocsCallout';
 import PropsTable from '@site/src/components/PropsTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
 
 # Input
 
@@ -122,3 +123,59 @@ Input is the single-line text field primitive. It pairs with `.label` and `.form
 <DocsCallout type="warning" title="Validation">
   Trigger `.input--error` and show `.form-error` only after a blur or form submit attempt — not while the user is actively typing. This avoids premature error states.
 </DocsCallout>
+
+---
+
+## In React (`@davinci/ui`)
+
+The React `Input` is aligned to the `.input` aesthetic above — solid `--bg-surface`
+fill, `--border-strong` on hover, focus ring, and `aria-invalid` error styling.
+
+### Sizes
+
+The `size` prop (`"sm" | "default" | "lg"`) mirrors the `.input--sm/--lg` ramp and
+matches `Select`'s sizing.
+
+```jsx
+<Input size="sm" placeholder="Small" />
+<Input placeholder="Default" />
+<Input size="lg" placeholder="Large" />
+```
+
+<StorybookEmbed story="components-input--sizes" height={200} title="Input sizes" />
+
+### Input groups
+
+`InputGroup` pairs an `Input` with an inline addon (button, select, or text) on the
+same row — the reference sheet's "Input Field" + "I'm Small" pattern.
+
+```jsx
+import { InputGroup } from '@davinci/ui/components/ui/input-group';
+
+<InputGroup>
+  <Input placeholder="Coupon code" />
+  <Button size="sm">Apply</Button>
+</InputGroup>
+```
+
+<StorybookEmbed story="components-input-group--with-button" height={160} title="Input group" />
+
+### Form layouts: top vs. left aligned
+
+`FormItem` supports the sheet's two layouts via `orientation`:
+
+- `orientation="vertical"` (default) — **Top Aligned**: label above the control.
+- `orientation="horizontal"` — **Left Aligned**: label beside the control. The label
+  column width is driven by `--form-label-width` (default `8rem`).
+- `messagePlacement="inline"` places the error/hint to the right of the control
+  (the sheet's "Error - Alternate"); the default stacks it below.
+
+```jsx
+<FormItem orientation="horizontal" messagePlacement="inline">
+  <FormLabel>Email</FormLabel>
+  <FormControl><Input aria-invalid {...field} /></FormControl>
+  <FormMessage>Warning warning.</FormMessage>
+</FormItem>
+```
+
+<StorybookEmbed story="components-form--left-aligned" height={220} title="Left-aligned form" />

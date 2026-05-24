@@ -33,3 +33,13 @@ export const Disabled = {
     <Textarea disabled placeholder="This field is disabled" style={{ width: '320px' }} rows={4} />
   ),
 };
+
+export const Sizes = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '320px' }}>
+      <Textarea size="sm" placeholder="Small (sm)" />
+      <Textarea size="default" placeholder="Default" />
+      <Textarea size="lg" placeholder="Large (lg)" />
+    </div>
+  ),
+};

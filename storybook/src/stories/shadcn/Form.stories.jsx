@@ -65,6 +65,48 @@ export const EmailForm = {
   },
 };
 
+// DaVinci "Left Aligned" layout — label beside the control, error inline to the right.
+export const LeftAligned = {
+  name: 'Left aligned (horizontal)',
+  render: () => {
+    const form = useForm({ defaultValues: { firstName: '', email: 'bad-email' } });
+    return (
+      <div className="w-[520px]" style={{ '--form-label-width': '7rem' }}>
+        <Form {...form}>
+          <form className="space-y-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem orientation="horizontal">
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Jane" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              rules={{ pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Ruh roh.' } }}
+              render={({ field }) => (
+                <FormItem orientation="horizontal" messagePlacement="inline">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input aria-invalid placeholder="you@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage>Warning warning.</FormMessage>
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+    );
+  },
+};
+
 export const ProfileForm = {
   render: () => {
     const form = useForm({
