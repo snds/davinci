@@ -88,12 +88,12 @@ function ToolbarButton({ active, label, onClick, disabled, children }) {
       onMouseDown={(e) => e.preventDefault()} // keep editor selection
       onClick={onClick}
       className={cn(
-        "inline-flex size-7 items-center justify-center rounded-sm text-[var(--fg-muted)] outline-none transition-colors",
+        "inline-flex size-8 items-center justify-center rounded-md text-[var(--fg-muted)] outline-none transition-colors",
         "hover:bg-[var(--bg-hover)] hover:text-[var(--fg)]",
-        "focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        "focus-visible:ring-2 focus-visible:ring-ring/50",
         "disabled:pointer-events-none disabled:opacity-40",
-        "data-[active=true]:bg-[var(--bg-active)] data-[active=true]:text-[var(--fg)]",
-        "[&_svg]:size-4"
+        "data-[active=true]:bg-[var(--accent-subtle)] data-[active=true]:text-[var(--accent-fg)]",
+        "[&_svg]:size-4 [&_svg]:shrink-0"
       )}>
       {children}
     </button>
@@ -101,7 +101,7 @@ function ToolbarButton({ active, label, onClick, disabled, children }) {
 }
 
 function ToolbarDivider() {
-  return <span aria-hidden className="mx-1 h-5 w-px bg-[var(--border-subtle)]" />
+  return <span aria-hidden className="mx-1.5 h-5 w-px bg-[var(--border)]" />
 }
 
 function Toolbar() {
@@ -185,7 +185,7 @@ function Toolbar() {
     <div
       role="toolbar"
       aria-label="Text formatting"
-      className="flex flex-wrap items-center gap-0.5 border-b border-input px-1.5 py-1">
+      className="flex flex-wrap items-center gap-0.5 border-b border-input bg-[var(--bg-subtle)] px-2 py-1.5">
       <ToolbarButton label="Bold" active={state.bold} onClick={() => format("bold")}><Bold /></ToolbarButton>
       <ToolbarButton label="Italic" active={state.italic} onClick={() => format("italic")}><Italic /></ToolbarButton>
       <ToolbarButton label="Underline" active={state.underline} onClick={() => format("underline")}><Underline /></ToolbarButton>
@@ -246,11 +246,11 @@ function RichTextarea({
             contentEditable={
               <ContentEditable
                 aria-label={ariaLabel}
-                className="min-h-24 px-3 py-2 text-sm leading-normal text-[var(--fg)] outline-none [&_a]:cursor-pointer"
+                className="min-h-32 max-h-80 overflow-y-auto px-3 py-2.5 text-sm leading-normal text-[var(--fg)] outline-none [&_a]:cursor-pointer"
               />
             }
             placeholder={
-              <div className="pointer-events-none absolute left-3 top-2 text-sm text-muted-foreground">
+              <div className="pointer-events-none absolute left-3 top-2.5 text-sm text-muted-foreground">
                 {placeholder}
               </div>
             }
