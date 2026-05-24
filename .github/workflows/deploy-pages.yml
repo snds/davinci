@@ -4,7 +4,7 @@
 # Publishes three artifacts under https://snds.github.io/davinci/ :
 #   • /              → Docusaurus docs site
 #   • /storybook/    → Storybook static build
-#   • /app/          → LinkedIn-style demo app (uses davinci.css)
+#   • /app/          → LinkedIn-style demo app (Vite build, dogfoods @davinci/ui)
 #
 # Triggers:
 #   • Push to feat/docs-dogfood (the active working branch)
@@ -54,6 +54,9 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook -w storybook
 
+      - name: Build demo app
+        run: npm run build:demo
+
       - name: Assemble site
         run: |
           set -euo pipefail
@@ -63,15 +66,11 @@ jobs:
           # 2. Storybook at /storybook
           mkdir -p _site/storybook
           cp -r storybook/storybook-static/. _site/storybook/
-          # 3. Demo app at /app — no-build static React (CDN + Babel)
+          # 3. Demo app at /app — Vite build that dogfoods @davinci/ui.
+          # Vite bundles the tokens into the CSS and uses relative asset
+          # paths (base: './'), so no link rewriting / token colocation.
           mkdir -p _site/app
-          cp -r ui_kits/web_app/. _site/app/
-          # The demo's index.html loads ../../colors_and_type.css; that
-          # path doesn't exist once flattened under /app, so colocate the
-          # token files and rewrite the link. colors_and_type.css does
-          # @import './palette.css', so palette.css must sit beside it.
-          cp colors_and_type.css palette.css _site/app/
-          sed -i 's#\.\./.\./colors_and_type\.css#colors_and_type.css#g' _site/app/index.html
+          cp -r apps/demo/dist/. _site/app/
           # Disable Jekyll so paths beginning with _ are served as-is.
           touch _site/.nojekyll
 
