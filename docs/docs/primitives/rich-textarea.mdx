@@ -1,0 +1,48 @@
+---
+title: Rich Textarea
+sidebar_label: Rich Textarea
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import DocsCallout from '@site/src/components/DocsCallout';
+
+# Rich Textarea
+
+`RichTextarea` is the DaVinci "Rich Textarea" — a [Lexical](https://lexical.dev)-powered
+rich text editor styled to match the plain [Textarea](/davinci/primitives/textarea).
+The plain `Textarea` remains the reference sheet's "Poor Textarea" for non-formatted input.
+
+The toolbar is **extrapolated to Lexical's real capabilities** beyond the original
+reference: bold, italic, underline, H1/H2 headings, bulleted and numbered lists,
+links, and undo/redo.
+
+<StorybookEmbed story="components-rich-textarea--rich-vs-poor" height={520} title="Rich vs. Poor textarea" />
+
+## Usage
+
+```jsx
+import { RichTextarea } from '@davinci/ui/components/ui/rich-textarea';
+
+<RichTextarea
+  placeholder="Write something…"
+  onChange={(editorState) => console.log(editorState.toJSON())}
+/>
+```
+
+It is **uncontrolled**: pass `onChange(editorState)` to observe the Lexical editor
+state. The container reuses the textarea chrome — solid `--bg-surface` fill, hover/focus
+border, and `focus-within` ring — so it sits naturally alongside other form fields.
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `placeholder` | `string` | `"Write something…"` | Empty-state text |
+| `ariaLabel` | `string` | `"Rich text editor"` | Accessible name for the editable region |
+| `onChange` | `(editorState) => void` | — | Fires on every edit with the Lexical `EditorState` |
+
+<DocsCallout type="note" title="Dependency">
+  `RichTextarea` pulls in <code>lexical</code> and the <code>@lexical/*</code> plugins.
+  It is the only design-system primitive with a rich-text dependency — reach for the
+  plain <code>Textarea</code> ("Poor Textarea") whenever formatting isn't needed.
+</DocsCallout>
