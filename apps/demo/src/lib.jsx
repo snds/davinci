@@ -136,7 +136,7 @@ export function Pill({ children, variant, style }) {
 }
 
 /* ---------------- Panel (wraps @davinci/ui Card; reuses .panel__* chrome) ---------------- */
-export function Panel({ title, action, children, style, bodyStyle, className = "" }) {
+export function Panel({ title, action, children, style, bodyStyle, className = "", bare = false }) {
   return (
     <Card className={`gap-0 overflow-hidden py-0 ${className}`.trim()} style={style}>
       {(title || action) && (
@@ -145,7 +145,9 @@ export function Panel({ title, action, children, style, bodyStyle, className = "
           {action}
         </header>
       )}
-      <div className="panel__body" style={bodyStyle}>{children}</div>
+      {/* `bare` skips the .panel__body padding for content that carries its
+          own (composer, post) — otherwise padding stacks. */}
+      {bare ? children : <div className="panel__body" style={bodyStyle}>{children}</div>}
     </Card>
   );
 }

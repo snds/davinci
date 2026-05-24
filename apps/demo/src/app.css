@@ -14,3 +14,24 @@ body,
 body {
   margin: 0;
 }
+
+/* ----------------------------------------------------------------
+   Demo refinements — softer container outlines + tighter rhythm than
+   the component defaults, tuned for a dense feed UI. Scoped to the
+   demo (does not touch davinci.css / Storybook / docs).
+   ---------------------------------------------------------------- */
+[data-slot="card"] {
+  border-color: var(--border-subtle);
+}
+.panel__header {
+  padding: 10px 16px;
+}
+.panel__body {
+  padding: 14px 16px;
+}
+.composer {
+  padding: 12px 16px;
+}
+.post {
+  padding: 14px 16px;
+}

@@ -165,7 +165,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
   }, [alertsOpen, onToggleAlerts]);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--bg-surface)]">
+    <header className="sticky top-0 z-30 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
       <div className="mx-auto flex h-14 max-w-[1180px] items-center gap-3 px-4">
         <Logo />
         <SearchBox value={searchValue} onChange={onSearchChange} onSubmit={onSearchSubmit} />
@@ -205,7 +205,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
 /* ============================ Rails ============================ */
 function LeftRail({ onViewProfile }) {
   return (
-    <aside className="flex flex-col gap-4">
+    <aside className="flex flex-col gap-3">
       <Panel className="cursor-pointer" style={{ cursor: "pointer" }}>
         <div role="button" onClick={onViewProfile}>
           <div className="profile-card__cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 600, 180, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
@@ -244,7 +244,7 @@ function RightRail() {
     { n: "Priya Ravi", r: "Design Engineer · Atlas", i: "PR", v: "g5" },
   ];
   return (
-    <aside className="flex flex-col gap-4">
+    <aside className="flex flex-col gap-3">
       <Panel title="Davinci News" action={<Icon name="info" className="text-[16px] text-[var(--fg-subtle)]" />} bodyStyle={{ padding: 0 }}>
         {news.map((n, i) => (
           <div key={i} className="rail-item" style={{ alignItems: "flex-start" }}>
@@ -271,7 +271,7 @@ function RightRail() {
 function Composer() {
   const [open, setOpen] = useState(false);
   return (
-    <Panel>
+    <Panel bare>
       <div className="composer">
         <Avatar initials="YO" size={48} photo={seededPhoto("yara-okonkwo", 96, 96, "face")} />
         {!open
@@ -307,7 +307,7 @@ function Composer() {
 
 function Post({ author, role, time, avatar, variant = "g1", photoSeed, isCompany, body, attachment, reactions, comments, liked, onLike }) {
   return (
-    <Panel>
+    <Panel bare>
       <div className="post">
         <div className="post__header">
           <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} style={isCompany ? { borderRadius: 8 } : undefined} />
@@ -349,7 +349,7 @@ function Feed() {
     { author: "Daniel Amrani", role: "Head of Brand at Pylon · 1st", time: "1d", avatar: "DA", variant: "g6", photoSeed: "Daniel Amrani", body: "Hot take: most “design systems” are asset libraries with a sitemap. A real system teaches you how to decide — what to build, what to reuse, what to leave alone.", reactions: 1204, comments: 96 },
   ];
   return (
-    <main className="flex min-w-0 flex-col gap-4">
+    <main className="flex min-w-0 flex-col gap-3">
       <Composer />
       {posts.map((p, i) => (
         <React.Fragment key={i}>
@@ -365,7 +365,7 @@ function Feed() {
 /* ============================ Profile ============================ */
 function ProfilePage() {
   return (
-    <main className="flex flex-col gap-4">
+    <main className="flex flex-col gap-3">
       <Panel>
         <div className="profile-cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 1200, 360, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div className="profile-header">
@@ -417,7 +417,7 @@ function ProfilePage() {
 function CompanyPage() {
   const [tab, setTab] = useState("home");
   return (
-    <main className="flex flex-col gap-4">
+    <main className="flex flex-col gap-3">
       <Panel>
         <div className="profile-cover" style={{ height: 140, backgroundImage: `url(${seededPhoto("davinci-systems-banner", 1200, 300, "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
@@ -504,7 +504,7 @@ function NetworkPage() {
     { name: "Ines Caballero", role: "Founder · Unwritten", mutual: 22, avatar: "IC", variant: "g2" },
   ];
   return (
-    <main className="flex min-w-0 flex-col gap-4">
+    <main className="flex min-w-0 flex-col gap-3">
       <Panel title="Manage your network" bodyStyle={{ padding: 0 }}>
         <div className="network-sub-nav">
           <NetworkNavItem icon="group" label="Connections" count="842" />
@@ -707,7 +707,7 @@ function AlertsPage() {
   const filtered = tab === "all" ? ALERTS : tab === "jobs" ? ALERTS.filter((a) => a.type === "job") : ALERTS.filter((a) => a.type === "mention" || a.type === "reaction");
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, alignItems: "start" }}>
-      <main className="flex flex-col gap-4">
+      <main className="flex flex-col gap-3">
         <Panel style={{ padding: "0 8px" }} bodyStyle={{ padding: 0 }}>
           <div className="results-tabs">
             <button className={`results-tab ${tab === "all" ? "active" : ""}`} onClick={() => setTab("all")}>All</button>
@@ -719,7 +719,7 @@ function AlertsPage() {
           {filtered.map((a, i) => (<React.Fragment key={a.id}><AlertRow alert={a} />{i === 2 && <InlineAd ad={AD_LIBRARY.course} />}</React.Fragment>))}
         </Panel>
       </main>
-      <aside className="flex flex-col gap-4">
+      <aside className="flex flex-col gap-3">
         <Panel title="Notification settings">
           {["Mentions of you", "Job recommendations", "Network activity", "Profile searches"].map((x, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < 3 ? "1px solid var(--border-subtle)" : "none" }}><span style={{ fontSize: 13 }}>{x}</span><span style={{ fontSize: 12, color: "var(--success-fg)", fontWeight: 600 }}>On</span></div>
@@ -775,7 +775,7 @@ function SearchResults({ query }) {
   const industries = ["any", ...new Set(base.map((e) => e.industry).filter(Boolean))];
   const tabs = [["all", "All"], ["people", "People"], ["jobs", "Jobs"], ["companies", "Companies"]];
   return (
-    <main className="flex min-w-0 flex-col gap-4">
+    <main className="flex min-w-0 flex-col gap-3">
       <Panel style={{ padding: "0 8px" }} bodyStyle={{ padding: 0 }}>
         <div className="results-tabs">{tabs.map(([id, label]) => <button key={id} className={`results-tab ${tab === id ? "active" : ""}`} onClick={() => setTab(id)}>{label}</button>)}</div>
       </Panel>
@@ -813,7 +813,7 @@ export function App() {
   const onSearchSubmit = (q) => { setSubmittedQuery(q); setSearchValue(q); setRoute("search"); };
 
   const pages = {
-    home: <div className="grid grid-cols-1 gap-4 lg:grid-cols-[225px_minmax(0,1fr)_300px]"><LeftRail onViewProfile={() => setRoute("profile")} /><Feed /><RightRail /></div>,
+    home: <div className="grid grid-cols-1 gap-3 lg:grid-cols-[225px_minmax(0,1fr)_300px]"><LeftRail onViewProfile={() => setRoute("profile")} /><Feed /><RightRail /></div>,
     profile: <div className="mx-auto max-w-[760px]"><ProfilePage /></div>,
     company: <div className="mx-auto max-w-[860px]"><CompanyPage /></div>,
     network: <div className="mx-auto max-w-[820px]"><NetworkPage /></div>,
@@ -844,7 +844,7 @@ export function App() {
           <Button variant="ghost" size="sm" icon={theme === "dark" ? "light_mode" : "dark_mode"} onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))} aria-label="Toggle theme" />
         </div>
       </div>
-      <div className="mx-auto max-w-[1180px] px-4 py-6">{pages[route] || pages.home}</div>
+      <div className="mx-auto max-w-[1180px] px-4 py-5">{pages[route] || pages.home}</div>
     </Surface>
   );
 }
