@@ -45,6 +45,10 @@
   --color-muted:                  var(--muted);
   --color-muted-foreground:       var(--muted-foreground);
 
+  /* Inverse / contrast surface — DaVinci "Bristol" */
+  --color-surface-inverse:            var(--surface-inverse);
+  --color-surface-inverse-foreground: var(--surface-inverse-foreground);
+
   /* Accent (hover/ghost highlight — note: --shadcn-accent to avoid name collision) */
   --color-accent:                 var(--shadcn-accent);
   --color-accent-foreground:      var(--shadcn-accent-foreground);

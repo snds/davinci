@@ -11,6 +11,7 @@ const sidebars = {
       label: 'Foundations',
       items: [
         'foundations/colors',
+        'foundations/surfaces',
         'foundations/typography',
         'foundations/spacing',
         'foundations/shadows',
@@ -33,6 +34,7 @@ const sidebars = {
         'shadcn/button',
         'shadcn/input',
         'shadcn/textarea',
+        'primitives/rich-textarea',
         'shadcn/label',
         'shadcn/badge',
         'shadcn/avatar',

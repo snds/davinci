@@ -40,6 +40,10 @@
   --muted:                   var(--bg-surface);
   --muted-foreground:        var(--fg-muted);
 
+  /* Davinci inverse/contrast surface — DaVinci "Bristol" (polarity flips per theme) */
+  --surface-inverse:            var(--bg-inverse);
+  --surface-inverse-foreground: var(--fg-on-inverse);
+
   /* shadcn --accent = hover/ghost highlight surface */
   --shadcn-accent:           var(--accent-subtle);
   --shadcn-accent-foreground: var(--accent-fg);
@@ -91,6 +95,10 @@
 
   --muted:                   var(--bg-surface);
   --muted-foreground:        var(--fg-muted);
+
+  /* Davinci inverse/contrast surface — DaVinci "Bristol" (polarity flips per theme) */
+  --surface-inverse:            var(--bg-inverse);
+  --surface-inverse-foreground: var(--fg-on-inverse);
 
   --shadcn-accent:           var(--accent-subtle);
   --shadcn-accent-foreground: var(--accent-fg);

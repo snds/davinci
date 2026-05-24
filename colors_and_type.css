@@ -30,6 +30,15 @@
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #1a1500;
 
+  /* Inverse / contrast surface — DaVinci "Bristol".
+     sand-1 / sand-12 already flip polarity per theme, so a single
+     definition yields a dark region in light mode and a light region
+     in dark mode — the modern equivalent of Material's inverseSurface. */
+  --bg-inverse:          var(--sand-12);
+  --fg-on-inverse:       var(--sand-1);
+  --fg-on-inverse-muted: var(--sand-3);
+  --border-inverse:      var(--sand-11);
+
   --border:        var(--sand-6);
   --border-subtle: var(--sand-4);
   --border-strong: var(--sand-8);
@@ -87,6 +96,15 @@
   --fg-disabled:   var(--sand-8);
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #2a2200;
+
+  /* Inverse / contrast surface — DaVinci "Bristol".
+     sand-1 / sand-12 already flip polarity per theme, so a single
+     definition yields a dark region in light mode and a light region
+     in dark mode — the modern equivalent of Material's inverseSurface. */
+  --bg-inverse:          var(--sand-12);
+  --fg-on-inverse:       var(--sand-1);
+  --fg-on-inverse-muted: var(--sand-3);
+  --border-inverse:      var(--sand-11);
 
   --border:        var(--sand-6);
   --border-subtle: var(--sand-4);
