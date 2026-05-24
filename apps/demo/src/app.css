@@ -1,0 +1,16 @@
+/* Davinci tokens + Tailwind + @davinci/ui component utilities (incl. @source scan) */
+@import "@davinci/ui/styles/globals.css";
+
+/* The skeuomorphic .btn chrome (and other shared class styles) live in
+   davinci.css; @davinci/ui Button composes those classes, so we load it here
+   exactly as Storybook does. */
+@import "../../../ui_kits/web_app/davinci.css";
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+}
