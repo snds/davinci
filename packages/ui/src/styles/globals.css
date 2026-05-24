@@ -13,6 +13,13 @@
 
 @import "tailwindcss";
 
+/* Tailwind v4 content sources. The UI components live outside the consuming
+   app's cwd (Storybook, docs), and Tailwind's auto-detection does not traverse
+   into the sibling workspace package — so utilities used ONLY inside a
+   @davinci/ui component (e.g. RichTextarea) would never be generated. Declare
+   the component dir explicitly (resolved relative to this file). */
+@source "../components/**/*.{js,jsx,ts,tsx}";
+
 /* Davinci full token stack */
 @import "@davinci/tokens/all.css";
 
