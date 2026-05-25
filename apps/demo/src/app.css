@@ -35,3 +35,31 @@ body {
 .post {
   padding: 14px 16px;
 }
+
+/* Softer outlines on form fields + buttons + attachments for the feed look */
+[data-slot="input"],
+[data-slot="textarea"],
+[data-slot="select-trigger"] {
+  border-color: var(--border-subtle);
+}
+.btn--secondary {
+  border-color: var(--border-subtle);
+}
+.btn--outline {
+  border-color: var(--accent-a7, var(--accent-border));
+}
+.post__attachment {
+  border-color: var(--border-subtle);
+}
+
+/* Profile card: full-bleed cover + centered avatar overlapping it */
+.profile-card__cover {
+  height: 68px;
+}
+.profile-card__body {
+  margin-top: -28px;
+}
+.profile-card__body > [data-slot="avatar"] {
+  margin: 0 auto 8px;
+  display: flex;
+}

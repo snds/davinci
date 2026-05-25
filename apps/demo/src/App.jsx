@@ -206,11 +206,11 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
 function LeftRail({ onViewProfile }) {
   return (
     <aside className="flex flex-col gap-3">
-      <Panel className="cursor-pointer" style={{ cursor: "pointer" }}>
+      <Panel bare className="cursor-pointer" style={{ cursor: "pointer" }}>
         <div role="button" onClick={onViewProfile}>
           <div className="profile-card__cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 600, 180, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div className="profile-card__body">
-            <Avatar initials="YO" size={64} photo={seededPhoto("yara-okonkwo", 128, 128, "face")} style={{ border: "3px solid var(--bg-surface)" }} />
+            <Avatar initials="YO" size={72} photo={seededPhoto("yara-okonkwo", 144, 144, "face")} style={{ border: "3px solid var(--bg-surface)" }} />
             <div className="profile-card__name">Yara Okonkwo</div>
             <div className="profile-card__role">Principal Designer · Davinci Systems</div>
             <Separator className="my-3" />
