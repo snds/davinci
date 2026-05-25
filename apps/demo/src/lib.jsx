@@ -96,7 +96,7 @@ const VARIANT_BG = {
   g1: "var(--blue-9)", g2: "var(--teal-9)", g3: "var(--grass-9)",
   g4: "var(--violet-9)", g5: "var(--amber-9)", g6: "var(--tomato-9)",
 };
-export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, style, className = "" }) {
+export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, bg, style, className = "" }) {
   let resolved = null;
   if (photo === null) resolved = null;
   else if (typeof photo === "string") resolved = photo;
@@ -110,7 +110,7 @@ export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, 
       {resolved && <AvatarImage src={resolved} alt="" style={{ borderRadius: "inherit" }} />}
       <AvatarFallback
         style={{
-          background: VARIANT_BG[variant] || "var(--bg-active)",
+          background: bg || VARIANT_BG[variant] || "var(--bg-active)",
           color: "#fff", borderRadius: "inherit",
           fontSize: Math.round(size * 0.38), fontWeight: 600,
         }}

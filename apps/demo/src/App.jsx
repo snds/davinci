@@ -10,11 +10,19 @@ import {
 } from "@davinci/ui/components/ui/select";
 
 import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
+} from "@davinci/ui/components/ui/dropdown-menu";
+
+import {
   Icon, seededPhoto, Button, Avatar, Pill, Panel,
   FeedAd, RailAd, InlineAd, AD_LIBRARY,
 } from "./lib.jsx";
+import { COMPANIES, GENERIC, companyIdFor } from "./companies.js";
 
 const { useState, useEffect, useRef } = React;
+
+// App-wide navigation helpers (avoids prop-drilling goToCompany everywhere).
+const NavContext = React.createContext({ goToCompany: () => {} });
 
 /* ============================ Reactions + comments ============================ */
 /* Standard social reaction set, rendered with Material Symbols. Each type has a
@@ -428,15 +436,17 @@ function Composer() {
   );
 }
 
-function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCompany, body, attachment, reactions, comments, topReactions, seedComments }) {
+function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCompany, bg, body, attachment, reactions, comments, topReactions, seedComments }) {
   const [showComments, setShowComments] = useState(false);
+  const { goToCompany } = React.useContext(NavContext);
+  const cid = isCompany ? companyIdFor(author) : null;
   return (
     <Panel bare>
       <div className="post">
         <div className="post__header">
-          <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} style={isCompany ? { borderRadius: 8 } : undefined} />
+          <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} bg={bg} style={isCompany ? { borderRadius: 8 } : undefined} />
           <div className="post__who">
-            <div className="post__name">{author}</div>
+            <div className="post__name" onClick={cid ? () => goToCompany(cid) : undefined} style={cid ? { cursor: "pointer" } : undefined}>{author}</div>
             <div className="post__role">{role}</div>
             <div className="post__time">{time} <span className="dot-sep" /> <Icon name="public" className="text-[12px]" /></div>
           </div>
@@ -582,54 +592,258 @@ function ProfilePage() {
 }
 
 /* ============================ Company ============================ */
-function CompanyPage() {
-  const [tab, setTab] = useState("home");
+function MoreMenu({ size = "icon-sm" }) {
   return (
-    <main className="flex flex-col gap-3">
-      <Panel bare>
-        <div className="profile-cover" style={{ height: 140, backgroundImage: `url(${seededPhoto("davinci-systems-banner", 1200, 300, "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-        <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
-          <div style={{ width: 96, height: 96, borderRadius: 14, background: "var(--bg-surface)", border: "4px solid var(--bg-surface)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)", marginBottom: 14, fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 40, color: "var(--accent-fg)" }}>D</div>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-end", flexWrap: "wrap" }}>
-            <div>
-              <div className="profile-header__name">Davinci Systems</div>
-              <div style={{ fontSize: 14, marginTop: 4 }}>Design infrastructure for product teams.</div>
-              <div className="profile-header__meta"><span>Software Development</span><span>Lisbon, Portugal</span><span style={{ color: "var(--accent-fg)", fontWeight: 600 }}>24,802 followers</span></div>
-            </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <Button variant="primary" icon="add">Follow</Button>
-              <Button variant="outline" icon="chat_bubble">Message</Button>
-            </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size={size} pill aria-label="More actions"><Icon name="more_horiz" /></Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem><Icon name="open_in_new" className="text-[18px] me-1" /> Visit website</DropdownMenuItem>
+        <DropdownMenuItem><Icon name="send" className="text-[18px] me-1" /> Send in a message</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem><Icon name="flag" className="text-[18px] me-1" /> Report abuse</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function CompanySubnav({ c, tabs, tab, setTab, stuck }) {
+  return (
+    <div className={`company-subnav ${stuck ? "is-stuck" : ""}`}>
+      <div className="company-subnav__id">
+        <span className="company-subnav__logo" style={{ background: c.logoBg }}>{c.initials}</span>
+        <span className="company-subnav__name">{c.name}</span>
+      </div>
+      <nav className="company-tabs">
+        {tabs.map((t) => (
+          <button key={t} className={`company-tab ${tab === t.toLowerCase() ? "active" : ""}`} onClick={() => setTab(t.toLowerCase())}>{t}</button>
+        ))}
+      </nav>
+      <div className="company-subnav__actions">
+        <MoreMenu />
+        <Button variant="primary" size="sm" pill icon="add">Follow</Button>
+      </div>
+    </div>
+  );
+}
+
+function CompanyRail({ goToCompany }) {
+  const Mod = ({ title, sub, rows }) => (
+    <Panel title={title} bodyStyle={{ padding: 0 }}>
+      {sub && <div style={{ fontSize: 11, color: "var(--fg-muted)", padding: "0 16px 8px" }}>{sub}</div>}
+      {rows.map(([name, kind], i) => {
+        const id = companyIdFor(name);
+        return (
+          <div key={i} className="rail-item" onClick={id ? () => goToCompany(id) : undefined} style={id ? { cursor: "pointer" } : undefined}>
+            <Avatar initials={name.slice(0, 2).toUpperCase()} size={40} variant="g2" bg={COMPANIES[id]?.logoBg} style={{ borderRadius: 8 }} />
+            <div className="rail-item__text"><div className="rail-item__title">{name}</div><div className="rail-item__sub">{kind}</div></div>
+            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
           </div>
-        </div>
-        <div className="company-tabs">
-          {["home", "about", "posts", "jobs", "people"].map((t) => (
-            <div key={t} className={`company-tab ${tab === t ? "active" : ""}`} onClick={() => setTab(t)}>{t[0].toUpperCase() + t.slice(1)}</div>
-          ))}
-        </div>
+        );
+      })}
+    </Panel>
+  );
+  return (
+    <aside className="hidden flex-col gap-3 lg:flex">
+      <Mod title="Products people also use" rows={GENERIC.rail.alsoUse} />
+      <Mod title="Pages people also viewed" rows={GENERIC.rail.alsoViewed} />
+      <Mod title="People also follow" rows={GENERIC.rail.alsoFollow} />
+    </aside>
+  );
+}
+
+function CompanyPage({ companyId = "davinci", goToCompany }) {
+  const c = COMPANIES[companyId] || COMPANIES.davinci;
+  const [tab, setTab] = useState("home");
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setStuck(window.scrollY > 230);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => { setTab("home"); window.scrollTo({ top: 0 }); }, [companyId]);
+
+  const TABS = ["Home", "About", "Products", "Posts", "Jobs", "People", "Insights"];
+  const postProps = (p) => ({
+    id: p.id, author: c.name, role: `${c.followers} followers`, time: p.time, avatar: c.initials, isCompany: true, bg: c.logoBg,
+    body: p.body, attachment: p.attachment ? { title: p.attachment.title, sub: p.attachment.sub, image: seededPhoto(p.attachment.image, 480, 240, "article") } : undefined,
+    reactions: p.reactions, comments: p.comments, topReactions: ["like", "celebrate", "support"],
+  });
+
+  const homeTab = (
+    <>
+      <Panel title="Overview" action={<Button variant="ghost" size="sm" onClick={() => setTab("about")}>Show all details</Button>}>
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>{c.about}</p>
       </Panel>
-      <Panel title="Overview">
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>Davinci Systems builds the design infrastructure behind some of the largest product organizations in Europe.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginTop: 20 }}>
-          {[["342", "employees"], ["2018", "founded"], ["18", "open roles"], ["€42M", "series B"]].map(([v, l]) => (
-            <div className="stat" key={l}><div className="stat__value">{v}</div><div className="stat__label">{l}</div></div>
-          ))}
-        </div>
+      <div>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, margin: "2px 2px 8px" }}>Page posts</div>
+        <div className="flex flex-col gap-3">{c.posts.map((p) => <Post key={p.id} {...postProps(p)} />)}</div>
+      </div>
+      <Panel title="Products" action={<Button variant="ghost" size="sm" onClick={() => setTab("products")}>Show all</Button>}>
+        <div style={{ fontWeight: 600 }}>{c.product.name}</div>
+        <p style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 4 }}>{c.product.desc}</p>
       </Panel>
-      <Panel title="Jobs" action={<Button variant="ghost" size="sm" iconRight="arrow_forward">See all 18</Button>}>
-        {[{ title: "Senior Design Engineer", loc: "Remote · EU", team: "Platform", isNew: true }, { title: "Brand Designer", loc: "Lisbon · Hybrid", team: "Brand Studio", isNew: true }, { title: "Engineering Manager, Tokens", loc: "Remote · EU", team: "Platform" }].map((j, i) => (
-          <div key={i} className="entry" style={{ alignItems: "center" }}>
-            <div className="entry__logo" style={{ fontSize: 20 }}>D</div>
-            <div style={{ flex: 1 }}>
-              <div className="entry__title">{j.title} {j.isNew && <Pill variant="alt" style={{ marginLeft: 6 }}>New</Pill>}</div>
-              <div className="entry__sub">{j.team}</div>
-              <div className="entry__time">{j.loc}</div>
-            </div>
-            <Button variant="outline" size="sm" pill>Easy apply</Button>
+      <Panel title="Recent job openings" action={<Button variant="ghost" size="sm" onClick={() => setTab("jobs")}>Show all jobs</Button>} bodyStyle={{ padding: 0 }}>
+        {c.jobs.slice(0, 2).map(([title, loc, posted], i) => (
+          <div key={i} className="entry" style={{ alignItems: "center", padding: "12px 16px", borderBottom: i === 0 ? "1px solid var(--border-subtle)" : "none" }}>
+            <Avatar initials={c.initials} size={40} bg={c.logoBg} style={{ borderRadius: 8 }} />
+            <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__time">{loc} · {posted}</div></div>
           </div>
         ))}
       </Panel>
-    </main>
+    </>
+  );
+
+  const aboutTab = (
+    <>
+      <Panel title="Overview">
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: "0 0 8px" }}>{c.about}</p>
+        {[["Website", c.website], ["Industry", c.industry], ["Company size", c.size], ["Headquarters", c.location], ["Founded", c.founded], ["Specialties", c.specialties.join(", ")]].map(([l, v]) => (
+          <div key={l} className="detail-row"><div className="detail-row__label">{l}</div><div className="detail-row__value">{v}</div></div>
+        ))}
+      </Panel>
+      <Panel title="Locations">
+        <div style={{ fontSize: 13, color: "var(--fg-muted)", marginBottom: 10 }}>Interact with the map to explore all locations.</div>
+        <div className="locations-map" />
+      </Panel>
+    </>
+  );
+
+  const productsTab = (
+    <>
+      <Panel title={`What is ${c.name}?`}><p style={{ fontSize: 14, lineHeight: 1.6, margin: 0 }}>{c.product.desc}</p></Panel>
+      <Panel title="Plans and pricing">
+        <div className="pricing-grid">
+          {c.product.pricing.map(([tier, price, blurb]) => (
+            <div key={tier} className="pricing-card">
+              <div style={{ fontWeight: 600 }}>{tier}</div>
+              <div className="pricing-card__price">{price}</div>
+              <div style={{ fontSize: 12, color: "var(--fg-muted)" }}>{blurb}</div>
+            </div>
+          ))}
+        </div>
+      </Panel>
+      <Panel title="Top rated features">
+        <div className="feature-grid">{c.product.features.map((f) => <div key={f} className="feature-card"><div style={{ fontWeight: 600, fontSize: 13 }}>{f}</div></div>)}</div>
+      </Panel>
+    </>
+  );
+
+  const postsTab = <>{c.posts.map((p) => <Post key={p.id} {...postProps(p)} />)}</>;
+
+  const jobsTab = (
+    <Panel title={`${c.name} has ${c.jobs.length} open roles`} bodyStyle={{ padding: 0 }}>
+      {c.jobs.map(([title, loc, posted], i) => (
+        <div key={i} className="entry" style={{ alignItems: "center", padding: "14px 16px", borderBottom: i < c.jobs.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
+          <Avatar initials={c.initials} size={48} bg={c.logoBg} style={{ borderRadius: 8 }} />
+          <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__sub">{c.name}</div><div className="entry__time">{loc} · {posted}</div></div>
+          <Button variant="outline" size="sm" pill>Easy apply</Button>
+        </div>
+      ))}
+    </Panel>
+  );
+
+  const peopleTab = (
+    <>
+      <Panel title={`${c.employees} associated members`}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          {[["Where they live", GENERIC.people.live], ["Where they studied", GENERIC.people.studied]].map(([label, rows]) => {
+            const max = Math.max(...rows.map((r) => r[1]));
+            return (
+              <div key={label}>
+                <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>{label}</div>
+                {rows.map(([name, n]) => (
+                  <div key={name} style={{ marginBottom: 10 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}><span>{name}</span><span className="meta">{n}</span></div>
+                    <div className="stat-bar" style={{ width: `${(n / max) * 100}%` }} />
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
+      <Panel title="People you may know">
+        <div className="network-grid">
+          {GENERIC.people.pymk.map((p, i) => (
+            <div key={i} className="suggestion-card">
+              <div className="suggestion-card__cover" style={{ backgroundImage: `url(${seededPhoto(p.seed + "-banner", 240, 56, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+              <Avatar initials={p.name.slice(0, 2).toUpperCase()} size={64} photoSeed={p.name} style={{ border: "3px solid var(--bg-surface)", marginTop: -32, position: "relative" }} />
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, marginTop: 8, textAlign: "center" }}>{p.name}</div>
+              <div style={{ fontSize: 12, color: "var(--fg-muted)", textAlign: "center", minHeight: 28, padding: "0 8px" }}>{p.role}</div>
+              <div style={{ padding: "10px 12px 14px", width: "100%", boxSizing: "border-box" }}><Button variant="outline" size="sm" pill icon="add" style={{ width: "100%" }}>Connect</Button></div>
+            </div>
+          ))}
+        </div>
+      </Panel>
+    </>
+  );
+
+  const ins = GENERIC.insights;
+  const insightsTab = (
+    <>
+      <Panel title="Hiring trends">
+        <p style={{ fontSize: 13, color: "var(--fg-muted)", lineHeight: 1.6, margin: "0 0 12px" }}>{ins.hiringBlurb}</p>
+        <div style={{ display: "flex", gap: 32 }}>
+          <div><div style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 800 }}>{ins.newHires}</div><div className="meta">New hires</div></div>
+          <div><div style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 800, color: "var(--success-fg)" }}>{ins.growth}</div><div className="meta">6-month growth</div></div>
+        </div>
+      </Panel>
+      <Panel title="Total employee count">
+        <div style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 800 }}>{c.employees}</div>
+        <div className="meta">Median tenure · {ins.tenure}</div>
+      </Panel>
+      <Panel title="Headcount growth by function">
+        {ins.functions.map(([f, g]) => (<div key={f} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", fontSize: 13, borderBottom: "1px solid var(--border-subtle)" }}><span>{f}</span><span style={{ color: "var(--success-fg)", fontWeight: 600 }}>{g}</span></div>))}
+      </Panel>
+      <Panel title="Notable alumni">
+        {ins.alumni.map((a, i) => (<div key={i} className="entry" style={{ alignItems: "center" }}><Avatar initials={a.name.slice(0, 2).toUpperCase()} size={44} photoSeed={a.seed} /><div style={{ flex: 1 }}><div className="entry__title">{a.name}</div><div className="entry__time">{a.role} · {a.was} at {c.name}</div></div></div>))}
+      </Panel>
+      <Panel title="Competitors" bodyStyle={{ padding: 0 }}>
+        {c.competitors.map(([name, kind], i) => { const id = companyIdFor(name); return (
+          <div key={i} className="rail-item" onClick={id ? () => goToCompany(id) : undefined} style={id ? { cursor: "pointer" } : undefined}>
+            <Avatar initials={name.slice(0, 2).toUpperCase()} size={40} variant="g5" bg={COMPANIES[id]?.logoBg} style={{ borderRadius: 8 }} />
+            <div className="rail-item__text"><div className="rail-item__title">{name}</div><div className="rail-item__sub">{kind}</div></div>
+            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
+          </div>
+        ); })}
+      </Panel>
+    </>
+  );
+
+  const content = { home: homeTab, about: aboutTab, products: productsTab, posts: postsTab, jobs: jobsTab, people: peopleTab, insights: insightsTab }[tab] || homeTab;
+
+  return (
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="flex min-w-0 flex-col gap-3">
+        <Panel bare>
+          <div className="profile-cover" style={{ height: 130, backgroundImage: `url(${seededPhoto(c.coverSeed, 1200, 300, c.coverKind || "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+          <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
+            <div className="company-logo" style={{ background: c.logoBg }}>{c.initials}</div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-end", flexWrap: "wrap", marginTop: 12 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}><span className="profile-header__name">{c.name}</span>{c.verified && <Icon name="verified" className="text-[18px]" style={{ color: "var(--accent-fg)" }} />}</div>
+                <div style={{ fontSize: 14, marginTop: 4 }}>{c.tagline}</div>
+                <div className="profile-header__meta"><span>{c.industry}</span><span>{c.location}</span><span style={{ color: "var(--accent-fg)", fontWeight: 600 }}>{c.followers} followers</span></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--fg-muted)", marginTop: 8 }}>
+                  <Avatar initials="KB" size={20} photoSeed="kaique borges" /> Kaique & 11 other connections follow this page
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <MoreMenu size="icon" />
+                <Button variant="outline" icon="chat_bubble">Message</Button>
+                <Button variant="primary" icon="add">Follow</Button>
+              </div>
+            </div>
+          </div>
+        </Panel>
+        <CompanySubnav c={c} tabs={TABS} tab={tab} setTab={setTab} stuck={stuck} />
+        <div className="flex flex-col gap-3">{content}</div>
+      </div>
+      <CompanyRail goToCompany={goToCompany} />
+    </div>
   );
 }
 
@@ -911,12 +1125,14 @@ function FilterSelect({ label, value, options, onChange }) {
 function ResultRow({ result, query }) {
   const { type } = result;
   const isRound = type === "person";
+  const { goToCompany } = React.useContext(NavContext);
+  const cid = type === "company" ? companyIdFor(result.title) : null;
   return (
     <Panel style={{ padding: 16 }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} style={{ borderRadius: isRound ? "50%" : 8 }} />
+      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} bg={COMPANIES[cid]?.logoBg} style={{ borderRadius: isRound ? "50%" : 8, cursor: cid ? "pointer" : undefined }} onClick={cid ? () => goToCompany(cid) : undefined} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15 }}>{highlightMatch(result.title, query)}</span>
+          <span onClick={cid ? () => goToCompany(cid) : undefined} style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, cursor: cid ? "pointer" : undefined }}>{highlightMatch(result.title, query)}</span>
           {type === "person" && result.connection && <Pill>{result.connection}</Pill>}
           {type === "job" && <Pill variant="success">Hiring</Pill>}
           <span style={{ marginLeft: "auto" }} className="typeahead__type-chip"><Icon name={TYPE_ICONS[type]} className="text-[12px]" />{TYPE_LABELS[type]}</span>
@@ -969,12 +1185,15 @@ function SearchResults({ query }) {
 /* ============================ App shell ============================ */
 export function App() {
   const [route, setRoute] = useState("home");
+  const [companyId, setCompanyId] = useState("davinci");
   const [theme, setTheme] = useState("dark");
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
 
   useEffect(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
+
+  const goToCompany = (id) => { setCompanyId(id); setRoute("company"); window.scrollTo({ top: 0 }); };
 
   const activeTab = { home: "home", profile: "home", company: "home", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "home" }[route] || "home";
 
@@ -983,7 +1202,7 @@ export function App() {
   const pages = {
     home: <div className="grid grid-cols-1 gap-3 lg:grid-cols-[225px_minmax(0,1fr)_300px]"><LeftRail onViewProfile={() => setRoute("profile")} /><Feed /><RightRail /></div>,
     profile: <div className="mx-auto max-w-[760px]"><ProfilePage /></div>,
-    company: <div className="mx-auto max-w-[860px]"><CompanyPage /></div>,
+    company: <CompanyPage companyId={companyId} goToCompany={goToCompany} />,
     network: <div className="mx-auto max-w-[820px]"><NetworkPage /></div>,
     jobs: <JobsPage />,
     messaging: <MessagesPage />,
@@ -994,6 +1213,7 @@ export function App() {
   const jump = [["home", "Feed"], ["profile", "Profile"], ["company", "Company"], ["network", "Network"], ["jobs", "Jobs"], ["messaging", "Messages"], ["notifications", "Alerts"]];
 
   return (
+    <NavContext.Provider value={{ goToCompany }}>
     <Surface variant="canvas" className="min-h-screen">
       <TopNav
         active={activeTab} onNavigate={setRoute}
@@ -1014,5 +1234,6 @@ export function App() {
       </div>
       <div className="mx-auto max-w-[1180px] px-4 py-5">{pages[route] || pages.home}</div>
     </Surface>
+    </NavContext.Provider>
   );
 }
