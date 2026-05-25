@@ -16,6 +16,129 @@ import {
 
 const { useState, useEffect, useRef } = React;
 
+/* ============================ Reactions + comments ============================ */
+/* Standard social reaction set, rendered with Material Symbols. Each type has a
+   consistent color wherever it appears. State is persisted to localStorage so the
+   demo feels like a living product (no backend). */
+const REACTIONS = [
+  { id: "like", label: "Like", icon: "thumb_up", color: "var(--blue-9)" },
+  { id: "love", label: "Love", icon: "favorite", color: "var(--red-9)" },
+  { id: "celebrate", label: "Celebrate", icon: "celebration", color: "var(--green-9)" },
+  { id: "support", label: "Support", icon: "volunteer_activism", color: "var(--violet-9)" },
+  { id: "insightful", label: "Insightful", icon: "lightbulb", color: "var(--amber-9)" },
+  { id: "funny", label: "Funny", icon: "mood", color: "var(--teal-9)" },
+];
+const REACTION_BY_ID = Object.fromEntries(REACTIONS.map((r) => [r.id, r]));
+
+function loadStore(key) { try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch { return {}; } }
+function saveStore(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* ignore */ } }
+
+function useReaction(postId) {
+  const [reaction, set] = useState(() => loadStore("davinci_reactions")[postId] || null);
+  const update = (id) => {
+    set(id);
+    const store = loadStore("davinci_reactions");
+    if (id) store[postId] = id; else delete store[postId];
+    saveStore("davinci_reactions", store);
+  };
+  return [reaction, update];
+}
+
+function useComments(postId, seed = []) {
+  const [list, setList] = useState(() => loadStore("davinci_comments")[postId] || seed);
+  const add = (text) => {
+    const next = [...list, { author: "Yara Okonkwo", text, time: "Just now", me: true }];
+    setList(next);
+    const store = loadStore("davinci_comments");
+    store[postId] = next;
+    saveStore("davinci_comments", store);
+  };
+  return [list, add];
+}
+
+function ReactionChips({ ids }) {
+  return (
+    <span className="reaction-chips">
+      {ids.map((id) => {
+        const r = REACTION_BY_ID[id];
+        return r ? <span key={id} className="reaction-chip" style={{ background: r.color }}><Icon name={r.icon} filled /></span> : null;
+      })}
+    </span>
+  );
+}
+
+function ReactionBar({ postId, baseReactions, topReactions = ["like", "love", "insightful"], commentCount, onToggleComments }) {
+  const [reaction, setReaction] = useReaction(postId);
+  const [flyout, setFlyout] = useState(false);
+  const holdRef = useRef(null);
+  const heldRef = useRef(false);
+
+  const startHold = () => { heldRef.current = false; holdRef.current = setTimeout(() => { heldRef.current = true; setFlyout(true); }, 350); };
+  const endHold = () => clearTimeout(holdRef.current);
+  const onClick = () => { if (heldRef.current) return; setReaction(reaction ? null : "like"); };
+  const pick = (id) => { setReaction(id === reaction ? null : id); setFlyout(false); };
+
+  const current = reaction ? REACTION_BY_ID[reaction] : null;
+  const total = baseReactions + (reaction ? 1 : 0);
+  const chips = (reaction ? [reaction, ...topReactions.filter((r) => r !== reaction)] : topReactions).slice(0, 3);
+
+  return (
+    <>
+      <div className="post__reactions">
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+          <ReactionChips ids={chips} /> {total.toLocaleString()}
+        </span>
+        <button type="button" onClick={onToggleComments} style={{ color: "inherit", cursor: "pointer" }}>{commentCount} comments</button>
+      </div>
+      <div className="post__actions">
+        <div style={{ position: "relative", flex: 1, display: "flex" }} onMouseLeave={() => setFlyout(false)}>
+          {flyout && (
+            <div className="reaction-flyout" role="menu" aria-label="Pick a reaction">
+              {REACTIONS.map((r) => (
+                <button key={r.id} type="button" className="reaction-flyout__btn" title={r.label} aria-label={r.label} onClick={() => pick(r.id)} style={{ color: r.color }}>
+                  <Icon name={r.icon} filled />
+                </button>
+              ))}
+            </div>
+          )}
+          <button type="button" className={`post__action ${current ? "active" : ""}`} style={current ? { color: current.color } : undefined}
+            onPointerDown={startHold} onPointerUp={endHold} onPointerLeave={endHold} onClick={onClick} aria-label="Like (press and hold for reactions)">
+            <Icon name={current ? current.icon : "thumb_up"} filled={!!current} /><span>{current ? current.label : "Like"}</span>
+          </button>
+        </div>
+        <button type="button" className="post__action" onClick={onToggleComments}><Icon name="chat_bubble" /><span>Comment</span></button>
+        <button type="button" className="post__action"><Icon name="repeat" /><span>Repost</span></button>
+        <button type="button" className="post__action"><Icon name="send" /><span>Send</span></button>
+      </div>
+    </>
+  );
+}
+
+function Comments({ postId, seed }) {
+  const [list, add] = useComments(postId, seed);
+  const [draft, setDraft] = useState("");
+  const submit = () => { const t = draft.trim(); if (!t) return; add(t); setDraft(""); };
+  return (
+    <div className="post__comments">
+      <div className="comment-composer">
+        <Avatar initials="YO" size={32} photo={seededPhoto("yara-okonkwo", 64, 64, "face")} />
+        <Input size="sm" className="!rounded-full" placeholder="Add a comment…" value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submit(); }} />
+        <Button variant="primary" size="sm" pill onClick={submit} disabled={!draft.trim()}>Post</Button>
+      </div>
+      {list.map((c, i) => (
+        <div key={i} className="comment">
+          <Avatar initials={c.me ? "YO" : (c.author || "?").slice(0, 2).toUpperCase()} size={32} variant="g3" photoSeed={c.me ? null : c.author} photo={c.me ? seededPhoto("yara-okonkwo", 64, 64, "face") : undefined} />
+          <div className="comment__bubble">
+            <div className="comment__author">{c.author}</div>
+            <div className="comment__text">{c.text}</div>
+            <div className="comment__time">{c.time}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ============================ Logo ============================ */
 function Logo() {
   return (
@@ -219,7 +342,7 @@ function LeftRail({ onViewProfile }) {
           </div>
         </div>
       </Panel>
-      <Panel>
+      <Panel bare>
         <ul className="nav-list">
           <li><Icon name="bookmark" /> Saved items</li>
           <li><Icon name="groups" /> Groups <span className="count">12</span></li>
@@ -305,7 +428,8 @@ function Composer() {
   );
 }
 
-function Post({ author, role, time, avatar, variant = "g1", photoSeed, isCompany, body, attachment, reactions, comments, liked, onLike }) {
+function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCompany, body, attachment, reactions, comments, topReactions, seedComments }) {
+  const [showComments, setShowComments] = useState(false);
   return (
     <Panel bare>
       <div className="post">
@@ -325,35 +449,28 @@ function Post({ author, role, time, avatar, variant = "g1", photoSeed, isCompany
             <div className="post__attachment-body"><strong>{attachment.title}</strong><span className="meta">{attachment.sub}</span></div>
           </div>
         )}
-        <div className="post__reactions">
-          <span><span style={{ color: "var(--accent-fg)" }}>❤ 👍 💡</span>&nbsp;&nbsp;{reactions} reactions</span>
-          <span>{comments} comments</span>
-        </div>
-        <div className="post__actions">
-          <button className={`post__action ${liked ? "active" : ""}`} onClick={onLike}><Icon name="thumb_up" filled={liked} /><span>Like</span></button>
-          <button className="post__action"><Icon name="chat_bubble" /><span>Comment</span></button>
-          <button className="post__action"><Icon name="repeat" /><span>Repost</span></button>
-          <button className="post__action"><Icon name="send" /><span>Send</span></button>
-        </div>
+        <ReactionBar postId={id} baseReactions={reactions} topReactions={topReactions} commentCount={comments} onToggleComments={() => setShowComments((s) => !s)} />
+        {showComments && <Comments postId={id} seed={seedComments} />}
       </div>
     </Panel>
   );
 }
 
 function Feed() {
-  const [likes, setLikes] = useState({});
-  const toggle = (i) => setLikes((s) => ({ ...s, [i]: !s[i] }));
   const posts = [
-    { author: "Sofia Antonova", role: "Staff Designer at Helix · 2nd", time: "2h", avatar: "SA", variant: "g4", photoSeed: "Sofia Antonova", body: "Shipping a refresh of our component library today. Fewer tokens, warmer neutrals, and — finally — a proper focus ring on every interactive surface.", attachment: { title: "Radix Colors for design systems that age well", sub: "davinci-systems.com · 8 min read", image: seededPhoto("article-radix-colors", 480, 240, "article") }, reactions: 482, comments: 34 },
-    { author: "Helix Systems", role: "Product & Design Platform · 24,802 followers", time: "5h", avatar: "HX", variant: "g2", isCompany: true, body: "We're hiring a Design Engineer to work on our token pipeline. Based in Lisbon or fully remote.", attachment: { title: "Design Engineer · Helix Platform Team", sub: "Remote / Lisbon · 5 days ago", style: { background: "linear-gradient(135deg, var(--yellow-7), var(--yellow-10))" } }, reactions: 188, comments: 12 },
-    { author: "Daniel Amrani", role: "Head of Brand at Pylon · 1st", time: "1d", avatar: "DA", variant: "g6", photoSeed: "Daniel Amrani", body: "Hot take: most “design systems” are asset libraries with a sitemap. A real system teaches you how to decide — what to build, what to reuse, what to leave alone.", reactions: 1204, comments: 96 },
+    { id: "feed-sofia", author: "Sofia Antonova", role: "Staff Designer at Helix · 2nd", time: "2h", avatar: "SA", variant: "g4", photoSeed: "Sofia Antonova", body: "Shipping a refresh of our component library today. Fewer tokens, warmer neutrals, and — finally — a proper focus ring on every interactive surface.", attachment: { title: "Radix Colors for design systems that age well", sub: "davinci-systems.com · 8 min read", image: seededPhoto("article-radix-colors", 480, 240, "article") }, reactions: 482, comments: 34, topReactions: ["insightful", "like", "love"], seedComments: [
+      { author: "Priya Ravi", text: "The focus-ring-on-every-surface bit is so underrated. Congrats on shipping!", time: "1h" },
+      { author: "Daniel Amrani", text: "Warmer neutrals — finally. Sand scales age so much better than pure grays.", time: "45m" },
+    ] },
+    { id: "feed-helix", author: "Helix Systems", role: "Product & Design Platform · 24,802 followers", time: "5h", avatar: "HX", variant: "g2", isCompany: true, body: "We're hiring a Design Engineer to work on our token pipeline. Based in Lisbon or fully remote.", attachment: { title: "Design Engineer · Helix Platform Team", sub: "Remote / Lisbon · 5 days ago", style: { background: "linear-gradient(135deg, var(--yellow-7), var(--yellow-10))" } }, reactions: 188, comments: 12, topReactions: ["like", "celebrate", "support"] },
+    { id: "feed-daniel", author: "Daniel Amrani", role: "Head of Brand at Pylon · 1st", time: "1d", avatar: "DA", variant: "g6", photoSeed: "Daniel Amrani", body: "Hot take: most “design systems” are asset libraries with a sitemap. A real system teaches you how to decide — what to build, what to reuse, what to leave alone.", reactions: 1204, comments: 96, topReactions: ["insightful", "like", "funny"] },
   ];
   return (
     <main className="flex min-w-0 flex-col gap-3">
       <Composer />
       {posts.map((p, i) => (
-        <React.Fragment key={i}>
-          <Post {...p} liked={!!likes[i]} onLike={() => toggle(i)} />
+        <React.Fragment key={p.id}>
+          <Post {...p} />
           {i === 0 && <FeedAd ad={AD_LIBRARY.notion} />}
           {i === 1 && <FeedAd ad={AD_LIBRARY.figma} />}
         </React.Fragment>
@@ -366,7 +483,7 @@ function Feed() {
 function ProfilePage() {
   return (
     <main className="flex flex-col gap-3">
-      <Panel>
+      <Panel bare>
         <div className="profile-cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 1200, 360, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div className="profile-header">
           <Avatar initials="YO" size={128} photo={seededPhoto("yara-okonkwo", 256, 256, "face")} />
@@ -396,6 +513,7 @@ function ProfilePage() {
         {[
           { logo: "DV", co: "Davinci Systems", title: "Principal Designer", time: "2022 – Present · 4 yrs", desc: "Lead design system and brand systems across the Davinci product suite. Built a token pipeline 40+ teams consume.", skills: ["Design Systems", "Tokens", "Leadership"] },
           { logo: "HX", co: "Helix", title: "Senior Product Designer", time: "2019 – 2022 · 3 yrs", desc: "Owned end-to-end redesign of the primary dashboard; partnered with eng on a React component library.", skills: ["Product Design", "React", "Figma"] },
+          { logo: "NV", co: "Novatech", title: "Product Designer", time: "2015 – 2019 · 4 yrs", desc: "Shipped consumer features across web and iOS; built the first internal component library.", skills: ["iOS", "Web"] },
         ].map((e, i) => (
           <div key={i} className="entry">
             <div className="entry__logo">{e.logo}</div>
@@ -409,6 +527,56 @@ function ProfilePage() {
           </div>
         ))}
       </Panel>
+      <Panel title="Skills">
+        <div className="entry__skills">
+          {["Design Systems", "Design Tokens", "Figma", "React", "TypeScript", "Accessibility (WCAG)", "Design Ops", "Typography", "Governance", "Component API Design"].map((s) => (
+            <Pill key={s} variant="accent">{s}</Pill>
+          ))}
+        </div>
+      </Panel>
+      <Panel title="Projects">
+        {[
+          { logo: "DV", title: "Davinci Token Pipeline", time: "2022 – Present", desc: "A Radix-based token system + Figma sync consumed by 40+ product teams. Zero-config theming and lint-enforced overrides." },
+          { logo: "OS", title: "Open Surface Guidelines", time: "2023", desc: "A public playbook for surface hierarchy and elevation, adopted across the design community." },
+        ].map((e, i) => (
+          <div key={i} className="entry">
+            <div className="entry__logo">{e.logo}</div>
+            <div style={{ flex: 1 }}>
+              <div className="entry__title">{e.title}</div>
+              <div className="entry__time">{e.time}</div>
+              <div className="entry__desc">{e.desc}</div>
+            </div>
+          </div>
+        ))}
+      </Panel>
+      <Panel title="Recommendations">
+        {[
+          { name: "Miriam Chen", role: "VP Design · Helix", text: "Yara is the rare designer who makes the boring parts of a system feel exciting. Our token sprawl dropped by half under her guidance." },
+          { name: "Daniel Amrani", role: "Head of Brand · Pylon", text: "Equal parts systems thinker and craftsperson. Every handoff was airtight and every rationale documented." },
+        ].map((r, i) => (
+          <div key={i} className="entry">
+            <Avatar initials={r.name.slice(0, 2).toUpperCase()} size={48} variant="g4" photoSeed={r.name} />
+            <div style={{ flex: 1 }}>
+              <div className="entry__title">{r.name}</div>
+              <div className="entry__time">{r.role}</div>
+              <div className="entry__desc">“{r.text}”</div>
+            </div>
+          </div>
+        ))}
+      </Panel>
+      <Panel title="Interests" bodyStyle={{ padding: 0 }}>
+        {[
+          { n: "Helix Systems", r: "24,802 followers", i: "HX", v: "g2", company: true },
+          { n: "Design Systems Guild", r: "28,402 members", i: "DS", v: "g4", company: true },
+          { n: "Miriam Chen", r: "VP Design · Helix", i: "MC", v: "g4" },
+        ].map((p, i) => (
+          <div key={i} className="rail-item">
+            <Avatar initials={p.i} size={40} variant={p.v} photoSeed={p.company ? null : p.n} style={p.company ? { borderRadius: 8 } : undefined} />
+            <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
+            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
+          </div>
+        ))}
+      </Panel>
     </main>
   );
 }
@@ -418,7 +586,7 @@ function CompanyPage() {
   const [tab, setTab] = useState("home");
   return (
     <main className="flex flex-col gap-3">
-      <Panel>
+      <Panel bare>
         <div className="profile-cover" style={{ height: 140, backgroundImage: `url(${seededPhoto("davinci-systems-banner", 1200, 300, "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
           <div style={{ width: 96, height: 96, borderRadius: 14, background: "var(--bg-surface)", border: "4px solid var(--bg-surface)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "var(--shadow-md)", marginBottom: 14, fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 40, color: "var(--accent-fg)" }}>D</div>
@@ -678,7 +846,7 @@ function AlertRow({ alert, compact }) {
     <div className={`alert-row ${alert.unread ? "alert-row--unread" : ""} ${compact ? "alert-row--compact" : ""}`}>
       <div style={{ position: "relative", flexShrink: 0 }}>
         <Avatar initials={alert.avatar} size={compact ? 40 : 48} variant={alert.variant} photoSeed={alert.isCompany ? null : alert.actor} style={{ borderRadius: alert.isCompany ? 8 : "50%" }} />
-        <span className="alert-row__type-badge" style={{ color: ico.color }}><Icon name={ico.icon} filled className="text-[12px]" /></span>
+        <span className="alert-row__type-badge" style={{ color: ico.color }}><Icon name={ico.icon} /></span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: compact ? 13 : 14, lineHeight: 1.45 }}>{alert.title}</div>
