@@ -474,7 +474,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
 /* ============================ Rails ============================ */
 function LeftRail({ onViewProfile }) {
   return (
-    <aside className="flex flex-col gap-3">
+    <>
       <Panel bare className="cursor-pointer" style={{ cursor: "pointer" }}>
         <div role="button" onClick={onViewProfile}>
           <div className="profile-card__cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 600, 180, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
@@ -497,7 +497,7 @@ function LeftRail({ onViewProfile }) {
         </ul>
       </Panel>
       <RailAd ad={AD_LIBRARY.aws} />
-    </aside>
+    </>
   );
 }
 
@@ -513,7 +513,7 @@ function RightRail() {
     { n: "Priya Ravi", r: "Design Engineer · Atlas", i: "PR", v: "g5" },
   ];
   return (
-    <aside className="flex flex-col gap-3">
+    <>
       <Panel title="Davinci News" action={<Icon name="info" className="text-[16px] text-[var(--fg-subtle)]" />} bodyStyle={{ padding: 0 }}>
         {news.map((n, i) => (
           <div key={i} className="rail-item" style={{ alignItems: "flex-start" }}>
@@ -533,7 +533,7 @@ function RightRail() {
       </Panel>
       <RailAd ad={AD_LIBRARY.course} />
       <RailFooter />
-    </aside>
+    </>
   );
 }
 
@@ -615,7 +615,7 @@ function Feed() {
     { id: "feed-daniel", author: "Daniel Amrani", role: "Head of Brand at Pylon · 1st", time: "1d", avatar: "DA", variant: "g6", photoSeed: "Daniel Amrani", body: "Hot take: most “design systems” are asset libraries with a sitemap. A real system teaches you how to decide — what to build, what to reuse, what to leave alone.", reactions: 1204, comments: 96, topReactions: ["insightful", "like", "funny"] },
   ];
   return (
-    <main className="flex min-w-0 flex-col gap-3">
+    <>
       <Composer />
       {posts.map((p, i) => (
         <React.Fragment key={p.id}>
@@ -624,15 +624,69 @@ function Feed() {
           {i === 1 && <FeedAd ad={AD_LIBRARY.figma} />}
         </React.Fragment>
       ))}
-    </main>
+    </>
   );
 }
 
 /* ============================ Profile ============================ */
+function ProfileRail() {
+  const { goToCompany } = React.useContext(NavContext);
+  const viewers = [
+    { name: "Ann Peng", role: "Design at TikTok", conn: "2nd" },
+    { name: "Braden Kowitz", role: "Design Leadership", conn: "2nd" },
+    { name: "Kacey Lewis", role: "Defender of the Frontend", conn: "2nd" },
+    { name: "Jenny Chang", role: "Design @ Vercel", conn: "2nd" },
+    { name: "Dan Hiester", role: "Product Builder", conn: "2nd" },
+  ];
+  return (
+    <>
+      <Panel title="Profile language">
+        <div style={{ fontSize: 13 }}>English</div>
+        <Separator className="my-3" />
+        <div style={{ fontWeight: 600, fontSize: 13 }}>Public profile &amp; URL</div>
+        <div className="meta" style={{ marginTop: 2 }}>davinci.design/in/yara-okonkwo</div>
+      </Panel>
+      <Panel title="Who your viewers also viewed" bodyStyle={{ padding: 0 }}>
+        {viewers.map((p, i) => (
+          <div key={i} className="rail-item">
+            <Avatar initials={p.name.slice(0, 2).toUpperCase()} size={40} photoSeed={p.name} />
+            <div className="rail-item__text"><div className="rail-item__title">{p.name} <span className="meta">· {p.conn}</span></div><div className="rail-item__sub">{p.role}</div></div>
+            <Button variant="outline" size="sm" pill icon="add">Connect</Button>
+          </div>
+        ))}
+      </Panel>
+      <Panel title="You might like — Pages for you" bodyStyle={{ padding: 0 }}>
+        {Object.values(COMPANIES).slice(0, 3).map((x) => (
+          <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
+            <Avatar initials={x.initials} size={40} bg={x.logoBg} style={{ borderRadius: 8 }} />
+            <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry}</div></div>
+            <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
+          </div>
+        ))}
+      </Panel>
+      <RailAd ad={AD_LIBRARY.course} />
+      <RailFooter />
+    </>
+  );
+}
+
 function ProfilePage() {
   const { goToCompany } = React.useContext(NavContext);
-  return (
-    <main className="flex flex-col gap-3">
+  const co = (name) => (companyIdFor(name) ? <span onClick={() => goToCompany(companyIdFor(name))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{name}</span> : name);
+  const Entry = ({ logo, logoBg, title, sub, time, desc, skills }) => (
+    <div className="entry">
+      <div className="entry__logo" style={logoBg ? { background: logoBg, color: "#fff" } : undefined}>{logo}</div>
+      <div style={{ flex: 1 }}>
+        <div className="entry__title">{title}</div>
+        {sub && <div className="entry__sub">{sub}</div>}
+        {time && <div className="entry__time">{time}</div>}
+        {desc && <div className="entry__desc">{desc}</div>}
+        {skills && <div className="entry__skills">{skills.map((s) => <Pill key={s}>{s}</Pill>)}</div>}
+      </div>
+    </div>
+  );
+  const main = (
+    <>
       <Panel bare>
         <div className="profile-cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 1200, 360, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div className="profile-header">
@@ -640,8 +694,11 @@ function ProfilePage() {
           <div className="profile-header__name">Yara Okonkwo</div>
           <div className="profile-header__headline">Principal Designer at Davinci Systems · Helping teams build design infrastructure that doesn't rot.</div>
           <div className="profile-header__meta">
-            <span><Icon name="location_on" className="text-[14px]" /> Lisbon, Portugal</span>
+            <span><Icon name="location_on" className="text-[14px]" /> Lisbon, Portugal · {co("Davinci Systems")}</span>
             <span><Icon name="group" className="text-[14px]" /> 1,842 connections · 12k followers</span>
+          </div>
+          <div style={{ marginTop: 12, display: "inline-flex", alignItems: "center", gap: 8, background: "var(--accent-subtle)", color: "var(--accent-fg)", borderRadius: 8, padding: "8px 12px", fontSize: 13, fontWeight: 600 }}>
+            <Icon name="work" className="text-[16px]" /> Open to work — Design Systems &amp; Product Design roles
           </div>
           <div className="profile-header__actions">
             <Button variant="primary" icon="chat_bubble">Message</Button>
@@ -650,55 +707,67 @@ function ProfilePage() {
           </div>
         </div>
       </Panel>
-      <Panel title="About">
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>
-          Designer and systems thinker with 12 years of experience building design infrastructure for product teams. I care about the boring, load-bearing parts of design systems — tokens, governance, contribution models.
-        </p>
-        <div className="entry__skills" style={{ marginTop: 14 }}>
-          {["Design Systems", "Typography", "Accessibility"].map((s) => <Pill key={s} variant="accent">{s}</Pill>)}
-          {["Figma", "React", "CSS", "Product Strategy"].map((s) => <Pill key={s}>{s}</Pill>)}
-        </div>
-      </Panel>
-      <Panel title="Experience">
-        {[
-          { logo: "DV", co: "Davinci Systems", title: "Principal Designer", time: "2022 – Present · 4 yrs", desc: "Lead design system and brand systems across the Davinci product suite. Built a token pipeline 40+ teams consume.", skills: ["Design Systems", "Tokens", "Leadership"] },
-          { logo: "HX", co: "Helix", title: "Senior Product Designer", time: "2019 – 2022 · 3 yrs", desc: "Owned end-to-end redesign of the primary dashboard; partnered with eng on a React component library.", skills: ["Product Design", "React", "Figma"] },
-          { logo: "NV", co: "Novatech", title: "Product Designer", time: "2015 – 2019 · 4 yrs", desc: "Shipped consumer features across web and iOS; built the first internal component library.", skills: ["iOS", "Web"] },
-        ].map((e, i) => (
-          <div key={i} className="entry">
-            <div className="entry__logo">{e.logo}</div>
-            <div style={{ flex: 1 }}>
-              <div className="entry__title">{e.title}</div>
-              <div className="entry__sub">{companyIdFor(e.co) ? <span onClick={() => goToCompany(companyIdFor(e.co))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{e.co}</span> : e.co}</div>
-              <div className="entry__time">{e.time}</div>
-              <div className="entry__desc">{e.desc}</div>
-              <div className="entry__skills">{e.skills.map((s) => <Pill key={s}>{s}</Pill>)}</div>
+
+      <Panel title="Analytics" action={<span className="meta">Private to you</span>}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+          {[["98", "profile views", "Discover who's viewed your profile."], ["1,892", "post impressions", "Check out who's engaging with your posts."], ["27", "search appearances", "See how often you appear in search."]].map(([v, l, d]) => (
+            <div key={l}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}><span className="stat__value">{v}</span><span style={{ fontSize: 13, fontWeight: 600 }}>{l}</span></div>
+              <div className="meta" style={{ marginTop: 4, lineHeight: 1.4 }}>{d}</div>
             </div>
-          </div>
-        ))}
-      </Panel>
-      <Panel title="Skills">
-        <div className="entry__skills">
-          {["Design Systems", "Design Tokens", "Figma", "React", "TypeScript", "Accessibility (WCAG)", "Design Ops", "Typography", "Governance", "Component API Design"].map((s) => (
-            <Pill key={s} variant="accent">{s}</Pill>
           ))}
         </div>
       </Panel>
-      <Panel title="Projects">
-        {[
-          { logo: "DV", title: "Davinci Token Pipeline", time: "2022 – Present", desc: "A Radix-based token system + Figma sync consumed by 40+ product teams. Zero-config theming and lint-enforced overrides." },
-          { logo: "OS", title: "Open Surface Guidelines", time: "2023", desc: "A public playbook for surface hierarchy and elevation, adopted across the design community." },
-        ].map((e, i) => (
-          <div key={i} className="entry">
-            <div className="entry__logo">{e.logo}</div>
-            <div style={{ flex: 1 }}>
-              <div className="entry__title">{e.title}</div>
-              <div className="entry__time">{e.time}</div>
-              <div className="entry__desc">{e.desc}</div>
-            </div>
-          </div>
-        ))}
+
+      <Panel title="About">
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>
+          Designer and systems thinker with 12 years of experience building design infrastructure for product teams. I care about the boring, load-bearing parts of design systems — tokens, governance, contribution models — because those are what make every other part of design feel easy.
+        </p>
+        <div className="entry__skills" style={{ marginTop: 14 }}>
+          {["Design Systems", "Design Tokens", "Accessibility"].map((s) => <Pill key={s} variant="accent">{s}</Pill>)}
+          {["Figma", "React", "Typography", "Product Strategy"].map((s) => <Pill key={s}>{s}</Pill>)}
+        </div>
       </Panel>
+
+      <Panel title="Services">
+        <p style={{ fontSize: 14, lineHeight: 1.6, margin: "0 0 12px" }}>I help product teams treat their design system as a product — set up the pipeline, governance, and rituals that keep it healthy.</p>
+        <div className="entry__skills">
+          {["Design Systems Consulting", "Design Ops", "Workshops & Training", "Token Architecture", "Audits"].map((s) => <Pill key={s}>{s}</Pill>)}
+        </div>
+      </Panel>
+
+      <Panel title="Activity" action={<Button variant="outline" size="sm" pill>Create a post</Button>}>
+        <div className="meta" style={{ marginBottom: 12 }}>1,094 followers</div>
+        <div className="flex flex-col gap-3" style={{ margin: "0 -16px -14px" }}>
+          <Post id="yara-act-1" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="3d" avatar="YO" photoSeed="yara okonkwo" body="The unglamorous truth about design systems: the wins compound in the docs and governance, not the component count. Shipped our contribution guide this week and adoption already feels different." reactions={317} comments={18} topReactions={["insightful", "like", "celebrate"]} />
+          <Post id="yara-act-2" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="1w" avatar="YO" photoSeed="yara okonkwo" body="Reposting a great thread on surface hierarchy — exactly how we think about Canvas → Container → grouping at Davinci." reactions={142} comments={6} topReactions={["like", "love"]} />
+        </div>
+      </Panel>
+
+      <Panel title="Experience">
+        {[
+          { logo: "DV", logoBg: "var(--blue-9)", title: "Principal Designer", sub: co("Davinci Systems"), time: "2022 – Present · 4 yrs", desc: "Lead design system and brand systems across the Davinci product suite. Built a token pipeline 40+ teams consume.", skills: ["Design Systems", "Tokens", "Leadership"] },
+          { logo: "HX", logoBg: "var(--teal-9)", title: "Senior Product Designer", sub: co("Helix Systems"), time: "2019 – 2022 · 3 yrs", desc: "Owned end-to-end redesign of the primary dashboard; partnered with eng on a React component library.", skills: ["Product Design", "React", "Figma"] },
+          { logo: "NV", title: "Product Designer", sub: "Novatech", time: "2015 – 2019 · 4 yrs", desc: "Shipped consumer features across web and iOS; built the first internal component library.", skills: ["iOS", "Web"] },
+        ].map((e, i) => <Entry key={i} {...e} />)}
+      </Panel>
+
+      <Panel title="Education">
+        <Entry logo="RC" title="Royal College of Art" sub="MA, Communication Design" time="2013 – 2015" desc="Graduated with Distinction. Thesis on systems thinking in interface design." />
+        <Entry logo="UL" title="University of Lagos" sub="BSc, Computer Science" time="2009 – 2013" />
+      </Panel>
+
+      <Panel title="Projects">
+        <Entry logo="DV" logoBg="var(--blue-9)" title="Davinci Token Pipeline" time="2022 – Present" desc="A Radix-based token system + Figma sync consumed by 40+ product teams. Zero-config theming and lint-enforced overrides." />
+        <Entry logo="OS" title="Open Surface Guidelines" time="2023" desc="A public playbook for surface hierarchy and elevation, adopted across the design community." />
+      </Panel>
+
+      <Panel title="Skills">
+        <div className="entry__skills">
+          {["Design Systems", "Design Tokens", "Figma", "React", "TypeScript", "Accessibility (WCAG)", "Design Ops", "Typography", "Governance", "Component API Design"].map((s) => <Pill key={s} variant="accent">{s}</Pill>)}
+        </div>
+      </Panel>
+
       <Panel title="Recommendations">
         {[
           { name: "Miriam Chen", role: "VP Design · Helix", text: "Yara is the rare designer who makes the boring parts of a system feel exciting. Our token sprawl dropped by half under her guidance." },
@@ -714,11 +783,28 @@ function ProfilePage() {
           </div>
         ))}
       </Panel>
+
+      <Panel title="Patents">
+        <Entry logo="" title="System and method for token-driven theme resolution" sub="US 11,842,019 · Granted 2023" desc="A method for resolving design tokens across themes with lint-enforced alias overrides." />
+      </Panel>
+
+      <Panel title="Courses">
+        {[["Advanced Design Systems", "Royal College of Art"], ["Accessibility Engineering", "Davinci Learning"], ["Type Design Fundamentals", "Type@Cooper"]].map(([t, sub]) => (
+          <Entry key={t} logo="" title={t} sub={sub} />
+        ))}
+      </Panel>
+
+      <Panel title="Languages">
+        {[["English", "Native or bilingual proficiency"], ["Portuguese", "Professional working proficiency"], ["Yoruba", "Native or bilingual proficiency"]].map(([l, p]) => (
+          <div key={l} className="detail-row"><div className="detail-row__value" style={{ fontWeight: 600 }}>{l}</div><div className="meta">{p}</div></div>
+        ))}
+      </Panel>
+
       <Panel title="Interests" bodyStyle={{ padding: 0 }}>
         {[
           { n: "Helix Systems", r: "24,802 followers", i: "HX", v: "g2", company: true },
-          { n: "Design Systems Guild", r: "28,402 members", i: "DS", v: "g4", company: true },
-          { n: "Miriam Chen", r: "VP Design · Helix", i: "MC", v: "g4" },
+          { n: "Atlas Docs", r: "214,882 followers", i: "AT", v: "g5", company: true },
+          { n: "Design Systems Guild", r: "28,402 members", i: "DS", v: "g4" },
         ].map((p, i) => {
           const cid = p.company ? companyIdFor(p.n) : null;
           return (
@@ -730,8 +816,13 @@ function ProfilePage() {
           );
         })}
       </Panel>
-    </main>
+
+      <Panel title="Causes">
+        <div className="entry__skills">{["Education", "Science and Technology", "Social Services", "Arts and Culture"].map((s) => <Pill key={s}>{s}</Pill>)}</div>
+      </Panel>
+    </>
   );
+  return <PageTwoColRight right={<ProfileRail />}>{main}</PageTwoColRight>;
 }
 
 /* ============================ Company ============================ */
@@ -1103,8 +1194,7 @@ function NetworkPage() {
     </Panel>
   );
   return (
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[260px_minmax(0,1fr)]">
-      <aside className="hidden flex-col gap-3 lg:flex">
+    <PageTwoColLeft left={<>
         <Panel title="Manage my network" bodyStyle={{ padding: 6 }}>
           <ul className="nav-list">
             {sidebar.map(([ic, label, count]) => (
@@ -1114,8 +1204,7 @@ function NetworkPage() {
         </Panel>
         <RailAd ad={AD_LIBRARY.course} />
         <RailFooter />
-      </aside>
-      <main className="flex min-w-0 flex-col gap-3">
+      </>}>
         <div className="results-tabs" style={{ padding: "0 4px", borderBottom: "1px solid var(--border-subtle)" }}>
           <button className={`results-tab ${tab === "grow" ? "active" : ""}`} onClick={() => setTab("grow")}>Grow</button>
           <button className={`results-tab ${tab === "catchup" ? "active" : ""}`} onClick={() => setTab("catchup")}>Catch up</button>
@@ -1129,8 +1218,7 @@ function NetworkPage() {
         <Section title="Adam Romanski's connections you may know" people={NETWORK_PEOPLE.slice(4, 8)} />
         <Section title="People in the Design Systems community" people={NETWORK_PEOPLE.slice(8, 12)} />
         <Section title="Suggestions for you" people={NETWORK_PEOPLE.slice(12, 16)} />
-      </main>
-    </div>
+    </PageTwoColLeft>
   );
 }
 
@@ -1298,7 +1386,7 @@ function AlertsPage() {
   const [tab, setTab] = useState("all");
   const filtered = tab === "all" ? ALERTS : tab === "jobs" ? ALERTS.filter((a) => a.type === "job") : ALERTS.filter((a) => a.type === "mention" || a.type === "reaction");
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, alignItems: "start" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 300px", gap: 12, alignItems: "start" }}>
       <main className="flex flex-col gap-3">
         <Panel style={{ padding: "0 8px" }} bodyStyle={{ padding: 0 }}>
           <div className="results-tabs">
@@ -1394,6 +1482,39 @@ function SearchResults({ query }) {
 }
 
 /* ============================ App shell ============================ */
+/* ============================ Layout templates ============================ */
+/* Consistent column sizing across pages: left rail 225px, right rail 300px,
+   main flexes. Rails hide below lg. Pages compose these instead of hand-rolling
+   their own grids. */
+function PageThreeCol({ left, right, children }) {
+  return (
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[225px_minmax(0,1fr)_300px]">
+      <aside className="hidden flex-col gap-3 lg:flex">{left}</aside>
+      <main className="flex min-w-0 flex-col gap-3">{children}</main>
+      <aside className="hidden flex-col gap-3 lg:flex">{right}</aside>
+    </div>
+  );
+}
+function PageTwoColRight({ right, children }) {
+  return (
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <main className="flex min-w-0 flex-col gap-3">{children}</main>
+      <aside className="hidden flex-col gap-3 lg:flex">{right}</aside>
+    </div>
+  );
+}
+function PageTwoColLeft({ left, children }) {
+  return (
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[225px_minmax(0,1fr)]">
+      <aside className="hidden flex-col gap-3 lg:flex">{left}</aside>
+      <main className="flex min-w-0 flex-col gap-3">{children}</main>
+    </div>
+  );
+}
+function PageSingle({ children, max = 820 }) {
+  return <div className="mx-auto flex w-full flex-col gap-3" style={{ maxWidth: max }}>{children}</div>;
+}
+
 /* ============================ Ad gallery ============================ */
 function AdGallery() {
   const G = ({ children }) => <p style={{ fontSize: 13, color: "var(--fg-muted)", lineHeight: 1.6, margin: "0 0 14px" }}>{children}</p>;
@@ -1439,14 +1560,14 @@ export function App() {
   const onSearchSubmit = (q) => { setSubmittedQuery(q); setSearchValue(q); setRoute("search"); };
 
   const pages = {
-    home: <div className="grid grid-cols-1 gap-3 lg:grid-cols-[225px_minmax(0,1fr)_300px]"><LeftRail onViewProfile={() => setRoute("profile")} /><Feed /><RightRail /></div>,
-    profile: <div className="mx-auto max-w-[760px]"><ProfilePage /></div>,
+    home: <PageThreeCol left={<LeftRail onViewProfile={() => setRoute("profile")} />} right={<RightRail />}><Feed /></PageThreeCol>,
+    profile: <ProfilePage />,
     company: <CompanyPage companyId={companyId} goToCompany={goToCompany} />,
-    network: <div className="mx-auto max-w-[820px]"><NetworkPage /></div>,
+    network: <NetworkPage />,
     jobs: <JobsPage />,
     messaging: <MessagesPage />,
     notifications: <AlertsPage />,
-    search: <div className="mx-auto max-w-[820px]"><SearchResults query={submittedQuery} /></div>,
+    search: <PageSingle max={820}><SearchResults query={submittedQuery} /></PageSingle>,
     ads: <AdGallery />,
   };
 
