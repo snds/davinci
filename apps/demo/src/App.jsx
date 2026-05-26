@@ -10,7 +10,7 @@ import {
 } from "@davinci/ui/components/ui/select";
 
 import {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from "@davinci/ui/components/ui/dropdown-menu";
 
 import {
@@ -21,8 +21,8 @@ import { COMPANIES, GENERIC, companyIdFor } from "./companies.js";
 
 const { useState, useEffect, useRef } = React;
 
-// App-wide navigation helpers (avoids prop-drilling goToCompany everywhere).
-const NavContext = React.createContext({ goToCompany: () => {} });
+// App-wide navigation helpers (avoids prop-drilling everywhere).
+const NavContext = React.createContext({ goToCompany: () => {}, openFooter: () => {} });
 
 /* ============================ Reactions + comments ============================ */
 /* Standard social reaction set, rendered with Material Symbols. Each type has a
@@ -143,6 +143,56 @@ function Comments({ postId, seed }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ============================ Footers ============================ */
+function RailFooter() {
+  const { openFooter } = React.useContext(NavContext);
+  const links = ["About", "Accessibility", "Help Center", "Privacy & Terms", "Ad Choices", "Advertising", "Business Services", "Get the app"];
+  return (
+    <div className="rail-footer">
+      <div className="rail-footer__links">
+        {links.map((l) => <button key={l} onClick={openFooter}>{l}</button>)}
+        <button onClick={openFooter}>More</button>
+      </div>
+      <div className="rail-footer__copy"><strong style={{ color: "var(--fg-muted)" }}>in</strong> Davinci Corporation © 2026</div>
+    </div>
+  );
+}
+
+function SiteFooter({ onClose }) {
+  const cols = [
+    ["General", ["About", "Accessibility", "Help Center", "Privacy & Terms", "Ad Choices"]],
+    ["Solutions", ["Talent Solutions", "Marketing Solutions", "Advertising", "Sales Solutions"]],
+    ["Directories", ["Members", "Jobs", "Companies", "Learning", "Mobile"]],
+  ];
+  return (
+    <div className="site-footer" role="dialog" aria-label="Site footer">
+      <div className="site-footer__inner">
+        <Button variant="ghost" size="icon" className="site-footer__close" aria-label="Close footer" onClick={onClose}><Icon name="close" /></Button>
+        <div className="site-footer__cols">
+          {cols.map(([h, items]) => (<div key={h}><div className="site-footer__h">{h}</div>{items.map((i) => <a key={i}>{i}</a>)}</div>))}
+          <div className="site-footer__meta">
+            <div><strong>Questions?</strong><div className="meta">Visit our Help Center.</div></div>
+            <div><strong>Manage your account and privacy</strong><div className="meta">Go to your Settings.</div></div>
+            <div><strong>Recommendation transparency</strong><div className="meta">Learn more about Recommended Content.</div></div>
+          </div>
+          <div>
+            <div className="site-footer__h">Select language</div>
+            <Select defaultValue="en">
+              <SelectTrigger size="sm" className="w-full"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English (English)</SelectItem>
+                <SelectItem value="es">Español (Spanish)</SelectItem>
+                <SelectItem value="fr">Français (French)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div className="site-footer__copy"><strong style={{ color: "var(--fg-muted)" }}>in</strong> Davinci Corporation © 2026</div>
+      </div>
     </div>
   );
 }
@@ -323,9 +373,41 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
             );
           })}
           <Separator orientation="vertical" className="mx-2 my-auto h-8" />
-          <button className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)]">
-            <Avatar initials="YO" size={26} photo={seededPhoto("yara-okonkwo", 64, 64, "face")} />
-            You
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)]">
+                <Avatar initials="YO" size={26} photo={seededPhoto("yara-okonkwo", 64, 64, "face")} />
+                <span className="flex items-center gap-0.5">Me <Icon name="expand_more" className="text-[14px]" /></span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64">
+              <div className="flex gap-3 p-2">
+                <Avatar size={48} photo={seededPhoto("yara-okonkwo", 96, 96, "face")} />
+                <div className="min-w-0">
+                  <div className="font-semibold">Yara Okonkwo</div>
+                  <div className="text-xs text-[var(--fg-muted)]">Principal Designer · Davinci Systems</div>
+                </div>
+              </div>
+              <div className="px-2 pb-2">
+                <Button variant="outline" size="sm" pill style={{ width: "100%" }} onClick={() => onNavigate?.("profile")}>View profile</Button>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
+              <DropdownMenuItem><Icon name="workspace_premium" className="text-[18px] me-1" /> Premium features</DropdownMenuItem>
+              <DropdownMenuItem><Icon name="settings" className="text-[18px] me-1" /> Settings &amp; Privacy</DropdownMenuItem>
+              <DropdownMenuItem><Icon name="help" className="text-[18px] me-1" /> Help</DropdownMenuItem>
+              <DropdownMenuItem><Icon name="language" className="text-[18px] me-1" /> Language</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Manage</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => onNavigate?.("profile")}><Icon name="history_edu" className="text-[18px] me-1" /> Posts &amp; Activity</DropdownMenuItem>
+              <DropdownMenuItem><Icon name="work" className="text-[18px] me-1" /> Job Posting Account</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem><Icon name="logout" className="text-[18px] me-1" /> Sign out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button className="flex h-14 w-[72px] flex-col items-center justify-center gap-0.5 border-l border-[var(--border-subtle)] text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)]" aria-label="Advertise">
+            <Icon name="campaign" className="text-[22px]" />
+            Advertise
           </button>
         </nav>
       </div>
@@ -394,6 +476,7 @@ function RightRail() {
         ))}
       </Panel>
       <RailAd ad={AD_LIBRARY.course} />
+      <RailFooter />
     </aside>
   );
 }
@@ -662,6 +745,7 @@ function CompanyRail({ c, goToCompany }) {
       </Panel>
       <Mod title="Products people also use" rows={GENERIC.rail.alsoUse} />
       <Mod title="People also follow" rows={GENERIC.rail.alsoFollow} />
+      <RailFooter />
     </aside>
   );
 }
@@ -911,70 +995,86 @@ function NetworkNavItem({ icon, label, count }) {
   );
 }
 function SuggestionCard({ person }) {
-  const [following, setFollowing] = useState(false);
+  const [state, setState] = useState("idle"); // idle | pending | dismissed
+  if (state === "dismissed") return null;
   return (
-    <div className="suggestion-card">
+    <div className="suggestion-card" style={{ position: "relative" }}>
+      <button className="suggestion-card__dismiss" aria-label="Dismiss" onClick={() => setState("dismissed")}><Icon name="close" className="text-[16px]" /></button>
       <div className="suggestion-card__cover" style={{ backgroundImage: `url(${seededPhoto(person.name + "-banner", 240, 56, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-      <Avatar initials={person.avatar} size={64} variant={person.variant} photoSeed={person.name} style={{ border: "3px solid var(--bg-surface)", marginTop: -32, position: "relative" }} />
-      <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, marginTop: 8, textAlign: "center" }}>{person.name}</div>
+      <Avatar initials={person.avatar} size={72} variant={person.variant} photoSeed={person.name} style={{ border: "3px solid var(--bg-surface)", marginTop: -36, position: "relative" }} />
+      <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, marginTop: 8, textAlign: "center", padding: "0 8px" }}>{person.name}</div>
       <div style={{ fontSize: 12, color: "var(--fg-muted)", textAlign: "center", marginTop: 2, minHeight: 32, lineHeight: 1.35, padding: "0 8px" }}>{person.role}</div>
-      <div className="meta" style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 4, justifyContent: "center" }}><Icon name="group" className="text-[12px]" /> {person.mutual} mutual</div>
-      <div style={{ padding: "10px 12px 14px", width: "100%", boxSizing: "border-box" }}>
-        <Button variant={following ? "secondary" : "outline"} size="sm" pill icon={following ? "check" : "add"} style={{ width: "100%" }} onClick={() => setFollowing((f) => !f)}>{following ? "Pending" : "Connect"}</Button>
+      <div className="meta" style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, justifyContent: "center", padding: "0 8px" }}>
+        <Avatar size={16} photoSeed={person.name + "-m"} /> {person.mutual} mutual connections
+      </div>
+      <div style={{ padding: "12px 12px 14px", width: "100%", boxSizing: "border-box" }}>
+        <Button variant={state === "pending" ? "secondary" : "outline"} size="sm" pill icon={state === "pending" ? "check" : "add"} style={{ width: "100%" }} onClick={() => setState((s) => (s === "pending" ? "idle" : "pending"))}>{state === "pending" ? "Pending" : "Connect"}</Button>
       </div>
     </div>
   );
 }
+const NETWORK_PEOPLE = [
+  { name: "Stuart Bayston", role: "Design Lead · Aston (ex-Google)", mutual: 11, avatar: "SB", variant: "g5" },
+  { name: "Justin Cohen", role: "Product Design at Plaid", mutual: 11, avatar: "JC", variant: "g2" },
+  { name: "Mallory Dean", role: "Designer Advocate at Figma", mutual: 17, avatar: "MD", variant: "g4" },
+  { name: "Colin Robins", role: "Senior Experience Design Consultant", mutual: 1, avatar: "CR", variant: "g6" },
+  { name: "Dimitri Otero", role: "Design Systems · helping product teams ship", mutual: 32, avatar: "DO", variant: "g1" },
+  { name: "Amy Wong", role: "Brand & Creative @ Plaid", mutual: 6, avatar: "AW", variant: "g4" },
+  { name: "Gili Boker", role: "Senior Director of Product Design", mutual: 6, avatar: "GB", variant: "g5" },
+  { name: "Shamus Scott Grubb", role: "Principal Product Designer at Davinci", mutual: 15, avatar: "SG", variant: "g6" },
+  { name: "Xavier Rivera", role: "Award-Winning Senior Art Director", mutual: 3, avatar: "XR", variant: "g1" },
+  { name: "Rami Moghadam", role: "Creative Director, ESPN", mutual: 2, avatar: "RM", variant: "g4" },
+  { name: "Nick Gawith", role: "EVP, Executive Creative Director", mutual: 4, avatar: "NG", variant: "g5" },
+  { name: "Phillip Golub", role: "Experience Transformation Leader", mutual: 12, avatar: "PG", variant: "g2" },
+  { name: "Steve Witmer", role: "Design Engineer & Technologist", mutual: 32, avatar: "SW", variant: "g2" },
+  { name: "Kevin Muldoon", role: "Design Systems Architect & Writer", mutual: 55, avatar: "KM", variant: "g6" },
+  { name: "Josh Silverman", role: "Designer, entrepreneur, educator", mutual: 21, avatar: "JS", variant: "g1" },
+  { name: "Catherine Cakir", role: "VP, Operations at BranchLab", mutual: 3, avatar: "CC", variant: "g4" },
+];
 function NetworkPage() {
   const [tab, setTab] = useState("grow");
-  const invites = [
-    { name: "Kai Thornton", role: "Design Engineer · Vector", mutual: 12, avatar: "KT", variant: "g5" },
-    { name: "Noor Farsi", role: "Principal PM · Atlas Docs", mutual: 8, avatar: "NF", variant: "g2" },
-    { name: "Lena Brandt", role: "Brand Director · Helix", mutual: 31, avatar: "LB", variant: "g4" },
+  const sidebar = [
+    ["group", "Connections", "1,092"],
+    ["person", "Following & followers", ""],
+    ["groups", "Groups", "7"],
+    ["event", "Events", "4"],
+    ["article", "Pages", "58"],
+    ["newspaper", "Newsletters", "3"],
   ];
-  const suggested = [
-    { name: "Ore Adebayo", role: "Head of Design · Pulse", mutual: 18, avatar: "OA", variant: "g6" },
-    { name: "Tara Weiss", role: "Staff Researcher · Helix", mutual: 6, avatar: "TW", variant: "g1" },
-    { name: "Marcus Lind", role: "Design Director · Vector", mutual: 4, avatar: "ML", variant: "g5" },
-    { name: "Ines Caballero", role: "Founder · Unwritten", mutual: 22, avatar: "IC", variant: "g2" },
-  ];
+  const Section = ({ title, people }) => (
+    <Panel title={title} action={<Button variant="ghost" size="sm">Show all</Button>} bodyStyle={{ padding: 16 }}>
+      <div className="network-grid">{people.map((p, i) => <SuggestionCard key={`${title}-${i}`} person={p} />)}</div>
+    </Panel>
+  );
   return (
-    <main className="flex min-w-0 flex-col gap-3">
-      <Panel title="Manage your network" bodyStyle={{ padding: 0 }}>
-        <div className="network-sub-nav">
-          <NetworkNavItem icon="group" label="Connections" count="842" />
-          <NetworkNavItem icon="person" label="Following & followers" count="2.1k" />
-          <NetworkNavItem icon="groups" label="Groups" count="12" />
-          <NetworkNavItem icon="event" label="Events" count="3" />
-        </div>
-      </Panel>
-      <div className="results-tabs" style={{ padding: "0 4px", borderBottom: "1px solid var(--border-subtle)" }}>
-        <button className={`results-tab ${tab === "grow" ? "active" : ""}`} onClick={() => setTab("grow")}>Grow</button>
-        <button className={`results-tab ${tab === "invites" ? "active" : ""}`} onClick={() => setTab("invites")}>Invitations <span className="results-tab__count">{invites.length}</span></button>
-      </div>
-      {tab === "invites" ? (
-        <Panel title="Pending invitations" bodyStyle={{ padding: 0 }}>
-          {invites.map((inv, i) => (
-            <div key={i} className="invite-row">
-              <Avatar initials={inv.avatar} size={56} variant={inv.variant} photoSeed={inv.name} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15 }}>{inv.name}</div>
-                <div style={{ fontSize: 13, color: "var(--fg-muted)" }}>{inv.role}</div>
-                <div style={{ fontSize: 12, color: "var(--fg-subtle)", marginTop: 4 }}><Icon name="group" className="text-[12px]" /> {inv.mutual} mutual</div>
-              </div>
-              <div style={{ display: "flex", gap: 8 }}><Button variant="ghost" size="sm" pill>Ignore</Button><Button variant="primary" size="sm" pill>Accept</Button></div>
-            </div>
-          ))}
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <aside className="hidden flex-col gap-3 lg:flex">
+        <Panel title="Manage my network" bodyStyle={{ padding: 6 }}>
+          <ul className="nav-list">
+            {sidebar.map(([ic, label, count]) => (
+              <li key={label}><Icon name={ic} /> {label} {count && <span className="count">{count}</span>}</li>
+            ))}
+          </ul>
         </Panel>
-      ) : (
-        <>
-          <InlineAd ad={AD_LIBRARY.recruit} />
-          <Panel title="People you may know" action={<Button variant="ghost" size="sm">See all</Button>} bodyStyle={{ padding: 16 }}>
-            <div className="network-grid">{suggested.map((p, i) => <SuggestionCard key={i} person={p} />)}</div>
-          </Panel>
-        </>
-      )}
-    </main>
+        <RailAd ad={AD_LIBRARY.course} />
+        <RailFooter />
+      </aside>
+      <main className="flex min-w-0 flex-col gap-3">
+        <div className="results-tabs" style={{ padding: "0 4px", borderBottom: "1px solid var(--border-subtle)" }}>
+          <button className={`results-tab ${tab === "grow" ? "active" : ""}`} onClick={() => setTab("grow")}>Grow</button>
+          <button className={`results-tab ${tab === "catchup" ? "active" : ""}`} onClick={() => setTab("catchup")}>Catch up</button>
+        </div>
+        <Panel bodyStyle={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontWeight: 600 }}>No pending invitations</span>
+          <Button variant="ghost" size="sm">Manage</Button>
+        </Panel>
+        <InlineAd ad={AD_LIBRARY.recruit} />
+        <Section title="People you may know based on your recent activity" people={NETWORK_PEOPLE.slice(0, 4)} />
+        <Section title="Adam Romanski's connections you may know" people={NETWORK_PEOPLE.slice(4, 8)} />
+        <Section title="People in the Design Systems community" people={NETWORK_PEOPLE.slice(8, 12)} />
+        <Section title="Suggestions for you" people={NETWORK_PEOPLE.slice(12, 16)} />
+      </main>
+    </div>
   );
 }
 
@@ -1162,6 +1262,7 @@ function AlertsPage() {
           ))}
         </Panel>
         <RailAd ad={AD_LIBRARY.aws} />
+        <RailFooter />
       </aside>
     </div>
   );
@@ -1237,19 +1338,47 @@ function SearchResults({ query }) {
 }
 
 /* ============================ App shell ============================ */
+/* ============================ Ad gallery ============================ */
+function AdGallery() {
+  const G = ({ children }) => <p style={{ fontSize: 13, color: "var(--fg-muted)", lineHeight: 1.6, margin: "0 0 14px" }}>{children}</p>;
+  return (
+    <div className="mx-auto flex max-w-[900px] flex-col gap-3">
+      <Panel title="Ad formats & placement">
+        <p style={{ fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+          The demo ships three sponsored-content formats. Each shares the "Promoted" treatment and an advertiser chip so the pattern is recognizable across surfaces — but they differ in footprint and where they belong. Use the lightest format that fits the surface's density.
+        </p>
+      </Panel>
+      <Panel title="Feed Ad — in-stream, full width">
+        <G>Placement: inline in the main feed, between posts (about one per three organic posts). Best for rich creative with a single CTA. Avoid stacking two in a row.</G>
+        <FeedAd ad={AD_LIBRARY.notion} />
+      </Panel>
+      <Panel title="Rail Ad — compact sidebar tile">
+        <G>Placement: a right or left rail. A creative band + advertiser + one CTA. Good for a persistent, low-friction promo alongside content.</G>
+        <div style={{ maxWidth: 300 }}><RailAd ad={AD_LIBRARY.aws} /></div>
+      </Panel>
+      <Panel title="Inline Ad — thin row between list items">
+        <G>Placement: between list rows (jobs, alerts, search results, network suggestions) — about one per four items. The lowest-profile format; never use it where a Feed Ad fits.</G>
+        <InlineAd ad={AD_LIBRARY.recruit} />
+      </Panel>
+    </div>
+  );
+}
+
 export function App() {
   const [route, setRoute] = useState("home");
   const [companyId, setCompanyId] = useState("davinci");
   const [theme, setTheme] = useState("dark");
   const [alertsOpen, setAlertsOpen] = useState(false);
+  const [footerOpen, setFooterOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
 
   useEffect(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
 
   const goToCompany = (id) => { setCompanyId(id); setRoute("company"); window.scrollTo({ top: 0 }); };
+  const navValue = { goToCompany, openFooter: () => setFooterOpen(true) };
 
-  const activeTab = { home: "home", profile: "home", company: "home", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "home" }[route] || "home";
+  const activeTab = { home: "home", profile: "home", company: "home", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "home", ads: "home" }[route] || "home";
 
   const onSearchSubmit = (q) => { setSubmittedQuery(q); setSearchValue(q); setRoute("search"); };
 
@@ -1262,12 +1391,13 @@ export function App() {
     messaging: <MessagesPage />,
     notifications: <AlertsPage />,
     search: <div className="mx-auto max-w-[820px]"><SearchResults query={submittedQuery} /></div>,
+    ads: <AdGallery />,
   };
 
-  const jump = [["home", "Feed"], ["profile", "Profile"], ["company", "Company"], ["network", "Network"], ["jobs", "Jobs"], ["messaging", "Messages"], ["notifications", "Alerts"]];
+  const jump = [["home", "Feed"], ["profile", "Profile"], ["company", "Company"], ["network", "Network"], ["jobs", "Jobs"], ["messaging", "Messages"], ["notifications", "Alerts"], ["ads", "Ad gallery"]];
 
   return (
-    <NavContext.Provider value={{ goToCompany }}>
+    <NavContext.Provider value={navValue}>
     <Surface variant="canvas" className="min-h-screen">
       <TopNav
         active={activeTab} onNavigate={setRoute}
@@ -1288,6 +1418,7 @@ export function App() {
       </div>
       <div className="mx-auto max-w-[1180px] px-4 py-5">{pages[route] || pages.home}</div>
     </Surface>
+    {footerOpen && <SiteFooter onClose={() => setFooterOpen(false)} />}
     </NavContext.Provider>
   );
 }

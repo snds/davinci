@@ -178,7 +178,10 @@ body {
 /* ---- Company page: sticky subnav ---- */
 .company-subnav {
   position: sticky;
-  top: 56px;
+  /* Tuck a few px under the top nav (which renders < 56px) so no scrolling
+     content peeks through; the overlap hides behind the opaque top nav. */
+  top: 50px;
+  padding-top: 0;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -308,4 +311,119 @@ body {
     radial-gradient(circle at 30% 38%, var(--accent) 0 4px, transparent 5px),
     radial-gradient(circle at 48% 60%, var(--accent) 0 4px, transparent 5px),
     var(--bg-subtle);
+}
+
+/* Suggestion card dismiss button */
+.suggestion-card__dismiss {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.suggestion-card__dismiss:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* ---- Column micro-footer ---- */
+.rail-footer {
+  padding: 8px 4px 16px;
+  font-size: 12px;
+}
+.rail-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 8px;
+}
+.rail-footer__links button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg-muted);
+  font: inherit;
+  padding: 0;
+}
+.rail-footer__links button:hover {
+  color: var(--accent-fg);
+  text-decoration: underline;
+}
+.rail-footer__copy {
+  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- Full-width bottom-docked site footer ---- */
+.site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-xl);
+  animation: footer-up var(--dur-base) var(--ease-out);
+}
+@keyframes footer-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.site-footer__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  position: relative;
+}
+.site-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 1.4fr 1fr;
+  gap: 24px;
+}
+.site-footer__h {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.site-footer a {
+  display: block;
+  font-size: 13px;
+  color: var(--fg-muted);
+  padding: 3px 0;
+  cursor: pointer;
+}
+.site-footer a:hover {
+  color: var(--accent-fg);
+  text-decoration: underline;
+}
+.site-footer__meta > div {
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.site-footer__copy {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.site-footer__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+@media (max-width: 900px) {
+  .site-footer__cols { grid-template-columns: 1fr 1fr; }
 }
