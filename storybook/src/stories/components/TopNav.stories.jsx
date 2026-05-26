@@ -2,7 +2,7 @@ import React from 'react';
 import TopNav from '../../components/TopNav';
 
 export default {
-  title: 'Patterns/TopNav',
+  title: 'Components/TopNav',
   component: TopNav,
   parameters: {
     layout: 'fullscreen',

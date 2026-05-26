@@ -79,7 +79,13 @@ const preview = {
     },
     options: {
       storySort: {
-        order: ['Foundations', 'Primitives', 'Components', 'Patterns', ['Panel', 'Post', 'Composer', 'NavList', 'TopNav', 'Feed', 'LeftRail', 'RightRail', 'ProfilePage']],
+        order: [
+          'Foundations',
+          'Primitives',
+          'Components', ['Panel', 'Post', 'Composer', 'NavList', 'TopNav'],
+          'Patterns', ['Feed', 'LeftRail', 'RightRail', 'ProfilePage'],
+          'shadcn',
+        ],
       },
     },
   },

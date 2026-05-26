@@ -3,7 +3,7 @@ import Post from '../../components/Post';
 import { seededPhoto } from '../../components/Avatar';
 
 export default {
-  title: 'Patterns/Post',
+  title: 'Components/Post',
   component: Post,
   parameters: {
     layout: 'padded',

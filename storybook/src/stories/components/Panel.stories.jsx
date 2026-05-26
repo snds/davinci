@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 
 export default {
-  title: 'Patterns/Panel',
+  title: 'Components/Panel',
   component: Panel,
   parameters: {
     layout: 'padded',

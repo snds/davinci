@@ -17,25 +17,25 @@ const LAYERS = [
     eyebrow: 'Layer 02',
     label: 'Primitives',
     description:
-      'Buttons, avatars, icons, and pills — atomic interactive elements composed directly from tokens with no additional dependencies.',
-    href: '/primitives/buttons',
-    items: ['Buttons', 'Avatars', 'Icons', 'Pills'],
+      'Button, input, avatar, badge, and icons — atomic building blocks wrapped from Radix UI and shadcn/ui on top of the tokens.',
+    href: '/primitives/icons',
+    items: ['Button', 'Input', 'Avatar', 'Icons'],
     accentClass: 'pill--accent',
   },
   {
     eyebrow: 'Layer 03',
     label: 'Components',
     description:
-      'Panels, posts, composers, and navigation — structured UI units that assemble primitives into coherent product interactions.',
-    href: '/components/panel',
-    items: ['Panel', 'Post', 'Composer', 'Navigation'],
+      'Card, dialog, tabs, table, and the full shadcn-based library — composed, interactive, multi-part components.',
+    href: '/shadcn/',
+    items: ['Card', 'Dialog', 'Tabs', 'Table'],
     accentClass: 'pill--alt',
   },
   {
     eyebrow: 'Layer 04',
     label: 'Patterns',
     description:
-      'Feed, profile, and rails — full page layout patterns that compose components into complete product surfaces.',
+      'Panel, post, composer, navigation, feed, profile, and rails — Davinci app compositions that assemble the library into product surfaces.',
     href: '/patterns/feed',
     items: ['Feed', 'Profile', 'Rails'],
     accentClass: 'pill--alt',
