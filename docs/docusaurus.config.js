@@ -1,6 +1,19 @@
 // @ts-check
 const { themes } = require('prism-react-renderer');
 
+// Single source of truth for the Primitives ↔ Components split. Both live under
+// /shadcn/*, so the navbar active-state is decided by this slug list rather
+// than two hand-kept regexes that could drift. Add a new primitive slug here
+// once and both regexes below update together.
+const PRIMITIVE_SLUGS = [
+  'button', 'input', 'textarea', 'label', 'badge', 'avatar', 'progress',
+  'slider', 'switch', 'checkbox', 'radio-group', 'toggle', 'toggle-group',
+  'separator', 'skeleton', 'aspect-ratio', 'scroll-area',
+];
+const PRIMITIVE_SHADCN = PRIMITIVE_SLUGS.join('|');
+const PRIMITIVES_ACTIVE_REGEX = `^/(primitives|shadcn/(${PRIMITIVE_SHADCN}))`;
+const COMPONENTS_ACTIVE_REGEX = `^/(shadcn(?!/(${PRIMITIVE_SHADCN}))|components/empty-state)`;
+
 /** Inline Docusaurus plugin that wires @tailwindcss/postcss into the CSS pipeline. */
 async function tailwindPlugin() {
   return {
@@ -123,13 +136,13 @@ const config = {
           { to: '/foundations/colors', activeBasePath: '/foundations', label: 'Foundations', position: 'left' },
           {
             to: '/primitives/icons',
-            activeBaseRegex: '^/(primitives|shadcn/(button|input|textarea|label|badge|avatar|progress|slider|switch|checkbox|radio-group|toggle|toggle-group|separator|skeleton|aspect-ratio|scroll-area))',
+            activeBaseRegex: PRIMITIVES_ACTIVE_REGEX,
             label: 'Primitives',
             position: 'left',
           },
           {
             to: '/shadcn',
-            activeBaseRegex: '^/(shadcn(?!/(button|input|textarea|label|badge|avatar|progress|slider|switch|checkbox|radio-group|toggle|toggle-group|separator|skeleton|aspect-ratio|scroll-area))|components/empty-state)',
+            activeBaseRegex: COMPONENTS_ACTIVE_REGEX,
             label: 'Components',
             position: 'left',
           },

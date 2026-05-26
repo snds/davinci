@@ -15,20 +15,9 @@ body {
   margin: 0;
 }
 
-/* Icon sizes — small 12 / medium 20 (UI default) / large 24. Descendant-scoped
-   icon rules (reaction chips, alert badges, post actions) keep their own size. */
-.material-symbols-rounded {
-  font-size: 20px;
-}
-.icon--sm {
-  font-size: 12px;
-}
-.icon--md {
-  font-size: 20px;
-}
-.icon--lg {
-  font-size: 24px;
-}
+/* Icon sizes (.material-symbols-rounded / .icon--sm|md|lg) now live in the
+   system stylesheet (@davinci/ui/styles/globals.css), imported at the top of
+   this file. Descendant-scoped icon rules below keep their own size. */
 
 /* ----------------------------------------------------------------
    Demo refinements — softer container outlines + tighter rhythm than

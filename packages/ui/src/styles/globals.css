@@ -138,3 +138,14 @@
   --sidebar-border:                 hsl(240 3.7% 15.9%);
   --sidebar-ring:                   hsl(217.2 91.2% 59.8%);
 }
+
+/* ============================================================
+   Davinci Icon (Material Symbols Rounded) sizing
+   Required by the davinci/icon component's `size` prop. Lives here (not in a
+   consumer app) so the system Icon works wherever globals.css is loaded —
+   Storybook included. sm 12 / md 20 (default) / lg 24.
+   ============================================================ */
+.material-symbols-rounded { font-size: 20px; }
+.icon--sm { font-size: 12px; }
+.icon--md { font-size: 20px; }
+.icon--lg { font-size: 24px; }
