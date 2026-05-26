@@ -15,9 +15,12 @@ body {
   margin: 0;
 }
 
-/* Icon sizes (.material-symbols-rounded / .icon--sm|md|lg) now live in the
-   system stylesheet (@davinci/ui/styles/globals.css), imported at the top of
-   this file. Descendant-scoped icon rules below keep their own size. */
+/* Icon base size — app default for unsized Material Symbols glyphs. The size
+   prop classes (.icon--sm|md|lg) live in the system stylesheet
+   (@davinci/ui/styles/globals.css), imported at the top of this file. */
+.material-symbols-rounded {
+  font-size: 20px;
+}
 
 /* ----------------------------------------------------------------
    Demo refinements — softer container outlines + tighter rhythm than

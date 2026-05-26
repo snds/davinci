@@ -141,11 +141,12 @@
 
 /* ============================================================
    Davinci Icon (Material Symbols Rounded) sizing
-   Required by the davinci/icon component's `size` prop. Lives here (not in a
-   consumer app) so the system Icon works wherever globals.css is loaded —
-   Storybook included. sm 12 / md 20 (default) / lg 24.
+   Only the `size` prop classes live here, so the system Icon's size works
+   wherever globals.css is loaded (Storybook included). The *base* glyph size
+   is intentionally NOT set globally — that's an app-level default (setting it
+   here enlarged every unsized material-symbols icon in consumers, e.g. the
+   docs LiveDemos). sm 12 / md 20 / lg 24.
    ============================================================ */
-.material-symbols-rounded { font-size: 20px; }
 .icon--sm { font-size: 12px; }
 .icon--md { font-size: 20px; }
 .icon--lg { font-size: 24px; }
