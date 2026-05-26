@@ -12,12 +12,16 @@ import { Card } from "@davinci/ui/components/ui/card";
    The component layer lives in @davinci/ui; the demo consumes it. Only
    demo-specific glue (seeded portraits, brand-logo placeholders, the
    photoSeed-resolving Avatar shim, HoverProfile, ad fixtures) lives here. */
+// Import locally (so the ad components below can use them) AND re-export for
+// the rest of the demo. A bare `export … from` would NOT create a local
+// binding, leaving <Button> undefined inside this module at runtime.
 import { Avatar as DvAvatar } from "@davinci/ui/components/davinci/avatar";
-export { Icon } from "@davinci/ui/components/davinci/icon";
-export { Button } from "@davinci/ui/components/davinci/button";
-export { Pill } from "@davinci/ui/components/davinci/pill";
-export { StatusBadge } from "@davinci/ui/components/davinci/status-badge";
-export { Panel } from "@davinci/ui/components/davinci/panel";
+import { Icon } from "@davinci/ui/components/davinci/icon";
+import { Button } from "@davinci/ui/components/davinci/button";
+import { Pill } from "@davinci/ui/components/davinci/pill";
+import { StatusBadge } from "@davinci/ui/components/davinci/status-badge";
+import { Panel } from "@davinci/ui/components/davinci/panel";
+export { Icon, Button, Pill, StatusBadge, Panel };
 
 /* ---------------- Seeded portraits (ported from the original demo) ---------------- */
 const PORTRAIT_MAP = {
