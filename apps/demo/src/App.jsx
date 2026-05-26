@@ -13,11 +13,51 @@ import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from "@davinci/ui/components/ui/dropdown-menu";
 
+import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
+
 import {
   Icon, seededPhoto, Button, Avatar, Pill, Panel,
   FeedAd, RailAd, InlineAd, AD_LIBRARY,
 } from "./lib.jsx";
-import { COMPANIES, GENERIC, companyIdFor } from "./companies.js";
+import { COMPANIES, GENERIC, companyIdFor, COMPANY_LOCATIONS } from "./companies.js";
+
+const WORLD_GEO = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
+function LocationsMap({ locations = [] }) {
+  const [hover, setHover] = React.useState(null);
+  return (
+    <div className="locations-map-wrap">
+      <ComposableMap projectionConfig={{ scale: 135 }} width={800} height={360} style={{ width: "100%", height: "auto" }}>
+        <Geographies geography={WORLD_GEO}>
+          {({ geographies }) =>
+            geographies.map((geo) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="var(--bg-active)"
+                stroke="var(--border-strong)"
+                strokeWidth={0.4}
+                style={{ default: { outline: "none" }, hover: { fill: "var(--bg-active)", outline: "none" }, pressed: { outline: "none" } }}
+              />
+            ))
+          }
+        </Geographies>
+        {locations.map((loc, i) => (
+          <Marker key={i} coordinates={loc.coords} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)}>
+            <circle r={hover === i ? 7 : 5} fill="var(--accent)" stroke="#fff" strokeWidth={1.5} style={{ cursor: "pointer", transition: "r 120ms" }} />
+            {hover === i && (
+              <g transform="translate(0,-12)" style={{ pointerEvents: "none" }}>
+                <rect x={-62} y={-30} width={124} height={28} rx={5} fill="var(--bg-elevated)" stroke="var(--border-subtle)" strokeWidth={0.5} />
+                <text textAnchor="middle" y={-17} fontSize={9} fontWeight="700" fill="var(--fg)">{loc.name}</text>
+                <text textAnchor="middle" y={-7} fontSize={8} fill="var(--fg-muted)">{loc.label}</text>
+              </g>
+            )}
+          </Marker>
+        ))}
+      </ComposableMap>
+    </div>
+  );
+}
 
 const { useState, useEffect, useRef } = React;
 
@@ -841,9 +881,9 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
           <div key={l} className="detail-row"><div className="detail-row__label">{l}</div><div className="detail-row__value">{v}</div></div>
         ))}
       </Panel>
-      <Panel title="Locations">
-        <div style={{ fontSize: 13, color: "var(--fg-muted)", marginBottom: 10 }}>Interact with the map to explore all locations.</div>
-        <div className="locations-map" />
+      <Panel title={`Locations (${(COMPANY_LOCATIONS[c.id] || []).length})`}>
+        <div style={{ fontSize: 13, color: "var(--fg-muted)", marginBottom: 10 }}>Hover a marker to explore each location.</div>
+        <LocationsMap locations={COMPANY_LOCATIONS[c.id] || []} />
       </Panel>
     </>
   );

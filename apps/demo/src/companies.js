@@ -159,6 +159,38 @@ export const COMPANIES = {
   },
 };
 
+// Office locations per company — [longitude, latitude] for the vector map.
+export const COMPANY_LOCATIONS = {
+  davinci: [
+    { name: "Lisbon, PT", coords: [-9.139, 38.722], label: "HQ · 210 people" },
+    { name: "London, UK", coords: [-0.128, 51.507], label: "78 people" },
+    { name: "Berlin, DE", coords: [13.405, 52.52], label: "54 people" },
+  ],
+  helix: [
+    { name: "Lisbon, PT", coords: [-9.139, 38.722], label: "HQ · 420 people" },
+    { name: "London, UK", coords: [-0.128, 51.507], label: "160 people" },
+    { name: "Remote · EU", coords: [10.451, 51.165], label: "262 people" },
+  ],
+  atlas: [
+    { name: "New York, NY", coords: [-74.006, 40.713], label: "HQ · 980 people" },
+    { name: "San Francisco, CA", coords: [-122.419, 37.775], label: "640 people" },
+    { name: "London, UK", coords: [-0.128, 51.507], label: "210 people" },
+  ],
+  pulse: [
+    { name: "San Francisco, CA", coords: [-122.419, 37.775], label: "HQ · 120 people" },
+    { name: "Remote · Americas", coords: [-98.5, 39.8], label: "198 people" },
+  ],
+  vector: [
+    { name: "Amsterdam, NL", coords: [4.895, 52.37], label: "HQ · 110 people" },
+    { name: "Berlin, DE", coords: [13.405, 52.52], label: "54 people" },
+  ],
+  frame: [
+    { name: "San Francisco, CA", coords: [-122.419, 37.775], label: "HQ · 2,100 people" },
+    { name: "New York, NY", coords: [-74.006, 40.713], label: "640 people" },
+    { name: "Tokyo, JP", coords: [139.69, 35.689], label: "180 people" },
+  ],
+};
+
 // Map a display name (any case) to a company id, for cross-app navigation.
 export const COMPANY_ALIAS = Object.fromEntries(
   Object.values(COMPANIES).map((c) => [c.name.toLowerCase(), c.id])

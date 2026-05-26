@@ -181,7 +181,6 @@ body {
   /* Tuck a few px under the top nav (which renders < 56px) so no scrolling
      content peeks through; the overlap hides behind the opaque top nav. */
   top: 50px;
-  padding-top: 0;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -190,7 +189,9 @@ body {
   border: 1px solid var(--border-subtle);
   border-top: none;
   border-radius: 0 0 10px 10px;
-  padding: 0 16px;
+  /* Extra top padding compensates for the ~6px tucked under the top nav so
+     the visible row reads with balanced optical padding. */
+  padding: 8px 16px 2px;
   transition: box-shadow var(--dur-fast);
 }
 .company-subnav .company-tabs {
@@ -302,15 +303,11 @@ body {
   background: var(--accent);
   margin-top: 4px;
 }
-.locations-map {
-  height: 240px;
+.locations-map-wrap {
   border-radius: 10px;
   border: 1px solid var(--border-subtle);
-  background:
-    radial-gradient(circle at 22% 42%, var(--accent) 0 4px, transparent 5px),
-    radial-gradient(circle at 30% 38%, var(--accent) 0 4px, transparent 5px),
-    radial-gradient(circle at 48% 60%, var(--accent) 0 4px, transparent 5px),
-    var(--bg-subtle);
+  overflow: hidden;
+  background: var(--bg);
 }
 
 /* Suggestion card dismiss button */
