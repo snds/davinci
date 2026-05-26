@@ -179,8 +179,12 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
    stop order swaps per theme. */
 
 /* ─── Primary (blue) ─── */
+/* Resting anchors on blue-9 (Radix solid step = --accent), with a subtle
+   1-step fade to blue-8 for the skeuomorphic depth. Hover steps up to the
+   blue-10 solid-hover step; active settles back. Keeps the chrome, lands the
+   color where Radix intends (was topping out at blue-10 while idle → too hot). */
 .btn--primary {
-  background: linear-gradient(to bottom, var(--blue-10), var(--blue-8));
+  background: linear-gradient(to bottom, var(--blue-9), var(--blue-8));
   color: var(--fg-on-accent);
   border-color: var(--blue-7);
   text-shadow: 0 -1px 0 rgba(0,0,0,.28);
@@ -191,14 +195,14 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
     0 1px 2px rgba(0,0,0,.22);
 }
 .btn--primary:hover {
-  background: linear-gradient(to bottom, var(--blue-11), var(--blue-9));
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-9));
   border-color: var(--blue-7);
 }
 .btn--primary:active {
-  background: linear-gradient(to bottom, var(--blue-8), var(--blue-10));
+  background: linear-gradient(to bottom, var(--blue-8), var(--blue-9));
 }
 [data-theme="light"] .btn--primary {
-  background: linear-gradient(to bottom, var(--blue-9), var(--blue-11));
+  background: linear-gradient(to bottom, var(--blue-9), var(--blue-10));
   border-color: var(--blue-12);
   text-shadow: 0 -1px 0 rgba(0,0,0,.32);
   box-shadow:
@@ -208,11 +212,11 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
     0 1px 2px rgba(0,0,0,.16);
 }
 [data-theme="light"] .btn--primary:hover {
-  background: linear-gradient(to bottom, var(--blue-8), var(--blue-10));
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-11));
   border-color: var(--blue-12);
 }
 [data-theme="light"] .btn--primary:active {
-  background: linear-gradient(to bottom, var(--blue-11), var(--blue-9));
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-9));
 }
 
 /* ─── Alt / spotlight (yellow) — one per page, primary CTA ─── */
