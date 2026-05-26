@@ -62,7 +62,7 @@ function LocationsMap({ locations = [] }) {
 const { useState, useEffect, useRef } = React;
 
 // App-wide navigation helpers (avoids prop-drilling everywhere).
-const NavContext = React.createContext({ goToCompany: () => {}, openFooter: () => {} });
+const NavContext = React.createContext({ goToCompany: () => {}, openFooter: () => {}, goToProfile: () => {}, goToJobs: () => {} });
 
 /* ============================ Reactions + comments ============================ */
 /* Standard social reaction set, rendered with Material Symbols. Each type has a
@@ -365,7 +365,7 @@ function Typeahead({ query, matches, onSubmit }) {
           </div>
           {order.map((t) => grouped[t].length > 0 && (
             <div key={t}>
-              <div className="typeahead__section-title"><Icon name={TYPE_ICONS[t]} className="text-[12px] me-1 align-middle" />{titles[t]}</div>
+              <div className="typeahead__section-title"><Icon name={TYPE_ICONS[t]} size="sm" className="me-1 align-middle" />{titles[t]}</div>
               {grouped[t].slice(0, 3).map((m) => (
                 <div key={m.id} className="typeahead__row" onMouseDown={(e) => { e.preventDefault(); onSubmit(m.title); }}>
                   <Avatar initials={m.avatar} size={36} variant={m.variant} photoSeed={t === "person" ? m.title : null} style={{ borderRadius: t === "company" || t === "job" ? 6 : "50%" }} />
@@ -417,7 +417,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
                   onClick={() => (isAlerts ? onToggleAlerts?.(!alertsOpen) : onNavigate?.(t.id))}
                 >
                   <span className="relative inline-flex">
-                    <Icon name={t.icon} filled={active === t.id} className="text-[22px]" />
+                    <Icon name={t.icon} filled={active === t.id} size="lg" />
                     {isAlerts && alertCount > 0 && (
                       <span className="absolute -right-2 -top-1 flex size-4 items-center justify-center rounded-full border-2 border-[var(--bg-surface)] bg-[var(--danger)] text-[10px] font-bold text-white">{alertCount}</span>
                     )}
@@ -462,7 +462,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
             </DropdownMenuContent>
           </DropdownMenu>
           <button className="flex h-14 w-[72px] flex-col items-center justify-center gap-0.5 border-l border-[var(--border-subtle)] text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)]" aria-label="Advertise">
-            <Icon name="campaign" className="text-[22px]" />
+            <Icon name="campaign" size="lg" />
             Advertise
           </button>
         </nav>
@@ -502,6 +502,7 @@ function LeftRail({ onViewProfile }) {
 }
 
 function RightRail() {
+  const { goToProfile } = React.useContext(NavContext);
   const news = [
     { t: "AI tools reshape the design stack", sub: "4h ago · 8,204 readers" },
     { t: "Typography on the web, revisited", sub: "6h ago · 3,102 readers" },
@@ -524,10 +525,10 @@ function RightRail() {
       </Panel>
       <Panel title="People to follow" bodyStyle={{ padding: 0 }}>
         {people.map((p, i) => (
-          <div key={i} className="rail-item">
+          <div key={i} className="rail-item" onClick={() => goToProfile()} style={{ cursor: "pointer" }}>
             <Avatar initials={p.i} size={40} variant={p.v} photoSeed={p.n} />
             <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
-            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
+            <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
           </div>
         ))}
       </Panel>
@@ -577,17 +578,18 @@ function Composer() {
 
 function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCompany, bg, body, attachment, reactions, comments, topReactions, seedComments }) {
   const [showComments, setShowComments] = useState(false);
-  const { goToCompany } = React.useContext(NavContext);
+  const { goToCompany, goToProfile } = React.useContext(NavContext);
   const cid = isCompany ? companyIdFor(author) : null;
+  const goAuthor = cid ? () => goToCompany(cid) : isCompany ? undefined : () => goToProfile();
   return (
     <Panel bare>
       <div className="post">
         <div className="post__header">
           <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} bg={bg} style={isCompany ? { borderRadius: 8 } : undefined} />
           <div className="post__who">
-            <div className="post__name" onClick={cid ? () => goToCompany(cid) : undefined} style={cid ? { cursor: "pointer" } : undefined}>{author}</div>
+            <div className="post__name" onClick={goAuthor} style={goAuthor ? { cursor: "pointer", width: "fit-content" } : undefined}>{author}</div>
             <div className="post__role">{role}</div>
-            <div className="post__time">{time} <span className="dot-sep" /> <Icon name="public" className="text-[12px]" /></div>
+            <div className="post__time">{time} <span className="dot-sep" /> <Icon name="public" size="sm" /></div>
           </div>
           <Button variant="ghost" size="icon-sm" icon="more_horiz" />
         </div>
@@ -1142,11 +1144,12 @@ function NetworkNavItem({ icon, label, count }) {
   );
 }
 function SuggestionCard({ person }) {
+  const { goToProfile } = React.useContext(NavContext);
   const [state, setState] = useState("idle"); // idle | pending | dismissed
   if (state === "dismissed") return null;
   return (
-    <div className="suggestion-card" style={{ position: "relative" }}>
-      <button className="suggestion-card__dismiss" aria-label="Dismiss" onClick={() => setState("dismissed")}><Icon name="close" className="text-[16px]" /></button>
+    <div className="suggestion-card" style={{ position: "relative", cursor: "pointer" }} onClick={() => goToProfile()}>
+      <button className="suggestion-card__dismiss" aria-label="Dismiss" onClick={(e) => { e.stopPropagation(); setState("dismissed"); }}><Icon name="close" size="sm" /></button>
       <div className="suggestion-card__cover" style={{ backgroundImage: `url(${seededPhoto(person.name + "-banner", 240, 56, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
       <Avatar initials={person.avatar} size={72} variant={person.variant} photoSeed={person.name} style={{ border: "3px solid var(--bg-surface)", marginTop: -36, position: "relative" }} />
       <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, marginTop: 8, textAlign: "center", padding: "0 8px" }}>{person.name}</div>
@@ -1155,7 +1158,7 @@ function SuggestionCard({ person }) {
         <Avatar size={16} photoSeed={person.name + "-m"} /> {person.mutual} mutual connections
       </div>
       <div style={{ padding: "12px 12px 14px", width: "100%", boxSizing: "border-box" }}>
-        <Button variant={state === "pending" ? "secondary" : "outline"} size="sm" pill icon={state === "pending" ? "check" : "add"} style={{ width: "100%" }} onClick={() => setState((s) => (s === "pending" ? "idle" : "pending"))}>{state === "pending" ? "Pending" : "Connect"}</Button>
+        <Button variant={state === "pending" ? "secondary" : "outline"} size="sm" pill icon={state === "pending" ? "check" : "add"} style={{ width: "100%" }} onClick={(e) => { e.stopPropagation(); setState((s) => (s === "pending" ? "idle" : "pending")); }}>{state === "pending" ? "Pending" : "Connect"}</Button>
       </div>
     </div>
   );
@@ -1424,20 +1427,25 @@ function FilterSelect({ label, value, options, onChange }) {
 function ResultRow({ result, query }) {
   const { type } = result;
   const isRound = type === "person";
-  const { goToCompany } = React.useContext(NavContext);
+  const { goToCompany, goToProfile, goToJobs } = React.useContext(NavContext);
   const cid = type === "company" ? companyIdFor(result.title) : null;
+  // Whole-row destination by result type.
+  const go =
+    type === "company" && cid ? () => goToCompany(cid) :
+    type === "person" ? () => goToProfile() :
+    type === "job" ? () => goToJobs() : null;
   return (
-    <Panel style={{ padding: 16 }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} bg={COMPANIES[cid]?.logoBg} style={{ borderRadius: isRound ? "50%" : 8, cursor: cid ? "pointer" : undefined }} onClick={cid ? () => goToCompany(cid) : undefined} />
+    <Panel style={{ padding: 16, cursor: go ? "pointer" : undefined }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }} onClick={go || undefined}>
+      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} bg={COMPANIES[cid]?.logoBg} style={{ borderRadius: isRound ? "50%" : 8 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span onClick={cid ? () => goToCompany(cid) : undefined} style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, cursor: cid ? "pointer" : undefined }}>{highlightMatch(result.title, query)}</span>
+          <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15 }}>{highlightMatch(result.title, query)}</span>
           {type === "person" && result.connection && <Pill>{result.connection}</Pill>}
           {type === "job" && <Pill variant="success">Hiring</Pill>}
-          <span style={{ marginLeft: "auto" }} className="typeahead__type-chip"><Icon name={TYPE_ICONS[type]} className="text-[12px]" />{TYPE_LABELS[type]}</span>
+          <span style={{ marginLeft: "auto" }} className="typeahead__type-chip"><Icon name={TYPE_ICONS[type]} size="sm" />{TYPE_LABELS[type]}</span>
         </div>
         <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 2 }}>{result.sub}</div>
-        <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
+        <div style={{ marginTop: 10, display: "flex", gap: 8 }} onClick={(e) => e.stopPropagation()}>
           {type === "person" && <><Button variant="outline" size="sm" pill icon="add">Connect</Button><Button variant="ghost" size="sm" pill>Message</Button></>}
           {type === "company" && <Button variant="outline" size="sm" pill icon="add">Follow</Button>}
           {type === "job" && <><Button variant="primary" size="sm" pill>Apply</Button><Button variant="ghost" size="sm" pill icon="bookmark">Save</Button></>}
@@ -1553,7 +1561,12 @@ export function App() {
   useEffect(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
 
   const goToCompany = (id) => { setCompanyId(id); setRoute("company"); window.scrollTo({ top: 0 }); };
-  const navValue = { goToCompany, openFooter: () => setFooterOpen(true) };
+  const navValue = {
+    goToCompany,
+    openFooter: () => setFooterOpen(true),
+    goToProfile: () => { setRoute("profile"); window.scrollTo({ top: 0 }); },
+    goToJobs: () => { setRoute("jobs"); window.scrollTo({ top: 0 }); },
+  };
 
   const activeTab = { home: "home", profile: "home", company: "home", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "home", ads: "home" }[route] || "home";
 

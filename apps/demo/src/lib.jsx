@@ -9,11 +9,13 @@ import {
 import { Badge } from "@davinci/ui/components/ui/badge";
 import { Card } from "@davinci/ui/components/ui/card";
 
-/* ---------------- Icon (Material Symbols Rounded) ---------------- */
-export function Icon({ name, filled, style, className = "" }) {
+/* ---------------- Icon (Material Symbols Rounded) ----------------
+   Three UI sizes: small 12 / medium 20 (default) / large 24. */
+const ICON_SIZE_CLASS = { sm: "icon--sm", md: "icon--md", lg: "icon--lg" };
+export function Icon({ name, filled, size, style, className = "" }) {
   return (
     <span
-      className={`material-symbols-rounded ${filled ? "filled" : ""} ${className}`}
+      className={`material-symbols-rounded ${filled ? "filled" : ""} ${size ? ICON_SIZE_CLASS[size] : ""} ${className}`}
       style={style}
       aria-hidden
     >
@@ -81,12 +83,12 @@ export function Button({
       size={size || "default"}
       onClick={onClick}
       style={style}
-      className={`${pill ? "btn--pill" : ""} ${className}`.trim()}
+      className={`${pill ? "btn--pill" : ""} ${icon && children ? "btn--icon-leading" : ""} ${iconRight && children ? "btn--icon-trailing" : ""} ${className}`.trim()}
       {...rest}
     >
-      {icon && <Icon name={icon} className="text-[16px]" />}
+      {icon && <Icon name={icon} size="md" />}
       {children}
-      {iconRight && <Icon name={iconRight} className="text-[16px]" />}
+      {iconRight && <Icon name={iconRight} size="md" />}
     </UIButton>
   );
 }
@@ -136,9 +138,9 @@ export function Pill({ children, variant, style }) {
 }
 
 /* ---------------- Panel (wraps @davinci/ui Card; reuses .panel__* chrome) ---------------- */
-export function Panel({ title, action, children, style, bodyStyle, className = "", bare = false }) {
+export function Panel({ title, action, children, style, bodyStyle, className = "", bare = false, ...rest }) {
   return (
-    <Card className={`gap-0 overflow-hidden py-0 ${className}`.trim()} style={style}>
+    <Card className={`gap-0 overflow-hidden py-0 ${className}`.trim()} style={style} {...rest}>
       {(title || action) && (
         <header className="panel__header">
           {title ? <span>{title}</span> : <span />}

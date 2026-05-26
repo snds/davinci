@@ -15,6 +15,21 @@ body {
   margin: 0;
 }
 
+/* Icon sizes — small 12 / medium 20 (UI default) / large 24. Descendant-scoped
+   icon rules (reaction chips, alert badges, post actions) keep their own size. */
+.material-symbols-rounded {
+  font-size: 20px;
+}
+.icon--sm {
+  font-size: 12px;
+}
+.icon--md {
+  font-size: 20px;
+}
+.icon--lg {
+  font-size: 24px;
+}
+
 /* ----------------------------------------------------------------
    Demo refinements — softer container outlines + tighter rhythm than
    the component defaults, tuned for a dense feed UI. Scoped to the
@@ -22,6 +37,7 @@ body {
    ---------------------------------------------------------------- */
 [data-slot="card"] {
   border-color: var(--border-subtle);
+  border-radius: var(--radius-container);
 }
 .panel__header {
   padding: 10px 16px;
@@ -36,14 +52,9 @@ body {
   padding: 14px 16px;
 }
 
-/* Softer outlines on form fields + buttons + attachments for the feed look */
-[data-slot="input"],
-[data-slot="textarea"],
-[data-slot="select-trigger"] {
-  border-color: var(--border-subtle);
-}
-/* Rich text editor: soften the outer frame + toolbar divider to match */
-[data-slot="rich-textarea"],
+/* Form fields & buttons now use the Radix UI-element border (step 7 = --border)
+   by default — no override needed. Internal separators (RTE toolbar divider)
+   take the subtle step (6). */
 [data-slot="rich-textarea"] [role="toolbar"] {
   border-color: var(--border-subtle);
 }
@@ -54,29 +65,13 @@ body {
 [data-slot="select-content"],
 [data-slot="popover-content"],
 [data-slot="hover-card-content"],
-[data-slot="dialog-content"] {
+[data-slot="dialog-content"],
+[data-slot="sheet-content"] {
   border-color: var(--border-subtle);
+  border-radius: var(--radius-surface);
 }
 
-/* Button alignment: a defined pill (proper horizontal padding) + a shorter
-   large size. .btn--icon stays a square rounded-rect (no pill on icon buttons). */
-.btn--pill {
-  padding-left: 16px;
-  padding-right: 16px;
-}
-.btn--sm.btn--pill {
-  padding-left: 12px;
-  padding-right: 12px;
-}
-.btn--lg {
-  padding: 8px 16px;
-}
-.btn--secondary {
-  border-color: var(--border-subtle);
-}
-.btn--outline {
-  border-color: var(--accent-a7, var(--accent-border));
-}
+/* Button sizing/pill/differential-icon-padding now live in davinci.css. */
 .post__attachment {
   border-color: var(--border-subtle);
 }
@@ -212,7 +207,7 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-top: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 var(--radius-container) var(--radius-container);
   /* Extra top padding compensates for the ~6px tucked under the top nav so
      the visible row reads with balanced optical padding. */
   padding: 8px 16px 2px;
