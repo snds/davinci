@@ -420,6 +420,7 @@ function highlightMatch(text, query) {
 
 function SearchBox({ value, onChange, onSubmit }) {
   const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
   const submit = (q, category) => { onSubmit?.(q, category); setOpen(false); };
   // Combobox pattern: the input is the Popover anchor, not its trigger, so it
   // keeps focus while the typeahead is open. Radix owns outside-click / Escape
@@ -428,7 +429,7 @@ function SearchBox({ value, onChange, onSubmit }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverAnchor asChild>
-        <div className="relative w-full max-w-72">
+        <div ref={anchorRef} className="relative w-full max-w-72">
           <Icon name="search" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-[var(--fg-subtle)]" />
           <Input size="sm" className="ps-9" placeholder="Search" value={value} aria-label="Search"
             onChange={(e) => { onChange(e.target.value); setOpen(true); }}
@@ -442,6 +443,10 @@ function SearchBox({ value, onChange, onSubmit }) {
         sideOffset={6}
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
+        // Clicking the input (the anchor, not the content) is an "interact
+        // outside" — without this guard the pointer-down that opens the popover
+        // immediately dismisses it, so it flashes open then closes.
+        onInteractOutside={(e) => { const t = e.detail?.originalEvent?.target; if (t && anchorRef.current?.contains(t)) e.preventDefault(); }}
         className="max-h-[520px] w-[420px] overflow-y-auto rounded-[10px] p-0 py-1.5"
       >
         <Typeahead query={value} onSubmit={submit} />
