@@ -813,7 +813,7 @@ function ProfilePage() {
           <div className="profile-header__actions">
             <Button variant="primary" icon="chat_bubble">Message</Button>
             <Button variant="outline" icon="add">Follow</Button>
-            <Button variant="secondary">More</Button>
+            <MoreMenu size="icon" />
           </div>
         </div>
       </Panel>
@@ -855,7 +855,7 @@ function ProfilePage() {
             <TabsTrigger value="reactions">Reactions</TabsTrigger>
           </TabsList>
           <TabsContent value="posts">
-            <div className="flex flex-col gap-3" style={{ margin: "0 -16px -14px" }}>
+            <div className="flex flex-col gap-3">
               <Post id="yara-act-1" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="3d" avatar="YO" photoSeed="yara okonkwo" body="The unglamorous truth about design systems: the wins compound in the docs and governance, not the component count. Shipped our contribution guide this week and adoption already feels different." reactions={317} comments={18} topReactions={["insightful", "like", "celebrate"]} />
               <Post id="yara-act-2" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="1w" avatar="YO" photoSeed="yara okonkwo" body="Reposting a great thread on surface hierarchy — exactly how we think about Canvas → Container → grouping at Davinci." reactions={142} comments={6} topReactions={["like", "love"]} />
             </div>
@@ -961,12 +961,14 @@ function ProfilePage() {
 }
 
 /* ============================ Company ============================ */
-function MoreMenu({ size = "icon-sm" }) {
+function MoreMenu({ size = "icon-sm", pill = false }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size={size} aria-label="More actions"><Icon name="more_horiz" /></Button>
-      </DropdownMenuTrigger>
+      <Tip label="More">
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" size={size} pill={pill} aria-label="More actions"><Icon name="more_horiz" /></Button>
+        </DropdownMenuTrigger>
+      </Tip>
       <DropdownMenuContent align="end">
         <DropdownMenuItem><Icon name="open_in_new" className="text-[18px] me-1" /> Visit website</DropdownMenuItem>
         <DropdownMenuItem><Icon name="send" className="text-[18px] me-1" /> Send in a message</DropdownMenuItem>
@@ -990,7 +992,7 @@ function CompanySubnav({ c, tabs, tab, setTab, stuck }) {
         ))}
       </nav>
       <div className="company-subnav__actions">
-        <MoreMenu />
+        <MoreMenu pill />
         <Button variant="primary" size="sm" pill icon="add">Follow</Button>
       </div>
     </div>
@@ -1236,7 +1238,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
 
   return (
     <div className="flex flex-col">
-        <Panel bare className="rounded-b-none">
+        <Panel bare className="company-hero">
           <div className="profile-cover" style={{ height: 130, backgroundImage: `url(${seededPhoto(c.coverSeed, 1200, 300, c.coverKind || "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
             <div className="company-logo" style={{ background: c.logoBg }}>{c.initials}</div>

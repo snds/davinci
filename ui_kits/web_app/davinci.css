@@ -118,7 +118,10 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
    surface is dark (text glows down) or light (text embosses up). */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 7px 14px;
+  /* Optical bias: 1px more top than bottom. Material Symbols glyphs and cap-height
+     text ink sit slightly above their line-box center, so a symmetric box reads
+     high. Total height is unchanged (8+6 = 7+7). Icon-only buttons stay symmetric. */
+  padding: 8px 14px 6px;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
@@ -127,13 +130,16 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
   cursor: pointer;
   line-height: 1.2;
   white-space: nowrap;
+  /* shared "filled" depth — this is the primary button's bezel, applied to
+     every filled type style (primary/alt/destructive) from one place. Flat
+     variants (secondary/outline/ghost) explicitly clear it below. */
   background: transparent;
   color: inherit;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.14),
-    0 1px 0 rgba(0,0,0,.06),
-    0 1px 2px rgba(0,0,0,.18);
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(0,0,0,.22),
+    0 1px 0 rgba(0,0,0,.10),
+    0 1px 2px rgba(0,0,0,.22);
   transition:
     background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast),
@@ -158,6 +164,14 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
 .btn:focus-visible {
   outline: 2px solid var(--focus-ring, var(--blue-8));
   outline-offset: 2px;
+}
+/* Light-mode tuning of the shared filled bezel (brighter top highlight). */
+[data-theme="light"] .btn {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.18),
+    0 1px 0 rgba(0,0,0,.08),
+    0 1px 2px rgba(0,0,0,.16);
 }
 /* Nudge Material Symbols glyphs up a hair — their em-box center sits below
    the optical center of the rendered glyph, so flex-align:center reads low. */
@@ -188,11 +202,7 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
   color: var(--fg-on-accent);
   border-color: var(--blue-7);
   text-shadow: 0 -1px 0 rgba(0,0,0,.28);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.28),
-    inset 0 -1px 0 rgba(0,0,0,.22),
-    0 1px 0 rgba(0,0,0,.10),
-    0 1px 2px rgba(0,0,0,.22);
+  /* bezel inherited from the shared .btn filled depth */
 }
 .btn--primary:hover {
   background: linear-gradient(to bottom, var(--blue-10), var(--blue-9));
@@ -205,11 +215,6 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
   background: linear-gradient(to bottom, var(--blue-9), var(--blue-10));
   border-color: var(--blue-12);
   text-shadow: 0 -1px 0 rgba(0,0,0,.32);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    inset 0 -1px 0 rgba(0,0,0,.18),
-    0 1px 0 rgba(0,0,0,.08),
-    0 1px 2px rgba(0,0,0,.16);
 }
 [data-theme="light"] .btn--primary:hover {
   background: linear-gradient(to bottom, var(--blue-10), var(--blue-11));
@@ -225,11 +230,7 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
   color: var(--fg-on-alt);
   border-color: var(--yellow-8);
   text-shadow: 0 1px 0 rgba(255,255,255,.45);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -1px 0 rgba(0,0,0,.18),
-    0 1px 0 rgba(0,0,0,.08),
-    0 1px 2px rgba(0,0,0,.18);
+  /* bezel inherited from the shared .btn filled depth */
 }
 .btn--alt:hover {
   background: linear-gradient(to bottom, var(--yellow-11), var(--yellow-9));
@@ -252,35 +253,25 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
 }
 
 /* ─── Secondary (neutral) ─── */
+/* Flat, ghost-like with a subtle UI-element border — NOT skeuomorphic. This is
+   the quiet, low-emphasis action (and the resting style for overflow / "More"
+   icon buttons). The bezel/gradient is reserved for the filled variants
+   (primary/alt) so emphasis reads through depth, not just color. */
 .btn--secondary {
-  background: linear-gradient(to bottom, var(--sand-4), var(--sand-2));
+  background: transparent;
   color: var(--fg);
-  border-color: var(--border);
-  text-shadow: 0 1px 0 rgba(0,0,0,.18);
+  border-color: var(--border-subtle);
+  box-shadow: none;
+  text-shadow: none;
 }
 .btn--secondary:hover {
-  background: linear-gradient(to bottom, var(--sand-5), var(--sand-3));
+  background: var(--bg-hover);
+  border-color: var(--border);
+  color: var(--fg);
 }
 .btn--secondary:active {
-  background: linear-gradient(to bottom, var(--sand-2), var(--sand-4));
-}
-[data-theme="light"] .btn--secondary {
-  background: linear-gradient(to bottom, #fdfdfd, #e6e6e6);
-  border-color: #c4c4c4;
-  color: var(--fg);
-  text-shadow: 0 1px 0 rgba(255,255,255,.85);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 1px 0 rgba(0,0,0,.05),
-    0 1px 2px rgba(0,0,0,.10);
-}
-[data-theme="light"] .btn--secondary:hover {
-  background: linear-gradient(to bottom, #f6f6f6, #dcdcdc);
-  border-color: #b8b8b8;
-}
-[data-theme="light"] .btn--secondary:active {
-  background: linear-gradient(to bottom, #d6d6d6, #ededed);
+  background: var(--bg-active);
+  box-shadow: none;
 }
 
 .btn--outline { background: transparent; color: var(--accent-fg); border-color: var(--accent-border); box-shadow: none; text-shadow: none; }
@@ -288,25 +279,53 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
 .btn--ghost { color: var(--fg-muted); box-shadow: none; text-shadow: none; }
 .btn--ghost:hover { background: var(--bg-hover); color: var(--fg); }
 /* Sizes — Small / Medium (.btn default) / Large */
-.btn--sm { padding: 4px 10px; font-size: 12px; border-radius: 5px; }
-.btn--lg { padding: 8px 16px; font-size: 14px; border-radius: 7px; }
+.btn--sm { padding: 5px 10px 3px; font-size: 12px; border-radius: 5px; }
+.btn--lg { padding: 9px 16px 7px; font-size: 14px; border-radius: 7px; }
 .btn--icon { padding: 6px; width: 32px; height: 32px; }
 
-/* Pill — rounded-full with its own horizontal padding per size */
+/* ─── Pill buttons — WHEN TO USE ───────────────────────────────────────────
+   A pill (fully-rounded) is a SHAPE treatment, not a variant. Pick one shape
+   per surface and stay consistent — mixing pills and rounded-rectangles in the
+   same cluster reads as a bug.
+
+   Use a pill when:
+   • The action is a discrete, self-contained social/affordance verb that
+     repeats in lists or rails — Follow, Connect, Message, Apply, "Jump to" chips.
+   • The button floats over content or sits in a toolbar/subnav (chip-like).
+   • You want a softer, more "tappable" affordance for a single primary CTA.
+
+   Use the default rounded-rectangle (radius-md) when:
+   • The button lives in a form, dialog footer, or settings row (Save / Cancel /
+     Submit) — squared corners pair with squared inputs and panels.
+   • It sits in a dense action bar of mixed-width buttons.
+
+   Hard rule: if pills and icon-only buttons sit side by side, the icon button
+   MUST be round too (.btn--icon.btn--pill, below) — never a rounded-rectangle
+   icon next to a pill. Conversely, in a rounded-rectangle cluster keep icon
+   buttons as rounded-rectangles. Match the shape of your neighbors.
+   ─────────────────────────────────────────────────────────────────────────── */
 .btn--pill { border-radius: 9999px; padding-left: 16px; padding-right: 16px; }
 .btn--sm.btn--pill { padding-left: 12px; padding-right: 12px; }
 .btn--lg.btn--pill { padding-left: 20px; padding-right: 20px; }
+/* Round icon button — when an icon-only button sits beside pill buttons it
+   must be circular too (a rounded-rectangle next to pills reads as a bug).
+   Keep it square in dimensions, just fully rounded. */
+.btn--icon.btn--pill { border-radius: 9999px; padding-left: 6px; padding-right: 6px; }
 
 /* Differential padding: a button with a leading/trailing icon gets less padding
-   on the icon side so the icon-to-edge gap matches the text-to-edge gap. */
-.btn--icon-leading { padding-left: 10px; }
-.btn--icon-trailing { padding-right: 10px; }
-.btn--sm.btn--icon-leading { padding-left: 7px; }
-.btn--sm.btn--icon-trailing { padding-right: 7px; }
-.btn--lg.btn--icon-leading { padding-left: 12px; }
-.btn--lg.btn--icon-trailing { padding-right: 12px; }
-.btn--pill.btn--icon-leading { padding-left: 12px; }
-.btn--pill.btn--icon-trailing { padding-right: 12px; }
+   on the icon side so the icon-to-edge gap matches the text-to-edge gap.
+   Material Symbols carry ~2px of internal whitespace, so the icon side needs a
+   noticeably smaller value than the text side to look optically equal. */
+.btn--icon-leading { padding-left: 8px; }
+.btn--icon-trailing { padding-right: 8px; }
+.btn--sm.btn--icon-leading { padding-left: 6px; }
+.btn--sm.btn--icon-trailing { padding-right: 6px; }
+.btn--lg.btn--icon-leading { padding-left: 10px; }
+.btn--lg.btn--icon-trailing { padding-right: 10px; }
+.btn--pill.btn--icon-leading { padding-left: 10px; }
+.btn--pill.btn--icon-trailing { padding-right: 10px; }
+.btn--sm.btn--pill.btn--icon-leading { padding-left: 8px; }
+.btn--sm.btn--pill.btn--icon-trailing { padding-right: 8px; }
 
 /* ─── Split button (regular + caret pane) ─── */
 .btn-split {
