@@ -188,6 +188,22 @@ function Comments({ postId, seed }) {
 }
 
 /* ============================ Footers ============================ */
+/* Single-color, resizable Davinci mark (currentColor): a rounded square with
+   a knocked-out "D" counter + accent dot. Inherits color + scales to any size. */
+function LogoMark({ size = 14, className = "" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" className={className} role="img" aria-label="Davinci" style={{ display: "inline-block", verticalAlign: "-2px", flexShrink: 0 }}>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8 0 H32 A8 8 0 0 1 40 8 V32 A8 8 0 0 1 32 40 H8 A8 8 0 0 1 0 32 V8 A8 8 0 0 1 8 0 Z M11 10 h10 a10 10 0 0 1 10 10 a10 10 0 0 1 -10 10 h-10 z"
+      />
+      <circle cx="24" cy="20" r="3" fill="currentColor" />
+    </svg>
+  );
+}
+
 function RailFooter() {
   const { openFooter } = React.useContext(NavContext);
   const links = ["About", "Accessibility", "Help Center", "Privacy & Terms", "Ad Choices", "Advertising", "Business Services", "Get the app"];
@@ -197,7 +213,7 @@ function RailFooter() {
         {links.map((l) => <button key={l} onClick={openFooter}>{l}</button>)}
         <button onClick={openFooter}>More</button>
       </div>
-      <div className="rail-footer__copy"><strong style={{ color: "var(--fg-muted)" }}>in</strong> Davinci Corporation © 2026</div>
+      <div className="rail-footer__copy"><LogoMark size={14} /> Davinci Corporation © 2026</div>
     </div>
   );
 }
@@ -231,7 +247,7 @@ function SiteFooter({ onClose }) {
             </Select>
           </div>
         </div>
-        <div className="site-footer__copy"><strong style={{ color: "var(--fg-muted)" }}>in</strong> Davinci Corporation © 2026</div>
+        <div className="site-footer__copy"><LogoMark size={16} /> Davinci Corporation © 2026</div>
       </div>
     </div>
   );
