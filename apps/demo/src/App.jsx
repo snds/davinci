@@ -1576,14 +1576,14 @@ function NetworkPage() {
 }
 
 /* ============================ Jobs ============================ */
-function ApplyDialog({ job }) {
+function ApplyDialog({ job, size = "default" }) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
   const submit = () => { setDone(true); setTimeout(() => { setOpen(false); setDone(false); }, 1400); };
   return (
     <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setDone(false); }}>
       <DialogTrigger asChild>
-        <Button variant="primary" pill iconRight="arrow_forward">{job.easyApply ? "Easy Apply" : "Apply"}</Button>
+        <Button variant="primary" size={size} pill iconRight="arrow_forward">{job.easyApply ? "Easy Apply" : "Apply"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[520px]">
         {done ? (
@@ -1792,6 +1792,81 @@ function CompanyInsights({ job }) {
     </div>
   );
 }
+/* Long-form description so each listing reads like a real posting — the meat
+   of the job. Intro is per-job; the rest is templated with company/title and
+   a seeded bullet selection so different roles read differently. */
+const JD_DOING = [
+  "Own the end-to-end design of major surfaces, from first concept to shipped pixels.",
+  "Partner with product and engineering to turn ambiguous problems into clear, elegant flows.",
+  "Establish and evolve patterns in the design system so the team scales without drift.",
+  "Run research and usability sessions, then translate findings into concrete decisions.",
+  "Mentor other designers and raise the craft bar across the team.",
+  "Drive design reviews and critique, keeping quality high under real deadlines.",
+  "Prototype interactions to pressure-test ideas before they reach engineering.",
+];
+const JD_LOOKING = [
+  "6+ years designing complex, data-dense product experiences.",
+  "A portfolio that shows systems thinking, not just screens.",
+  "Fluency with modern design tooling and component-driven workflows.",
+  "Strong written communication — you can make a case in a doc, not just a mock.",
+  "Comfort partnering closely with engineers on feasibility and implementation.",
+  "Experience shipping to production at scale, with measurable outcomes.",
+];
+const JD_BENEFITS = [
+  "Competitive salary and meaningful equity.",
+  "Remote-first with flexible hours.",
+  "Comprehensive medical, dental, and vision.",
+  "Generous learning and conference budget.",
+  "Home-office stipend and modern hardware.",
+  "Paid sabbatical after four years.",
+];
+function pickN(pool, seed, n) {
+  return Array.from({ length: n }, (_, i) => pool[(Math.abs(seed) + i) % pool.length]);
+}
+function JobAbout({ job }) {
+  const h = strHash(job.title);
+  const P = ({ children }) => <p style={{ fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.6, margin: "0 0 14px" }}>{children}</p>;
+  const H = ({ children }) => <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14, margin: "18px 0 8px" }}>{children}</h4>;
+  const ul = { margin: 0, paddingLeft: 18 };
+  const li = { fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.55, marginBottom: 8 };
+  return (
+    <div>
+      <P>{job.about}</P>
+      <H>About {job.company}</H>
+      <P>{job.company} equips teams with the tools to do their best work. We move fast, sweat the details, and care deeply about the people who use what we build — and about the people who build it.</P>
+      <H>About the team</H>
+      <P>The group behind {job.title} sits close to the core of {job.company}'s product. You'll partner daily with product managers, engineers, and researchers to ship work that reaches real users at scale.</P>
+      <H>About the role</H>
+      <P>We're looking for a {job.title} to lead the next chapter of this work. This opportunity is ideal for someone who thrives on turning complex, multi-channel problems into intuitive and elegant experiences.</P>
+      <H>What you'll be doing</H>
+      <ul style={ul}>{pickN(JD_DOING, h, 5).map((t, i) => <li key={i} style={li}>{t}</li>)}</ul>
+      <H>What we're looking for</H>
+      <ul style={ul}>{pickN(JD_LOOKING, h >> 2, 4).map((t, i) => <li key={i} style={li}>{t}</li>)}</ul>
+      <H>Benefits &amp; perks</H>
+      <ul style={ul}>{pickN(JD_BENEFITS, h >> 3, 4).map((t, i) => <li key={i} style={li}>{t}</li>)}</ul>
+    </div>
+  );
+}
+/* Compact job header that reveals on scroll — mirrors the profile/company
+   sticky headers. Sits above the detail Panel (the Panel is overflow-hidden,
+   which would trap a sticky child), zero layout cost via the height:0 wrapper. */
+function JobStickyHeader({ job, saved, onToggleSave, stuck }) {
+  return (
+    <div className="jobdetail-sticky">
+      <div className={`jobdetail-subnav ${stuck ? "is-stuck" : ""}`} aria-hidden={!stuck}>
+        <Avatar initials={job.logo} size={32} variant={job.variant} photo={brandLogo(job.company)} ring={false} style={{ borderRadius: 6 }} />
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div className="jobdetail-subnav__name">{job.title}</div>
+          <div className="jobdetail-subnav__meta">{job.company} · {job.location}</div>
+        </div>
+        <div className="jobdetail-subnav__actions">
+          <Button variant={saved.has(job.id) ? "secondary" : "outline"} size="sm" pill icon={saved.has(job.id) ? "check" : "bookmark"} onClick={() => onToggleSave(job.id)}>{saved.has(job.id) ? "Saved" : "Save"}</Button>
+          <ApplyDialog job={job} size="sm" />
+        </div>
+      </div>
+    </div>
+  );
+}
 function JobDetail({ job, saved, onToggleSave }) {
   const { goToCompany } = React.useContext(NavContext);
   const cid = companyIdFor(job.company);
@@ -1836,7 +1911,7 @@ function JobDetail({ job, saved, onToggleSave }) {
 
       <Separator className="my-5" />
       <h3 style={JD_H3}>About the job</h3>
-      <p style={{ fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.55, margin: 0 }}>{job.about}</p>
+      <JobAbout job={job} />
 
       <Separator className="my-5" />
       <ApplicantCompare job={job} />
@@ -1850,6 +1925,7 @@ function JobsPage() {
   const { goToCompany } = React.useContext(NavContext);
   const [selected, setSelected] = useState(JOBS[0].id);
   const [saved, setSaved] = useState(new Set([1]));
+  const stuck = useStuck(280);
   const current = JOBS.find((j) => j.id === selected) || JOBS[0];
   const toggleSave = (id) => setSaved((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
   return (
@@ -1870,7 +1946,8 @@ function JobsPage() {
           ))}
         </div>
       </Panel>
-      <div style={{ position: "sticky", top: 64 }}>
+      <div>
+        <JobStickyHeader job={current} saved={saved} onToggleSave={toggleSave} stuck={stuck} />
         <JobDetail job={current} saved={saved} onToggleSave={toggleSave} />
       </div>
     </div>
