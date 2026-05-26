@@ -12,6 +12,9 @@ import {
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from "@davinci/ui/components/ui/dropdown-menu";
+import {
+  Popover, PopoverTrigger, PopoverContent, PopoverAnchor,
+} from "@davinci/ui/components/ui/popover";
 
 import {
   Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose,
@@ -305,41 +308,108 @@ function Logo() {
 }
 
 /* ============================ Search ============================ */
+/* The result pool. This is dummy content: search is intentionally NOT a live
+   index query. Only the curated SAVED_SEARCHES below return results — each
+   names the entries it surfaces by id (see savedSearchFor). Typing anything
+   that isn't a saved search yields an empty, "try one of these" state. */
 const SEARCH_INDEX = [
+  // People
   { type: "person", id: "p1", title: "Sofia Antonova", sub: "Staff Designer · Helix", avatar: "SA", variant: "g4", connection: "2nd", location: "Lisbon, PT", industry: "Design" },
   { type: "person", id: "p3", title: "Sonya Petersen", sub: "Product Manager · Atlas", avatar: "SP", variant: "g2", connection: "2nd", location: "Oslo, NO", industry: "Product" },
   { type: "person", id: "p4", title: "Solomon Reyes", sub: "Design Engineer · Vector", avatar: "SR", variant: "g6", connection: "1st", location: "Mexico City, MX", industry: "Engineering" },
   { type: "person", id: "p5", title: "Miriam Chen", sub: "VP Design · Helix", avatar: "MC", variant: "g4", connection: "2nd", location: "London, UK", industry: "Design" },
   { type: "person", id: "p6", title: "Daniel Amrani", sub: "Head of Brand · Pylon", avatar: "DA", variant: "g2", connection: "1st", location: "Tel Aviv, IL", industry: "Design" },
   { type: "person", id: "p7", title: "Priya Ravi", sub: "Design Engineer · Atlas", avatar: "PR", variant: "g5", connection: "3rd", location: "Bengaluru, IN", industry: "Engineering" },
+  // Companies
   { type: "company", id: "c1", title: "Helix Systems", sub: "Product & Design Platform · 24,802 followers", avatar: "HX", variant: "g2", industry: "Software", location: "Lisbon, PT" },
   { type: "company", id: "c2", title: "Atlas Docs", sub: "Knowledge Tools · 214,882 followers", avatar: "AT", variant: "g5", industry: "Software", location: "New York, NY" },
   { type: "company", id: "c4", title: "Vector Project OS", sub: "Developer Tools · 42,112 followers", avatar: "VE", variant: "g6", industry: "Software", location: "Amsterdam, NL" },
+  // Jobs
   { type: "job", id: "j1", title: "Staff Product Designer", sub: "Helix · Lisbon or Remote · 5d", avatar: "HX", variant: "g2", industry: "Design", location: "Lisbon, PT" },
   { type: "job", id: "j2", title: "Senior Design Engineer", sub: "Atlas Docs · Remote · 2d", avatar: "AT", variant: "g5", industry: "Engineering", location: "Remote" },
   { type: "job", id: "j3", title: "Design Systems Lead", sub: "Vector · Amsterdam · 1w", avatar: "VE", variant: "g6", industry: "Design", location: "Amsterdam, NL" },
+  // Groups
   { type: "group", id: "g1", title: "Design Systems Guild", sub: "28,402 members · Active daily", avatar: "DS", variant: "g4", industry: "Design" },
   { type: "group", id: "g2", title: "Design Engineers", sub: "12,104 members · 4 new posts today", avatar: "DE", variant: "g5", industry: "Engineering" },
+  // Posts
   { type: "post", id: "post1", title: '"Most design systems are asset libraries with a sitemap…"', sub: "Daniel Amrani · 1,204 reactions", avatar: "DA", variant: "g2", industry: "Design" },
   { type: "post", id: "post2", title: "Shipping a refresh of our component library today.", sub: "Sofia Antonova · 482 reactions", avatar: "SA", variant: "g4", industry: "Design" },
+  // Courses
+  { type: "course", id: "co1", title: "UX Design Foundations", sub: "Diane Cronenwett · 4h 12m · 128K learners", avatar: "UX", variant: "g4", industry: "Design" },
+  { type: "course", id: "co2", title: "Design Systems with Tokens", sub: "Anne Grundhoefer · 2h 30m · 54K learners", avatar: "DS", variant: "g2", industry: "Design" },
+  { type: "course", id: "co3", title: "Prototyping Microinteractions", sub: "Tom Green · 3h 33m · 21K learners", avatar: "PM", variant: "g5", industry: "Design" },
+  // Events
+  { type: "event", id: "ev1", title: "Design Confessional: May UX Meetup", sub: "Thu, May 28 · Cardiff-by-the-Sea · 8 attendees", avatar: "DC", variant: "g6", industry: "Design", location: "Cardiff, UK" },
+  { type: "event", id: "ev2", title: "Design Systems Coffee & Critique", sub: "Tue, Jun 3 · Remote · 142 attendees", avatar: "CC", variant: "g4", industry: "Design", location: "Remote" },
+  // Products
+  { type: "product", id: "pd1", title: "Vector UI Kit", sub: "Web Design Software · by Intuition SofTech", avatar: "VK", variant: "g4", industry: "Software" },
+  { type: "product", id: "pd2", title: "Prototype Studio", sub: "Design Software · by WebMedia", avatar: "PS", variant: "g2", industry: "Software" },
+  { type: "product", id: "pd3", title: "Token Manager", sub: "Design Ops · by PerfectionGeeks", avatar: "TM", variant: "g5", industry: "Software" },
+  // Schools
+  { type: "school", id: "sc1", title: "UX Design Institute", sub: "Dublin · 5,664 students & alumni", avatar: "UXD", variant: "g4", industry: "Education", location: "Dublin, IE" },
+  { type: "school", id: "sc2", title: "UX Design Academy", sub: "Kaunas · 8 students & alumni", avatar: "UXA", variant: "g2", industry: "Education", location: "Kaunas, LT" },
+  { type: "school", id: "sc3", title: "Davinci Design School", sub: "Remote · 2,194 students & alumni", avatar: "DD", variant: "g6", industry: "Education", location: "Remote" },
+  // Services
+  { type: "service", id: "sv1", title: "UX & UI Design Services", sub: "Jennifer Lau · UX/UI Designer", avatar: "JL", variant: "g4", industry: "Design", location: "United States" },
+  { type: "service", id: "sv2", title: "Design Systems Consulting", sub: "Scott Jenson · UX Strategy", avatar: "SJ", variant: "g2", industry: "Design", location: "Palo Alto, CA" },
+  { type: "service", id: "sv3", title: "Product Design Studio", sub: "Neil Duan · Head of Design", avatar: "ND", variant: "g6", industry: "Design", location: "San Francisco, CA" },
 ];
-const RECENT_SEARCHES = ["staff designer", "helix systems", "design engineer remote", "priya ravi"];
-const TYPE_LABELS = { person: "Person", company: "Company", job: "Job", group: "Group", post: "Post" };
-const TYPE_ICONS = { person: "person", company: "work", job: "work", group: "groups", post: "article" };
+const INDEX_BY_ID = Object.fromEntries(SEARCH_INDEX.map((e) => [e.id, e]));
 
-function matchScore(q, e) {
-  if (!q) return 0;
-  const needle = q.toLowerCase();
-  const hay = (e.title + " " + e.sub).toLowerCase();
-  if (hay.startsWith(needle)) return 3;
-  if (e.title.toLowerCase().includes(needle)) return 2;
-  if (hay.includes(needle)) return 1;
-  return 0;
+const TYPE_LABELS = { person: "Person", company: "Company", job: "Job", group: "Group", post: "Post", course: "Course", event: "Event", product: "Product", school: "School", service: "Service" };
+const TYPE_ICONS = { person: "person", company: "work", job: "work", group: "groups", post: "article", course: "play_circle", event: "event", product: "category", school: "school", service: "handshake" };
+
+/* Result categories (LinkedIn-style). `types` maps a category to the index
+   entry types it surfaces; `all` surfaces everything. Each category bubbles up
+   its own filter chips (see SearchResults) so the side panel is optional. */
+const SEARCH_CATEGORIES = [
+  { id: "all", label: "All", icon: "manage_search" },
+  { id: "people", label: "People", icon: "person", types: ["person"] },
+  { id: "jobs", label: "Jobs", icon: "work", types: ["job"] },
+  { id: "companies", label: "Companies", icon: "apartment", types: ["company"] },
+  { id: "groups", label: "Groups", icon: "groups", types: ["group"] },
+  { id: "posts", label: "Posts", icon: "article", types: ["post"] },
+  { id: "courses", label: "Courses", icon: "play_circle", types: ["course"] },
+  { id: "events", label: "Events", icon: "event", types: ["event"] },
+  { id: "products", label: "Products", icon: "category", types: ["product"] },
+  { id: "schools", label: "Schools", icon: "school", types: ["school"] },
+  { id: "services", label: "Services", icon: "handshake", types: ["service"] },
+];
+const CAT_BY_TYPE = { person: "people", company: "companies", job: "jobs", group: "groups", post: "posts", course: "courses", event: "events", product: "products", school: "schools", service: "services" };
+
+/* Curated saved searches — the ONLY queries that return results. `label` is
+   both the display string and the exact query the user must type/choose;
+   `resultIds` are the entries it surfaces. One per category (People has two)
+   plus a mixed "design" search that lights up the All view across types. */
+const SAVED_SEARCHES = [
+  { label: "design", category: "all", resultIds: ["p4", "c1", "j1", "g1", "co1", "post1", "sv1"] },
+  { label: "design engineer", category: "people", resultIds: ["p4", "p7"] },
+  { label: "priya ravi", category: "people", resultIds: ["p7"] },
+  { label: "product designer", category: "jobs", resultIds: ["j1", "j2", "j3"] },
+  { label: "helix systems", category: "companies", resultIds: ["c1", "c2", "c4"] },
+  { label: "design systems", category: "groups", resultIds: ["g1", "g2"] },
+  { label: "design leadership", category: "posts", resultIds: ["post1", "post2"] },
+  { label: "ux design course", category: "courses", resultIds: ["co1", "co2", "co3"] },
+  { label: "ux meetup", category: "events", resultIds: ["ev1", "ev2"] },
+  { label: "design tools", category: "products", resultIds: ["pd1", "pd2", "pd3"] },
+  { label: "ux design institute", category: "schools", resultIds: ["sc1", "sc2", "sc3"] },
+  { label: "design services", category: "services", resultIds: ["sv1", "sv2", "sv3"] },
+];
+const norm = (q) => (q || "").trim().toLowerCase();
+// The matching saved search for a query string (exact, case-insensitive), or null.
+function savedSearchFor(q) {
+  const n = norm(q);
+  return SAVED_SEARCHES.find((s) => norm(s.label) === n) || null;
 }
-function searchMatches(q, { limit = 50 } = {}) {
-  if (!q) return [];
-  return SEARCH_INDEX.map((e) => ({ e, s: matchScore(q, e) })).filter((x) => x.s > 0)
-    .sort((a, b) => b.s - a.s).slice(0, limit).map((x) => x.e);
+// Saved searches whose label contains the typed text — drives the typeahead.
+function suggestSaved(q) {
+  const n = norm(q);
+  return n ? SAVED_SEARCHES.filter((s) => s.label.toLowerCase().includes(n)) : SAVED_SEARCHES;
+}
+// The resolved result entries for a (valid) query, else [].
+function resultsFor(q) {
+  const s = savedSearchFor(q);
+  return s ? s.resultIds.map((id) => INDEX_BY_ID[id]).filter(Boolean) : [];
 }
 function highlightMatch(text, query) {
   if (!query) return text;
@@ -350,74 +420,69 @@ function highlightMatch(text, query) {
 
 function SearchBox({ value, onChange, onSubmit }) {
   const [open, setOpen] = useState(false);
-  const wrapRef = useRef(null);
-  useEffect(() => {
-    const onDoc = (e) => { if (!wrapRef.current?.contains(e.target)) setOpen(false); };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, []);
-  const matches = searchMatches(value, { limit: 30 });
-  const submit = (q) => { onSubmit?.(q); setOpen(false); };
+  const submit = (q, category) => { onSubmit?.(q, category); setOpen(false); };
+  // Combobox pattern: the input is the Popover anchor, not its trigger, so it
+  // keeps focus while the typeahead is open. Radix owns outside-click / Escape
+  // dismissal (no document listener); we suppress content auto-focus so typing
+  // is never interrupted.
   return (
-    <div ref={wrapRef} className="relative w-full max-w-72">
-      <Icon name="search" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-[var(--fg-subtle)]" />
-      <Input size="sm" className="ps-9" placeholder="Search" value={value} aria-label="Search"
-        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={(e) => { if (e.key === "Enter") submit(value); else if (e.key === "Escape") setOpen(false); }}
-      />
-      {open && <Typeahead query={value} matches={matches} onSubmit={submit} />}
-    </div>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverAnchor asChild>
+        <div className="relative w-full max-w-72">
+          <Icon name="search" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[18px] text-[var(--fg-subtle)]" />
+          <Input size="sm" className="ps-9" placeholder="Search" value={value} aria-label="Search"
+            onChange={(e) => { onChange(e.target.value); setOpen(true); }}
+            onFocus={() => setOpen(true)}
+            onKeyDown={(e) => { if (e.key === "Enter") submit(value); else if (e.key === "Escape") setOpen(false); }}
+          />
+        </div>
+      </PopoverAnchor>
+      <PopoverContent
+        align="start"
+        sideOffset={6}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+        className="max-h-[520px] w-[420px] overflow-y-auto rounded-[10px] p-0 py-1.5"
+      >
+        <Typeahead query={value} onSubmit={submit} />
+      </PopoverContent>
+    </Popover>
   );
 }
 
-function Typeahead({ query, matches, onSubmit }) {
-  const grouped = { person: [], company: [], job: [], group: [], post: [] };
-  matches.forEach((m) => grouped[m.type]?.push(m));
-  const order = ["person", "company", "job", "group", "post"];
-  const titles = { person: "People", company: "Companies", job: "Jobs", group: "Groups", post: "Posts" };
+/* Typeahead is a saved-search autocomplete. Search is curated, not a live
+   index query, so the suggestions ARE the searches that work — choosing one
+   (or typing its label verbatim and pressing Enter) runs it. No fuzzy entity
+   previews: anything off the list lands on an empty "try one of these" state. */
+function Typeahead({ query, onSubmit }) {
+  const suggestions = suggestSaved(query);
+  const exact = savedSearchFor(query);
+  // No .typeahead wrapper here — PopoverContent supplies the positioned frame.
   return (
-    <div className="typeahead">
-      {!query ? (
-        <>
-          <div className="typeahead__section-title">Recent</div>
-          {RECENT_SEARCHES.map((q, i) => (
-            <div key={i} className="typeahead__row" onMouseDown={(e) => { e.preventDefault(); onSubmit(q); }}>
-              <span className="typeahead__icon"><Icon name="history" className="text-[18px]" /></span>
-              <div style={{ flex: 1, fontSize: 13 }}>{q}</div>
-              <Icon name="arrow_forward" className="text-[14px] text-[var(--fg-subtle)]" />
-            </div>
-          ))}
-        </>
-      ) : matches.length === 0 ? (
-        <div style={{ padding: 20, textAlign: "center", color: "var(--fg-muted)", fontSize: 13 }}>
-          No matches for "<strong style={{ color: "var(--fg)" }}>{query}</strong>". Press Enter to search.
+    <>
+      {query && !exact && (
+        <div className="typeahead__row typeahead__row--primary" onMouseDown={(e) => { e.preventDefault(); onSubmit(query); }}>
+          <span className="typeahead__icon"><Icon name="search" className="text-[18px]" /></span>
+          <div style={{ flex: 1, fontSize: 13 }}>Search for <strong>"{query}"</strong></div>
+          <Icon name="arrow_forward" className="text-[14px] text-[var(--fg-subtle)]" />
         </div>
-      ) : (
-        <>
-          <div className="typeahead__row typeahead__row--primary" onMouseDown={(e) => { e.preventDefault(); onSubmit(query); }}>
-            <span className="typeahead__icon"><Icon name="search" className="text-[18px]" /></span>
-            <div style={{ flex: 1, fontSize: 13 }}>See all results for <strong>"{query}"</strong></div>
-            <Icon name="arrow_forward" className="text-[14px] text-[var(--fg-subtle)]" />
-          </div>
-          {order.map((t) => grouped[t].length > 0 && (
-            <div key={t}>
-              <div className="typeahead__section-title"><Icon name={TYPE_ICONS[t]} size="sm" className="me-1 align-middle" />{titles[t]}</div>
-              {grouped[t].slice(0, 3).map((m) => (
-                <div key={m.id} className="typeahead__row" onMouseDown={(e) => { e.preventDefault(); onSubmit(m.title); }}>
-                  <Avatar initials={m.avatar} size={36} variant={m.variant} photoSeed={t === "person" ? m.title : null} style={{ borderRadius: t === "company" || t === "job" ? 6 : "50%" }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-display)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{highlightMatch(m.title, query)}</div>
-                    <div className="meta" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{m.sub}</div>
-                  </div>
-                  {t === "person" && m.connection && <Pill>{m.connection}</Pill>}
-                </div>
-              ))}
-            </div>
-          ))}
-        </>
       )}
-    </div>
+      <div className="typeahead__section-title">{query ? "Suggested searches" : "Recent"}</div>
+      {suggestions.length === 0 ? (
+        <div style={{ padding: "10px 14px 14px", color: "var(--fg-muted)", fontSize: 13 }}>
+          No saved searches match. Try <strong style={{ color: "var(--fg)" }}>{SAVED_SEARCHES[0].label}</strong> or <strong style={{ color: "var(--fg)" }}>{SAVED_SEARCHES[4].label}</strong>.
+        </div>
+      ) : suggestions.map((s) => (
+        <div key={s.label} className="typeahead__row" onMouseDown={(e) => { e.preventDefault(); onSubmit(s.label, s.category); }}>
+          <span className="typeahead__icon"><Icon name={query ? "search" : "history"} className="text-[18px]" /></span>
+          <div style={{ flex: 1, fontSize: 13 }}>{highlightMatch(s.label, query)}</div>
+          <span className="meta" style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+            <Icon name={SEARCH_CATEGORIES.find((c) => c.id === s.category)?.icon} className="text-[14px]" />
+            {SEARCH_CATEGORIES.find((c) => c.id === s.category)?.label}
+          </span>
+        </div>
+      ))}
+    </>
   );
 }
 
@@ -431,40 +496,44 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
     { id: "notifications", label: "Alerts", icon: "notifications" },
   ];
   const { goToProfile } = React.useContext(NavContext);
-  const bellRef = useRef(null);
   const [meOpen, setMeOpen] = useState(false);
-  useEffect(() => {
-    if (!alertsOpen) return;
-    const onDoc = (e) => { if (!bellRef.current?.contains(e.target)) onToggleAlerts?.(false); };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [alertsOpen, onToggleAlerts]);
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
       <div className="mx-auto flex h-14 max-w-[1180px] items-center gap-3 px-4">
-        <Logo />
+        <button type="button" onClick={() => onNavigate?.("home")} aria-label="Davinci home" className="flex shrink-0 items-center rounded outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]">
+          <Logo />
+        </button>
         <SearchBox value={searchValue} onChange={onSearchChange} onSubmit={onSearchSubmit} />
         <nav className="ml-auto flex items-stretch">
           {tabs.map((t) => {
             const isAlerts = t.id === "notifications";
+            const tabButton = (
+              <button
+                className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)] outline-none transition-colors hover:text-[var(--fg)] data-[active=true]:text-[var(--fg)] data-[active=true]:shadow-[inset_0_-2px_0_var(--fg)] data-[state=open]:text-[var(--fg)]"
+                data-active={active === t.id || undefined}
+                onClick={isAlerts ? undefined : () => onNavigate?.(t.id)}
+              >
+                <span className="relative inline-flex">
+                  <Icon name={t.icon} filled={active === t.id} size="lg" />
+                  {isAlerts && alertCount > 0 && (
+                    <span className="absolute -right-2 -top-1 flex size-4 items-center justify-center rounded-full border-2 border-[var(--bg-surface)] bg-[var(--danger)] text-[10px] font-bold text-white">{alertCount}</span>
+                  )}
+                </span>
+                {t.label}
+              </button>
+            );
+            if (!isAlerts) return <div key={t.id} className="relative">{tabButton}</div>;
+            // Radix Popover owns open state + outside-click/Escape dismissal.
+            // Opening Alerts closes the Me menu (and vice-versa via Me's handler),
+            // so the two nav surfaces are mutually exclusive without manual wiring.
             return (
-              <div key={t.id} className="relative" ref={isAlerts ? bellRef : null}>
-                <button
-                  className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] data-[active=true]:text-[var(--fg)] data-[active=true]:shadow-[inset_0_-2px_0_var(--fg)]"
-                  data-active={active === t.id || undefined}
-                  onClick={() => { if (isAlerts) { setMeOpen(false); onToggleAlerts?.(!alertsOpen); } else onNavigate?.(t.id); }}
-                >
-                  <span className="relative inline-flex">
-                    <Icon name={t.icon} filled={active === t.id} size="lg" />
-                    {isAlerts && alertCount > 0 && (
-                      <span className="absolute -right-2 -top-1 flex size-4 items-center justify-center rounded-full border-2 border-[var(--bg-surface)] bg-[var(--danger)] text-[10px] font-bold text-white">{alertCount}</span>
-                    )}
-                  </span>
-                  {t.label}
-                </button>
-                {isAlerts && alertsOpen && <AlertsDropdown onClose={() => onToggleAlerts?.(false)} onViewAll={() => { onToggleAlerts?.(false); onNavigate?.("notifications"); }} />}
-              </div>
+              <Popover key={t.id} open={alertsOpen} onOpenChange={(o) => { if (o) setMeOpen(false); onToggleAlerts?.(o); }}>
+                <PopoverTrigger asChild>{tabButton}</PopoverTrigger>
+                <PopoverContent align="end" className="flex max-h-[560px] w-[420px] flex-col overflow-hidden rounded-[10px] p-0">
+                  <AlertsDropdown onClose={() => onToggleAlerts?.(false)} onViewAll={() => { onToggleAlerts?.(false); onNavigate?.("notifications"); }} />
+                </PopoverContent>
+              </Popover>
             );
           })}
           <Separator orientation="vertical" className="mx-2 my-auto h-8" />
@@ -727,7 +796,7 @@ function Feed() {
 
 /* ============================ Profile ============================ */
 function ProfileRail({ handle = "yara-okonkwo" }) {
-  const { goToCompany } = React.useContext(NavContext);
+  const { goToCompany, goToProfile } = React.useContext(NavContext);
   const viewers = [
     { name: "Ann Peng", role: "Design at TikTok", conn: "2nd" },
     { name: "Braden Kowitz", role: "Design Leadership", conn: "2nd" },
@@ -761,10 +830,10 @@ function ProfileRail({ handle = "yara-okonkwo" }) {
       </Panel>
       <Panel title="Who your viewers also viewed" bodyStyle={{ padding: 0 }}>
         {viewers.map((p, i) => (
-          <div key={i} className="rail-item">
+          <div key={i} className="rail-item" onClick={() => goToProfile({ name: p.name, role: p.role, avatar: p.name.slice(0, 2).toUpperCase() })} style={{ cursor: "pointer" }}>
             <Avatar initials={p.name.slice(0, 2).toUpperCase()} size={40} photoSeed={p.name} />
             <div className="rail-item__text"><div className="rail-item__title">{p.name} <span className="meta">· {p.conn}</span></div><div className="rail-item__sub">{p.role}</div></div>
-            <Button variant="outline" size="sm" pill icon="add">Connect</Button>
+            <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Connect</Button>
           </div>
         ))}
       </Panel>
@@ -1482,10 +1551,12 @@ function NetworkPage() {
         <RailAd ad={AD_LIBRARY.course} />
         <RailFooter />
       </>}>
-        <div className="results-tabs" style={{ padding: "0 4px", borderBottom: "1px solid var(--border-subtle)" }}>
-          <button className={`results-tab ${tab === "grow" ? "active" : ""}`} onClick={() => setTab("grow")}>Grow</button>
-          <button className={`results-tab ${tab === "catchup" ? "active" : ""}`} onClick={() => setTab("catchup")}>Catch up</button>
-        </div>
+        <Tabs value={tab} onValueChange={setTab}>
+          <TabsList variant="line" className="w-full justify-start rounded-none border-b border-[var(--border-subtle)] px-1">
+            <TabsTrigger value="grow" className="flex-none px-3.5">Grow</TabsTrigger>
+            <TabsTrigger value="catchup" className="flex-none px-3.5">Catch up</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <Panel bodyStyle={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontWeight: 600 }}>No pending invitations</span>
           <Button variant="ghost" size="sm">Manage</Button>
@@ -1740,8 +1811,10 @@ function AlertRow({ alert, compact }) {
 }
 function AlertsDropdown({ onClose, onViewAll }) {
   const unread = ALERTS.filter((a) => a.unread).length;
+  // The positioned frame (border, shadow, radius) is the PopoverContent; this
+  // component only owns the internal header / scrolling body / footer layout.
   return (
-    <div className="alerts-dropdown">
+    <>
       <div className="alerts-dropdown__header">
         <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14 }}>Notifications</span>
         {unread > 0 && <Pill variant="accent">{unread} new</Pill>}
@@ -1749,7 +1822,7 @@ function AlertsDropdown({ onClose, onViewAll }) {
       </div>
       <div className="alerts-dropdown__body">{ALERTS.slice(0, 5).map((a) => <AlertRow key={a.id} alert={a} compact />)}</div>
       <div className="alerts-dropdown__footer"><Button variant="ghost" size="sm" style={{ width: "100%" }} onClick={onViewAll}>View all notifications</Button></div>
-    </div>
+    </>
   );
 }
 function AlertsPage() {
@@ -1761,11 +1834,13 @@ function AlertsPage() {
     <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 300px", gap: 12, alignItems: "start" }}>
       <main className="flex flex-col gap-3">
         <Panel style={{ padding: "0 8px" }} bodyStyle={{ padding: 0 }}>
-          <div className="results-tabs">
-            <button className={`results-tab ${tab === "all" ? "active" : ""}`} onClick={() => setTab("all")}>All</button>
-            <button className={`results-tab ${tab === "mentions" ? "active" : ""}`} onClick={() => setTab("mentions")}>Mentions</button>
-            <button className={`results-tab ${tab === "jobs" ? "active" : ""}`} onClick={() => setTab("jobs")}>Jobs</button>
-          </div>
+          <Tabs value={tab} onValueChange={setTab}>
+            <TabsList variant="line" className="w-full justify-start rounded-none">
+              <TabsTrigger value="all" className="flex-none px-3.5">All</TabsTrigger>
+              <TabsTrigger value="mentions" className="flex-none px-3.5">Mentions</TabsTrigger>
+              <TabsTrigger value="jobs" className="flex-none px-3.5">Jobs</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </Panel>
         <Panel bodyStyle={{ padding: 0 }}>
           {filtered.map((a, i) => (
@@ -1795,12 +1870,50 @@ function AlertsPage() {
 }
 
 /* ============================ Search results ============================ */
-function FilterSelect({ label, value, options, onChange }) {
+/* Pill-shaped Select chip. The "any" option carries the resting label (e.g.
+   "Locations") so the chip reads like a filter prompt until something's picked,
+   and turns into a filled (active) chip once it is. */
+function FilterChip({ label, value, options, onChange }) {
+  const active = value !== "any";
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger size="sm" className="min-w-36"><SelectValue /></SelectTrigger>
-      <SelectContent>{options.map((o) => <SelectItem key={o} value={o}>{o === "any" ? `Any ${label.toLowerCase()}` : o}</SelectItem>)}</SelectContent>
+      <SelectTrigger size="sm" className={`rounded-full px-3 ${active ? "border-transparent bg-[var(--accent-subtle)] text-[var(--accent-fg)]" : ""}`}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>{options.map((o) => <SelectItem key={o} value={o}>{o === "any" ? label : o}</SelectItem>)}</SelectContent>
     </Select>
+  );
+}
+/* A boolean / single-select pill that fills when active. */
+function ToggleChip({ active, onClick, children }) {
+  return <Button variant={active ? "primary" : "outline"} size="sm" pill onClick={onClick}>{children}</Button>;
+}
+/* Labeled control group for the All-filters side panel. */
+function FilterField({ label, children }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-xs font-semibold uppercase tracking-wide text-[var(--fg-subtle)]">{label}</span>
+      {children}
+    </div>
+  );
+}
+/* The category selector — a filled pill that opens the full category list. */
+function CategoryMenu({ category, onCategoryChange }) {
+  const cat = SEARCH_CATEGORIES.find((c) => c.id === category) || SEARCH_CATEGORIES[0];
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="primary" size="sm" pill icon={cat.icon} iconRight="expand_more">{cat.label}</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
+        {SEARCH_CATEGORIES.map((c) => (
+          <DropdownMenuItem key={c.id} onClick={() => onCategoryChange(c.id)}>
+            <Icon name={c.icon} className="text-[18px] me-1" />{c.label}
+            {c.id === category && <Icon name="check" className="text-[18px] ms-auto" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 function ResultRow({ result, query }) {
@@ -1815,7 +1928,7 @@ function ResultRow({ result, query }) {
     type === "job" ? () => goToJobs() : null;
   return (
     <Panel style={{ padding: 16, cursor: go ? "pointer" : undefined }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }} onClick={go || undefined}>
-      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} photo={type === "company" ? brandLogo(result.title) : undefined} bg={COMPANIES[cid]?.logoBg} shape={isRound ? "circle" : "rounded"} />
+      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} photo={["company", "product", "school", "service", "event"].includes(type) ? brandLogo(result.title) : undefined} bg={COMPANIES[cid]?.logoBg} shape={isRound ? "circle" : "rounded"} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15 }}>{highlightMatch(result.title, query)}</span>
@@ -1830,40 +1943,144 @@ function ResultRow({ result, query }) {
           {type === "job" && <><Button variant="primary" size="sm" pill>Apply</Button><Button variant="ghost" size="sm" pill icon="bookmark">Save</Button></>}
           {type === "group" && <Button variant="outline" size="sm" pill>Join</Button>}
           {type === "post" && <Button variant="ghost" size="sm" pill iconRight="arrow_forward">Read post</Button>}
+          {type === "course" && <Button variant="outline" size="sm" pill icon="bookmark">Save</Button>}
+          {type === "event" && <Button variant="outline" size="sm" pill icon="check">Attend</Button>}
+          {type === "product" && <Button variant="outline" size="sm" pill>View page</Button>}
+          {type === "school" && <Button variant="outline" size="sm" pill icon="add">Follow</Button>}
+          {type === "service" && <Button variant="outline" size="sm" pill>Request services</Button>}
         </div>
       </div>
     </Panel>
   );
 }
-function SearchResults({ query }) {
-  const [tab, setTab] = useState("all");
-  const [filters, setFilters] = useState({ location: "any", industry: "any" });
-  const base = searchMatches(query, { limit: 100 });
-  const byTab = tab === "all" ? base : tab === "people" ? base.filter((e) => e.type === "person") : tab === "jobs" ? base.filter((e) => e.type === "job") : base.filter((e) => e.type === "company");
-  const filtered = byTab.filter((e) => (filters.location === "any" || e.location === filters.location) && (filters.industry === "any" || e.industry === filters.industry));
-  const locations = ["any", ...new Set(base.map((e) => e.location).filter(Boolean))];
-  const industries = ["any", ...new Set(base.map((e) => e.industry).filter(Boolean))];
-  const tabs = [["all", "All"], ["people", "People"], ["jobs", "Jobs"], ["companies", "Companies"]];
+/* The curated searches that actually work, as clickable pills. Shown on the
+   empty and no-match states so the demo always points at something live. */
+function SearchSuggestions({ onRun }) {
+  return (
+    <div className="mt-4 flex flex-wrap justify-center gap-2">
+      {SAVED_SEARCHES.filter((s) => s.category !== "all").map((s) => (
+        <Button key={s.label} variant="outline" size="sm" pill icon={SEARCH_CATEGORIES.find((c) => c.id === s.category)?.icon} onClick={() => onRun(s.label, s.category)}>{s.label}</Button>
+      ))}
+    </div>
+  );
+}
+const DEFAULT_SEARCH_FILTERS = { location: "any", industry: "any", connection: "any", remote: false };
+function SearchResults({ query, category = "all", onCategoryChange, onRunSearch }) {
+  const [filters, setFilters] = useState(DEFAULT_SEARCH_FILTERS);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  // A new query or category starts from a clean filter slate.
+  useEffect(() => { setFilters(DEFAULT_SEARCH_FILTERS); }, [query, category]);
+
+  const cat = SEARCH_CATEGORIES.find((c) => c.id === category) || SEARCH_CATEGORIES[0];
+  // Search is curated: only a saved search returns results. Anything else is a
+  // valid page with zero results and a nudge toward the searches that work.
+  const valid = !!savedSearchFor(query);
+  const base = resultsFor(query);
+  const inCat = cat.types ? base.filter((e) => cat.types.includes(e.type)) : base;
+  const optsOf = (key) => ["any", ...new Set(inCat.map((e) => e[key]).filter(Boolean))];
+  const locations = optsOf("location");
+  const industries = optsOf("industry");
+  const connections = optsOf("connection");
+
+  const setF = (patch) => setFilters((f) => ({ ...f, ...patch }));
+  const filtered = inCat.filter((e) =>
+    (filters.location === "any" || e.location === filters.location) &&
+    (filters.industry === "any" || e.industry === filters.industry) &&
+    (filters.connection === "any" || e.connection === filters.connection) &&
+    (!filters.remote || (e.location || "").toLowerCase().includes("remote"))
+  );
+
+  // Each category bubbles up only the chips its data supports.
+  const showLocation = ["all", "people", "jobs", "companies"].includes(category) && locations.length > 1;
+  const showIndustry = ["all", "jobs", "companies"].includes(category) && industries.length > 1;
+  const showConnection = category === "people" && connections.length > 1;
+  const showRemote = category === "jobs";
+  const hasChips = showLocation || showIndustry || showConnection || showRemote;
+  const degree = (d) => (d === "3rd" ? "3rd+" : d);
+
+  if (query === "") return (
+    <main className="flex min-w-0 flex-col gap-3">
+      <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
+        <Icon name="search" className="text-[48px] text-[var(--fg-subtle)]" />
+        <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>Search the Davinci network</h3>
+        <p className="meta" style={{ marginTop: 8 }}>Pick one of these searches to explore.</p>
+        <SearchSuggestions onRun={onRunSearch} />
+      </Panel>
+    </main>
+  );
+
+  // Off-list query: not one of the curated searches → no results, by design.
+  if (!valid) return (
+    <main className="flex min-w-0 flex-col gap-3">
+      <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
+        <Icon name="search_off" className="text-[48px] text-[var(--fg-subtle)]" />
+        <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>No results for "{query}"</h3>
+        <p className="meta" style={{ marginTop: 8 }}>This demo only searches a curated set. Try one of these:</p>
+        <SearchSuggestions onRun={onRunSearch} />
+      </Panel>
+    </main>
+  );
+
   return (
     <main className="flex min-w-0 flex-col gap-3">
-      <Panel style={{ padding: "0 8px" }} bodyStyle={{ padding: 0 }}>
-        <div className="results-tabs">{tabs.map(([id, label]) => <button key={id} className={`results-tab ${tab === id ? "active" : ""}`} onClick={() => setTab(id)}>{label}</button>)}</div>
-      </Panel>
-      <Panel bodyStyle={{ padding: 14 }}>
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-          <span className="meta" style={{ fontWeight: 600, color: "var(--fg)" }}>Smart filters</span>
-          <FilterSelect label="Location" value={filters.location} options={locations} onChange={(v) => setFilters((f) => ({ ...f, location: v }))} />
-          <FilterSelect label="Industry" value={filters.industry} options={industries} onChange={(v) => setFilters((f) => ({ ...f, industry: v }))} />
-          <div style={{ marginLeft: "auto", fontSize: 12, color: "var(--fg-muted)" }}><strong style={{ color: "var(--fg)" }}>{filtered.length}</strong> results</div>
+      {/* Filter bar: category selector + the chips that category supports +
+          All filters. Sticks under the top nav so it stays reachable. */}
+      <Panel bare className="sticky top-14 z-20">
+        <div className="flex flex-wrap items-center gap-2 p-2.5">
+          <CategoryMenu category={category} onCategoryChange={onCategoryChange} />
+          {hasChips && <Separator orientation="vertical" className="h-6" />}
+          {showConnection && connections.filter((c) => c !== "any").map((d) => (
+            <ToggleChip key={d} active={filters.connection === d} onClick={() => setF({ connection: filters.connection === d ? "any" : d })}>{degree(d)}</ToggleChip>
+          ))}
+          {showRemote && <ToggleChip active={filters.remote} onClick={() => setF({ remote: !filters.remote })}>Remote</ToggleChip>}
+          {showLocation && <FilterChip label="Locations" value={filters.location} options={locations} onChange={(v) => setF({ location: v })} />}
+          {showIndustry && <FilterChip label="Industry" value={filters.industry} options={industries} onChange={(v) => setF({ industry: v })} />}
+          <Button variant="ghost" size="sm" pill icon="tune" onClick={() => setSheetOpen(true)}>All filters</Button>
+          <span className="ms-auto shrink-0 text-xs text-[var(--fg-muted)]"><strong style={{ color: "var(--fg)" }}>{filtered.length}</strong> results</span>
         </div>
       </Panel>
-      {query === "" ? (
+
+      {filtered.length === 0 ? (
         <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
-          <Icon name="search" className="text-[48px] text-[var(--fg-subtle)]" />
-          <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>Search the Davinci network</h3>
-          <p className="meta" style={{ marginTop: 8 }}>Start typing above to find people, companies, jobs, and posts.</p>
+          <Icon name="search_off" className="text-[48px] text-[var(--fg-subtle)]" />
+          <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>No {category === "all" ? "" : cat.label.toLowerCase() + " "}results for "{query}"</h3>
+          <p className="meta" style={{ marginTop: 8 }}>Try another category or clear your filters.</p>
         </Panel>
-      ) : filtered.map((r, i) => (<React.Fragment key={r.id}><ResultRow result={r} query={query} />{(i + 1) % 4 === 0 && i < filtered.length - 1 && <InlineAd ad={AD_LIBRARY.recruit} />}</React.Fragment>))}
+      ) : filtered.map((r, i) => (
+        <React.Fragment key={r.id}>
+          <ResultRow result={r} query={query} />
+          {(i + 1) % 4 === 0 && i < filtered.length - 1 && <InlineAd ad={AD_LIBRARY.recruit} />}
+        </React.Fragment>
+      ))}
+
+      {/* The complete filter side panel — every facet, regardless of which chips
+          are bubbled into the bar. "All filters" opens it. */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent side="right" className="w-[340px] sm:max-w-[340px]">
+          <SheetHeader>
+            <SheetTitle>All filters</SheetTitle>
+            <SheetDescription>Refine results across every facet.</SheetDescription>
+          </SheetHeader>
+          <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-4">
+            <FilterField label="Location"><FilterChip label="Any location" value={filters.location} options={locations} onChange={(v) => setF({ location: v })} /></FilterField>
+            <FilterField label="Industry"><FilterChip label="Any industry" value={filters.industry} options={industries} onChange={(v) => setF({ industry: v })} /></FilterField>
+            <FilterField label="Connections">
+              <div className="flex flex-wrap gap-2">
+                {connections.length > 1
+                  ? connections.filter((c) => c !== "any").map((d) => (
+                      <ToggleChip key={d} active={filters.connection === d} onClick={() => setF({ connection: filters.connection === d ? "any" : d })}>{degree(d)}</ToggleChip>
+                    ))
+                  : <span className="meta">No connection data in this category.</span>}
+              </div>
+            </FilterField>
+            <FilterField label="Workplace"><ToggleChip active={filters.remote} onClick={() => setF({ remote: !filters.remote })}>Remote</ToggleChip></FilterField>
+          </div>
+          <SheetFooter>
+            <Button variant="secondary" size="sm" onClick={() => setFilters(DEFAULT_SEARCH_FILTERS)}>Reset</Button>
+            <SheetClose asChild><Button variant="primary" size="sm">Show {filtered.length} results</Button></SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </main>
   );
 }
@@ -1937,6 +2154,7 @@ export function App() {
   const [footerOpen, setFooterOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
+  const [searchCategory, setSearchCategory] = useState("all");
 
   useEffect(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
 
@@ -1954,9 +2172,18 @@ export function App() {
     goToJobs: () => { setRoute("jobs"); window.scrollTo({ top: 0 }); },
   };
 
-  const activeTab = { home: "home", profile: "home", company: "home", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "home", ads: "home" }[route] || "home";
+  // `profile` is reached from the Me menu, not a nav tab — leave the nav in its
+  // default (nothing-active) state so Home reads as a place to return to.
+  const activeTab = { home: "home", profile: "", company: "", network: "network", jobs: "jobs", messaging: "messaging", notifications: "notifications", search: "", ads: "" }[route] ?? "home";
 
-  const onSearchSubmit = (q) => { setSubmittedQuery(q); setSearchValue(q); setRoute("search"); };
+  // A submit may carry an explicit category (chosen suggestion); otherwise we
+  // resolve it from the matching saved search. Unknown queries still route to
+  // the search page, which renders the "no curated results" state.
+  const onSearchSubmit = (q, category) => {
+    setSubmittedQuery(q); setSearchValue(q);
+    setSearchCategory(category || savedSearchFor(q)?.category || "all");
+    setRoute("search");
+  };
 
   const pages = {
     home: <PageThreeCol left={<LeftRail onViewProfile={() => goToProfile()} />} right={<RightRail />}><Feed /></PageThreeCol>,
@@ -1966,7 +2193,7 @@ export function App() {
     jobs: <JobsPage />,
     messaging: <MessagesPage />,
     notifications: <AlertsPage />,
-    search: <PageSingle max={820}><SearchResults query={submittedQuery} /></PageSingle>,
+    search: <PageSingle max={820}><SearchResults query={submittedQuery} category={searchCategory} onCategoryChange={setSearchCategory} onRunSearch={onSearchSubmit} /></PageSingle>,
     ads: <AdGallery />,
   };
 
