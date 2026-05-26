@@ -8,6 +8,12 @@ import {
 } from "@davinci/ui/components/ui/avatar";
 import { Badge } from "@davinci/ui/components/ui/badge";
 import { Card } from "@davinci/ui/components/ui/card";
+import {
+  Tooltip, TooltipTrigger, TooltipContent, TooltipProvider,
+} from "@davinci/ui/components/ui/tooltip";
+import {
+  HoverCard, HoverCardTrigger, HoverCardContent,
+} from "@davinci/ui/components/ui/hover-card";
 
 /* ---------------- Icon (Material Symbols Rounded) ----------------
    Three UI sizes: small 12 / medium 20 (default) / large 24. */
@@ -134,6 +140,77 @@ export function Pill({ children, variant, style }) {
     <Badge variant="secondary" className="rounded-full" style={{ ...(PILL_STYLE[variant] || {}), ...style }}>
       {children}
     </Badge>
+  );
+}
+
+/* ---------------- StatusBadge (wraps @davinci/ui Badge) ----------------
+   Status with a leading dot — online/hiring/away/closed. Uses the outline
+   Badge variant so the dot carries the semantic color, not the whole chip. */
+const STATUS_TONE = {
+  online: { dot: "var(--success)", label: "Online" },
+  hiring: { dot: "var(--success)", label: "Actively hiring" },
+  away: { dot: "var(--warning)", label: "Away" },
+  closed: { dot: "var(--fg-subtle)", label: "Closed" },
+  new: { dot: "var(--accent)", label: "New" },
+};
+export function StatusBadge({ status = "online", children }) {
+  const t = STATUS_TONE[status] || STATUS_TONE.online;
+  return (
+    <Badge variant="outline" className="rounded-full gap-1.5" style={{ borderColor: "var(--border-subtle)", color: "var(--fg-muted)" }}>
+      <span style={{ width: 7, height: 7, borderRadius: "50%", background: t.dot, flexShrink: 0 }} />
+      {children || t.label}
+    </Badge>
+  );
+}
+
+/* ---------------- Tooltip ----------------
+   Re-export the provider (mounted once at the app root) and a thin `Tip`
+   wrapper. `asChild` lets the trigger be the real interactive element, so
+   icon-only buttons keep their semantics while gaining an accessible label. */
+export { TooltipProvider };
+export function Tip({ label, side = "top", children }) {
+  if (!label) return children;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent side={side}>{label}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+/* ---------------- HoverProfile (wraps @davinci/ui HoverCard) ----------------
+   Rich preview shown when pointing at a person/company. The trigger stays the
+   element it wraps (name link, avatar) via `asChild`. */
+export function HoverProfile({
+  name, role, meta, stat, initials, variant, photoSeed, photo, square,
+  action, side = "bottom", align = "start", children,
+}) {
+  return (
+    <HoverCard openDelay={250} closeDelay={120}>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+      <HoverCardContent side={side} align={align} className="w-72 p-0 overflow-hidden">
+        <div style={{ display: "flex", gap: 12, padding: 14 }}>
+          <Avatar
+            initials={initials} size={52} variant={variant}
+            photoSeed={photoSeed} photo={photo}
+            style={square ? { borderRadius: 10 } : undefined}
+          />
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ fontWeight: 700, fontFamily: "var(--font-display)", fontSize: 15, lineHeight: 1.2 }}>{name}</div>
+            {role && <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 2, lineHeight: 1.35 }}>{role}</div>}
+            {meta && <div style={{ fontSize: 12, color: "var(--fg-subtle)", marginTop: 4 }}>{meta}</div>}
+          </div>
+        </div>
+        {stat && (
+          <div style={{ padding: "0 14px 10px", fontSize: 12, color: "var(--fg-muted)" }}>{stat}</div>
+        )}
+        {action && (
+          <div style={{ padding: "10px 14px", borderTop: "1px solid var(--border-subtle)", background: "var(--bg-subtle)" }}>
+            {action}
+          </div>
+        )}
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 

@@ -13,11 +13,25 @@ import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from "@davinci/ui/components/ui/dropdown-menu";
 
+import {
+  Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose,
+} from "@davinci/ui/components/ui/dialog";
+import {
+  Sheet, SheetTrigger, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription, SheetClose,
+} from "@davinci/ui/components/ui/sheet";
+import {
+  Tabs, TabsList, TabsTrigger, TabsContent,
+} from "@davinci/ui/components/ui/tabs";
+import { Switch } from "@davinci/ui/components/ui/switch";
+import { Progress } from "@davinci/ui/components/ui/progress";
+import { Label } from "@davinci/ui/components/ui/label";
+
 import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 
 import {
   Icon, seededPhoto, Button, Avatar, Pill, Panel,
   FeedAd, RailAd, InlineAd, AD_LIBRARY,
+  Tip, HoverProfile, TooltipProvider, StatusBadge,
 } from "./lib.jsx";
 import { COMPANIES, GENERIC, companyIdFor, COMPANY_LOCATIONS } from "./companies.js";
 
@@ -63,6 +77,29 @@ const { useState, useEffect, useRef } = React;
 
 // App-wide navigation helpers (avoids prop-drilling everywhere).
 const NavContext = React.createContext({ goToCompany: () => {}, openFooter: () => {}, goToProfile: () => {}, goToJobs: () => {} });
+
+/* ============================ Form / setting helpers ============================ */
+// Labelled field — pairs the DS Label with any control (Input, Select, Textarea).
+function Field({ label, children }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <Label className="text-xs text-[var(--fg-muted)]">{label}</Label>
+      {children}
+    </div>
+  );
+}
+// Setting row — label + description on the left, a DS Switch on the right.
+function SettingRow({ label, desc, defaultChecked, checked, onCheckedChange }) {
+  return (
+    <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 14, fontWeight: 500 }}>{label}</div>
+        {desc && <div style={{ fontSize: 12, color: "var(--fg-muted)", marginTop: 1 }}>{desc}</div>}
+      </div>
+      <Switch defaultChecked={defaultChecked} checked={checked} onCheckedChange={onCheckedChange} />
+    </label>
+  );
+}
 
 /* ============================ Reactions + comments ============================ */
 /* Standard social reaction set, rendered with Material Symbols. Each type has a
@@ -541,38 +578,76 @@ function RightRail() {
 /* ============================ Feed ============================ */
 function Composer() {
   const [open, setOpen] = useState(false);
+  const composerActions = [
+    { icon: "image", label: "Photo", color: "var(--accent-fg)" },
+    { icon: "play_circle", label: "Video", color: "var(--success-fg)" },
+    { icon: "event", label: "Event", color: "var(--warning-fg)" },
+    { icon: "article", label: "Article", color: "var(--danger-fg)" },
+  ];
   return (
-    <Panel bare>
-      <div className="composer">
-        <Avatar initials="YO" size={48} photo={seededPhoto("yara-okonkwo", 96, 96, "face")} />
-        {!open
-          ? <button className="composer__input" onClick={() => setOpen(true)}>Share an update, Yara…</button>
-          : <div style={{ flex: 1, fontWeight: 600 }}>Create a post</div>}
-      </div>
-      {open && (
-        <div style={{ padding: "0 16px 14px" }}>
-          <RichTextarea placeholder="What do you want to talk about?" />
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10 }}>
-            <div style={{ display: "flex", gap: 4, color: "var(--fg-muted)" }}>
-              <Button variant="ghost" size="sm" icon="image" style={{ padding: 6 }} />
-              <Button variant="ghost" size="sm" icon="play_circle" style={{ padding: 6 }} />
-              <Button variant="ghost" size="sm" icon="event" style={{ padding: 6 }} />
-            </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <Button variant="secondary" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
-              <Button variant="primary" size="sm">Post</Button>
-            </div>
-          </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Panel bare>
+        <div className="composer">
+          <Avatar initials="YO" size={48} photo={seededPhoto("yara-okonkwo", 96, 96, "face")} />
+          <DialogTrigger asChild>
+            <button className="composer__input">Share an update, Yara…</button>
+          </DialogTrigger>
         </div>
-      )}
-      {!open && (
         <div className="composer__actions">
-          {[{ icon: "image", label: "Photo", color: "var(--accent-fg)" }, { icon: "play_circle", label: "Video", color: "var(--success-fg)" }, { icon: "event", label: "Event", color: "var(--warning-fg)" }, { icon: "article", label: "Article", color: "var(--danger-fg)" }].map((a, i) => (
-            <div key={i} className="composer__action"><Icon name={a.icon} style={{ color: a.color }} /><span>{a.label}</span></div>
+          {composerActions.map((a, i) => (
+            <DialogTrigger asChild key={i}>
+              <button className="composer__action" type="button"><Icon name={a.icon} style={{ color: a.color }} /><span>{a.label}</span></button>
+            </DialogTrigger>
           ))}
         </div>
-      )}
-    </Panel>
+      </Panel>
+      <DialogContent className="sm:max-w-[560px]">
+        <DialogHeader>
+          <DialogTitle>Create a post</DialogTitle>
+          <DialogDescription className="sr-only">Compose and share an update with your network.</DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center gap-3">
+          <Avatar initials="YO" size={48} photo={seededPhoto("yara-okonkwo", 96, 96, "face")} />
+          <div>
+            <div className="font-semibold" style={{ fontFamily: "var(--font-display)" }}>Yara Okonkwo</div>
+            <Pill variant="accent">Post to anyone</Pill>
+          </div>
+        </div>
+        <RichTextarea placeholder="What do you want to talk about?" />
+        <DialogFooter className="!justify-between sm:!justify-between">
+          <div style={{ display: "flex", gap: 4, color: "var(--fg-muted)" }}>
+            {composerActions.map((a) => (
+              <Tip key={a.label} label={a.label}>
+                <Button variant="ghost" size="icon-sm" icon={a.icon} aria-label={a.label} />
+              </Tip>
+            ))}
+          </div>
+          <Button variant="primary" size="sm" pill onClick={() => setOpen(false)}>Post</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function PostMenu() {
+  const [saved, setSaved] = useState(false);
+  return (
+    <DropdownMenu>
+      <Tip label="More">
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon-sm" icon="more_horiz" aria-label="Post actions" />
+        </DropdownMenuTrigger>
+      </Tip>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setSaved((s) => !s)}>
+          <Icon name={saved ? "bookmark" : "bookmark_border"} className="text-[18px] me-1" /> {saved ? "Saved" : "Save post"}
+        </DropdownMenuItem>
+        <DropdownMenuItem><Icon name="link" className="text-[18px] me-1" /> Copy link to post</DropdownMenuItem>
+        <DropdownMenuItem><Icon name="notifications_off" className="text-[18px] me-1" /> Mute this author</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem><Icon name="flag" className="text-[18px] me-1" /> Report post</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -581,17 +656,34 @@ function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCom
   const { goToCompany, goToProfile } = React.useContext(NavContext);
   const cid = isCompany ? companyIdFor(author) : null;
   const goAuthor = cid ? () => goToCompany(cid) : isCompany ? undefined : () => goToProfile();
+  const followLabel = isCompany ? "Follow" : "Connect";
   return (
     <Panel bare>
       <div className="post">
         <div className="post__header">
-          <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} bg={bg} style={isCompany ? { borderRadius: 8 } : undefined} />
+          <HoverProfile
+            name={author} role={role} square={isCompany}
+            initials={avatar} variant={variant} photoSeed={photoSeed}
+            meta={isCompany ? "Company · View page" : "View profile"}
+            action={<Button variant="outline" size="sm" pill icon={isCompany ? "add" : "person_add"} onClick={goAuthor}>{followLabel}</Button>}
+          >
+            <button type="button" onClick={goAuthor} style={{ all: "unset", cursor: goAuthor ? "pointer" : "default" }}>
+              <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} bg={bg} style={isCompany ? { borderRadius: 8 } : undefined} />
+            </button>
+          </HoverProfile>
           <div className="post__who">
-            <div className="post__name" onClick={goAuthor} style={goAuthor ? { cursor: "pointer", width: "fit-content" } : undefined}>{author}</div>
+            <HoverProfile
+              name={author} role={role} square={isCompany}
+              initials={avatar} variant={variant} photoSeed={photoSeed}
+              meta={isCompany ? "Company · View page" : "View profile"}
+              action={<Button variant="outline" size="sm" pill icon={isCompany ? "add" : "person_add"} onClick={goAuthor}>{followLabel}</Button>}
+            >
+              <div className="post__name" onClick={goAuthor} style={goAuthor ? { cursor: "pointer", width: "fit-content" } : undefined}>{author}</div>
+            </HoverProfile>
             <div className="post__role">{role}</div>
             <div className="post__time">{time} <span className="dot-sep" /> <Icon name="public" size="sm" /></div>
           </div>
-          <Button variant="ghost" size="icon-sm" icon="more_horiz" />
+          <PostMenu />
         </div>
         <div className="post__body">{body}</div>
         {attachment && (
@@ -640,8 +732,24 @@ function ProfileRail() {
     { name: "Jenny Chang", role: "Design @ Vercel", conn: "2nd" },
     { name: "Dan Hiester", role: "Product Builder", conn: "2nd" },
   ];
+  const strength = 85;
   return (
     <>
+      <Panel title="Profile strength">
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+          <Pill variant="accent">All-Star</Pill>
+          <span style={{ marginLeft: "auto", fontSize: 13, fontWeight: 600 }}>{strength}%</span>
+        </div>
+        <Progress value={strength} />
+        <ul style={{ listStyle: "none", margin: "12px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+          {[["Add 2 more skills", false], ["Verified work email", true], ["Add a featured project", false]].map(([label, done]) => (
+            <li key={label} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: done ? "var(--fg-muted)" : "var(--fg)" }}>
+              <Icon name={done ? "check_circle" : "radio_button_unchecked"} filled={done} className="text-[16px]" style={{ color: done ? "var(--success-fg)" : "var(--fg-subtle)" }} />
+              <span style={{ textDecoration: done ? "line-through" : "none" }}>{label}</span>
+            </li>
+          ))}
+        </ul>
+      </Panel>
       <Panel title="Profile language">
         <div style={{ fontSize: 13 }}>English</div>
         <Separator className="my-3" />
@@ -740,10 +848,35 @@ function ProfilePage() {
 
       <Panel title="Activity" action={<Button variant="outline" size="sm" pill>Create a post</Button>}>
         <div className="meta" style={{ marginBottom: 12 }}>1,094 followers</div>
-        <div className="flex flex-col gap-3" style={{ margin: "0 -16px -14px" }}>
-          <Post id="yara-act-1" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="3d" avatar="YO" photoSeed="yara okonkwo" body="The unglamorous truth about design systems: the wins compound in the docs and governance, not the component count. Shipped our contribution guide this week and adoption already feels different." reactions={317} comments={18} topReactions={["insightful", "like", "celebrate"]} />
-          <Post id="yara-act-2" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="1w" avatar="YO" photoSeed="yara okonkwo" body="Reposting a great thread on surface hierarchy — exactly how we think about Canvas → Container → grouping at Davinci." reactions={142} comments={6} topReactions={["like", "love"]} />
-        </div>
+        <Tabs defaultValue="posts">
+          <TabsList>
+            <TabsTrigger value="posts">Posts</TabsTrigger>
+            <TabsTrigger value="comments">Comments</TabsTrigger>
+            <TabsTrigger value="reactions">Reactions</TabsTrigger>
+          </TabsList>
+          <TabsContent value="posts">
+            <div className="flex flex-col gap-3" style={{ margin: "0 -16px -14px" }}>
+              <Post id="yara-act-1" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="3d" avatar="YO" photoSeed="yara okonkwo" body="The unglamorous truth about design systems: the wins compound in the docs and governance, not the component count. Shipped our contribution guide this week and adoption already feels different." reactions={317} comments={18} topReactions={["insightful", "like", "celebrate"]} />
+              <Post id="yara-act-2" author="Yara Okonkwo" role="Principal Designer · Davinci Systems" time="1w" avatar="YO" photoSeed="yara okonkwo" body="Reposting a great thread on surface hierarchy — exactly how we think about Canvas → Container → grouping at Davinci." reactions={142} comments={6} topReactions={["like", "love"]} />
+            </div>
+          </TabsContent>
+          <TabsContent value="comments">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {[
+                { on: "Sofia Antonova's post", text: "This matches our experience exactly — the focus ring work paid off more than any net-new component.", time: "2d" },
+                { on: "a post in Design Systems", text: "We lint alias-level overrides too. Game changer for keeping the global scale clean.", time: "5d" },
+              ].map((c, i) => (
+                <div key={i} style={{ fontSize: 13 }}>
+                  <div className="meta" style={{ marginBottom: 2 }}>Commented on {c.on} · {c.time}</div>
+                  <div style={{ color: "var(--fg-muted)", lineHeight: 1.5 }}>“{c.text}”</div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+          <TabsContent value="reactions">
+            <div className="meta">Reacted to 14 posts this month — mostly <Icon name="lightbulb" filled className="text-[14px]" style={{ color: "var(--amber-9)", verticalAlign: "middle" }} /> Insightful.</div>
+          </TabsContent>
+        </Tabs>
       </Panel>
 
       <Panel title="Experience">
@@ -1109,7 +1242,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
             <div className="company-logo" style={{ background: c.logoBg }}>{c.initials}</div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-end", flexWrap: "wrap", marginTop: 12 }}>
               <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}><span className="profile-header__name">{c.name}</span>{c.verified && <Icon name="verified" className="text-[18px]" style={{ color: "var(--accent-fg)" }} />}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}><span className="profile-header__name">{c.name}</span>{c.verified && <Icon name="verified" className="text-[18px]" style={{ color: "var(--accent-fg)" }} />}<StatusBadge status="hiring" /></div>
                 <div style={{ fontSize: 14, marginTop: 4 }}>{c.tagline}</div>
                 <div className="profile-header__meta"><span>{c.industry}</span><span>{c.location}</span><span style={{ color: "var(--accent-fg)", fontWeight: 600 }}>{c.followers} followers</span></div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--fg-muted)", marginTop: 8 }}>
@@ -1226,6 +1359,98 @@ function NetworkPage() {
 }
 
 /* ============================ Jobs ============================ */
+function ApplyDialog({ job }) {
+  const [open, setOpen] = useState(false);
+  const [done, setDone] = useState(false);
+  const submit = () => { setDone(true); setTimeout(() => { setOpen(false); setDone(false); }, 1400); };
+  return (
+    <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setDone(false); }}>
+      <DialogTrigger asChild>
+        <Button variant="primary" pill iconRight="arrow_forward">{job.easyApply ? "Easy Apply" : "Apply"}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[520px]">
+        {done ? (
+          <div style={{ textAlign: "center", padding: "24px 8px" }}>
+            <Icon name="check_circle" filled className="text-[44px]" style={{ color: "var(--success-fg)" }} />
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, marginTop: 8 }}>Application sent</div>
+            <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 4 }}>{job.company} will review your application.</div>
+          </div>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle>Apply to {job.title}</DialogTitle>
+              <DialogDescription>{job.company} · {job.location}</DialogDescription>
+            </DialogHeader>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <Field label="Full name"><Input defaultValue="Yara Okonkwo" /></Field>
+              <Field label="Email"><Input type="email" defaultValue="yara@davinci.systems" /></Field>
+              <Field label="Phone"><Input type="tel" placeholder="+351 …" /></Field>
+              <Field label="Cover note (optional)"><Textarea rows={3} placeholder={`Why you're a great fit for ${job.company}…`} /></Field>
+              <button type="button" className="flex items-center gap-2 text-sm" style={{ color: "var(--accent-fg)" }}>
+                <Icon name="upload_file" className="text-[18px]" /> Attach résumé — Yara_Okonkwo_CV.pdf
+              </button>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild><Button variant="secondary" size="sm">Cancel</Button></DialogClose>
+              <Button variant="primary" size="sm" pill onClick={submit}>Submit application</Button>
+            </DialogFooter>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function JobFiltersSheet({ count }) {
+  return (
+    <Sheet>
+      <Tip label="Filter jobs">
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon-sm" icon="tune" aria-label="Filter jobs" />
+        </SheetTrigger>
+      </Tip>
+      <SheetContent side="right" className="w-[340px] sm:max-w-[340px]">
+        <SheetHeader>
+          <SheetTitle>Filter jobs</SheetTitle>
+          <SheetDescription>{count} roles match your profile.</SheetDescription>
+        </SheetHeader>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "0 16px", overflowY: "auto" }}>
+          <Field label="Date posted">
+            <Select defaultValue="week">
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="day">Past 24 hours</SelectItem>
+                <SelectItem value="week">Past week</SelectItem>
+                <SelectItem value="month">Past month</SelectItem>
+                <SelectItem value="any">Any time</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <Field label="Experience level">
+            <Select defaultValue="senior">
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="mid">Mid-Senior</SelectItem>
+                <SelectItem value="senior">Senior</SelectItem>
+                <SelectItem value="staff">Staff +</SelectItem>
+                <SelectItem value="lead">Lead / Principal</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <SettingRow label="Remote only" desc="Hide on-site roles" defaultChecked />
+          <SettingRow label="Easy Apply" desc="One-click applications" defaultChecked />
+          <SettingRow label="Under 10 applicants" desc="Less competition" />
+          <SettingRow label="In your network" desc="Companies where you have a connection" />
+        </div>
+        <SheetFooter>
+          <SheetClose asChild><Button variant="primary" pill style={{ width: "100%" }}>Show {count} jobs</Button></SheetClose>
+          <Button variant="ghost" size="sm">Reset filters</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
 function JobsPage() {
   const { goToCompany } = React.useContext(NavContext);
   const [selected, setSelected] = useState(0);
@@ -1240,7 +1465,7 @@ function JobsPage() {
   const toggleSave = (id) => setSaved((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
   return (
     <div style={{ display: "grid", gridTemplateColumns: "380px 1fr", gap: 16, alignItems: "start" }}>
-      <Panel title="Top picks for you" action={<span className="meta">{jobs.length}</span>} bodyStyle={{ padding: 0 }}>
+      <Panel title="Top picks for you" action={<JobFiltersSheet count={jobs.length} />} bodyStyle={{ padding: 0 }}>
         <div className="jobs-list">
           {jobs.map((j) => (
             <button key={j.id} type="button" className={`job-row ${selected === j.id ? "active" : ""}`} onClick={() => setSelected(j.id)}>
@@ -1268,7 +1493,7 @@ function JobsPage() {
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-            <Button variant="primary" pill iconRight="arrow_forward">{current.easyApply ? "Easy Apply" : "Apply"}</Button>
+            <ApplyDialog job={current} />
             <Button variant={saved.has(current.id) ? "secondary" : "outline"} pill icon={saved.has(current.id) ? "check" : "bookmark"} onClick={() => toggleSave(current.id)}>{saved.has(current.id) ? "Saved" : "Save"}</Button>
           </div>
           {current.fits.length > 0 && (
@@ -1328,6 +1553,7 @@ function MessagesPage() {
           <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", gap: 12 }}>
             <Avatar initials={conv.avatar} size={40} variant={conv.variant} photoSeed={conv.role.includes("Company") ? null : conv.name} />
             <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15 }}>{conv.name}</div><div style={{ fontSize: 12, color: "var(--fg-muted)" }}>{conv.role}</div></div>
+            {!conv.role.includes("Company") && <StatusBadge status={selectedId === 2 ? "away" : "online"} />}
           </div>
           <div style={{ flex: 1, overflowY: "auto", padding: 20, display: "flex", flexDirection: "column", gap: 10, minHeight: 0 }}>
             {conv.messages.map((m, i) => (<div key={i} className={`msg msg--${m.from}`}><div className="msg__bubble">{m.text}</div><div className="msg__time">{m.time}</div></div>))}
@@ -1387,6 +1613,8 @@ function AlertsDropdown({ onClose, onViewAll }) {
 }
 function AlertsPage() {
   const [tab, setTab] = useState("all");
+  const [prefs, setPrefs] = useState({ mentions: true, jobs: true, network: true, searches: false });
+  const setPref = (k) => (v) => setPrefs((p) => ({ ...p, [k]: v }));
   const filtered = tab === "all" ? ALERTS : tab === "jobs" ? ALERTS.filter((a) => a.type === "job") : ALERTS.filter((a) => a.type === "mention" || a.type === "reaction");
   return (
     <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) 300px", gap: 12, alignItems: "start" }}>
@@ -1404,9 +1632,12 @@ function AlertsPage() {
       </main>
       <aside className="flex flex-col gap-3">
         <Panel title="Notification settings">
-          {["Mentions of you", "Job recommendations", "Network activity", "Profile searches"].map((x, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < 3 ? "1px solid var(--border-subtle)" : "none" }}><span style={{ fontSize: 13 }}>{x}</span><span style={{ fontSize: 12, color: "var(--success-fg)", fontWeight: 600 }}>On</span></div>
-          ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <SettingRow label="Mentions of you" desc="When someone @-mentions you" checked={prefs.mentions} onCheckedChange={setPref("mentions")} />
+            <SettingRow label="Job recommendations" desc="Roles that match your profile" checked={prefs.jobs} onCheckedChange={setPref("jobs")} />
+            <SettingRow label="Network activity" desc="Posts and milestones" checked={prefs.network} onCheckedChange={setPref("network")} />
+            <SettingRow label="Profile searches" desc="When you appear in search" checked={prefs.searches} onCheckedChange={setPref("searches")} />
+          </div>
         </Panel>
         <RailAd ad={AD_LIBRARY.aws} />
         <RailFooter />
@@ -1588,6 +1819,7 @@ export function App() {
 
   return (
     <NavContext.Provider value={navValue}>
+    <TooltipProvider delayDuration={300}>
     <Surface variant="canvas" className="min-h-screen">
       <TopNav
         active={activeTab} onNavigate={setRoute}
@@ -1603,12 +1835,15 @@ export function App() {
         ))}
         <div className="ms-auto flex shrink-0 items-center gap-2 ps-4">
           <span className="meta">Theme</span>
-          <Button variant="ghost" size="sm" icon={theme === "dark" ? "light_mode" : "dark_mode"} onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))} aria-label="Toggle theme" />
+          <Tip label={theme === "dark" ? "Switch to light" : "Switch to dark"}>
+            <Button variant="ghost" size="sm" icon={theme === "dark" ? "light_mode" : "dark_mode"} onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))} aria-label="Toggle theme" />
+          </Tip>
         </div>
       </div>
       <div className="mx-auto max-w-[1180px] px-4 py-5">{pages[route] || pages.home}</div>
     </Surface>
     {footerOpen && <SiteFooter onClose={() => setFooterOpen(false)} />}
+    </TooltipProvider>
     </NavContext.Provider>
   );
 }
