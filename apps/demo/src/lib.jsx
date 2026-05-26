@@ -78,10 +78,10 @@ export function Button({
   return (
     <UIButton
       variant={variant}
-      size={size === "sm" ? "sm" : "default"}
+      size={size || "default"}
       onClick={onClick}
       style={style}
-      className={`${pill ? "!rounded-full" : ""} ${className}`.trim()}
+      className={`${pill ? "btn--pill" : ""} ${className}`.trim()}
       {...rest}
     >
       {icon && <Icon name={icon} className="text-[16px]" />}
@@ -163,7 +163,7 @@ function PromotedMeta({ advertiser, subtitle, logoInitials, logoVariant = "g5" }
           {subtitle} <span className="dot-sep" /> <span>Promoted</span>
         </div>
       </div>
-      <Button variant="ghost" size="sm" style={{ padding: 4 }} icon="close" />
+      <Button variant="ghost" size="icon-sm" icon="close" />
     </div>
   );
 }

@@ -589,7 +589,7 @@ function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCom
             <div className="post__role">{role}</div>
             <div className="post__time">{time} <span className="dot-sep" /> <Icon name="public" className="text-[12px]" /></div>
           </div>
-          <Button variant="ghost" size="sm" style={{ padding: 4 }} icon="more_horiz" />
+          <Button variant="ghost" size="icon-sm" icon="more_horiz" />
         </div>
         <div className="post__body">{body}</div>
         {attachment && (
@@ -830,7 +830,7 @@ function MoreMenu({ size = "icon-sm" }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size={size} pill aria-label="More actions"><Icon name="more_horiz" /></Button>
+        <Button variant="secondary" size={size} aria-label="More actions"><Icon name="more_horiz" /></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem><Icon name="open_in_new" className="text-[18px] me-1" /> Visit website</DropdownMenuItem>
@@ -1375,7 +1375,7 @@ function AlertsDropdown({ onClose, onViewAll }) {
       <div className="alerts-dropdown__header">
         <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 14 }}>Notifications</span>
         {unread > 0 && <Pill variant="accent">{unread} new</Pill>}
-        <Button variant="ghost" size="sm" style={{ marginLeft: "auto", padding: 4 }} icon="close" onClick={onClose} />
+        <Button variant="ghost" size="icon-sm" style={{ marginLeft: "auto" }} icon="close" onClick={onClose} />
       </div>
       <div className="alerts-dropdown__body">{ALERTS.slice(0, 5).map((a) => <AlertRow key={a.id} alert={a} compact />)}</div>
       <div className="alerts-dropdown__footer"><Button variant="ghost" size="sm" style={{ width: "100%" }} onClick={onViewAll}>View all notifications</Button></div>

@@ -47,6 +47,30 @@ body {
 [data-slot="rich-textarea"] [role="toolbar"] {
   border-color: var(--border-subtle);
 }
+/* Floating surfaces (menus, selects, popovers, dialogs, cards) also used the
+   heavy --border; align them to the softened --border-subtle. */
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"],
+[data-slot="popover-content"],
+[data-slot="hover-card-content"],
+[data-slot="dialog-content"] {
+  border-color: var(--border-subtle);
+}
+
+/* Button alignment: a defined pill (proper horizontal padding) + a shorter
+   large size. .btn--icon stays a square rounded-rect (no pill on icon buttons). */
+.btn--pill {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.btn--sm.btn--pill {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.btn--lg {
+  padding: 8px 16px;
+}
 .btn--secondary {
   border-color: var(--border-subtle);
 }
