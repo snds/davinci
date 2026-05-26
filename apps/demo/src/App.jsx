@@ -1668,25 +1668,197 @@ function JobFiltersSheet({ count }) {
   );
 }
 
+/* Expanded job set so the list feels alive. Detail content (applicant
+   breakdown, hiring trend, etc.) is derived deterministically per job — it's
+   illustrative dummy data, not a real feed. */
+const JOBS = [
+  { id: 0, title: "Staff Product Designer", company: "Helix Systems", logo: "HX", variant: "g2", location: "Lisbon or Remote · EU", salary: "€110k – €140k · Equity", posted: "5 days ago", applicantCount: 482, remote: true, easyApply: true, match: "high", about: "We're looking for a staff-level designer to lead our design platform — the tokens, components, and docs that power every product surface at Helix.", fits: ["Your skills match 8 of 10 requirements", "Your connections can refer you", "3 people from your network work here"] },
+  { id: 1, title: "Senior Design Engineer", company: "Atlas Docs", logo: "AT", variant: "g5", location: "Remote · Americas", salary: "$170k – $210k", posted: "2 days ago", applicantCount: 1074, remote: true, easyApply: true, match: "high", about: "Build the interactive canvas at the heart of Atlas. You'll work across React, typography, and performance.", fits: ["Your skills match 9 of 10 requirements"] },
+  { id: 2, title: "Design Systems Lead", company: "Vector Project OS", logo: "VE", variant: "g6", location: "Amsterdam, NL (hybrid)", salary: "€95k – €125k", posted: "1 week ago", applicantCount: 312, remote: false, easyApply: false, match: "medium", about: "Own Vector's design system end to end. Partner with product leads to scale our visual language.", fits: [] },
+  { id: 3, title: "Staff Brand Designer", company: "Pulse Meetings", logo: "PU", variant: "g1", location: "New York, NY · Hybrid", salary: "$165k – $195k", posted: "3 days ago", applicantCount: 640, remote: false, easyApply: true, match: "medium", about: "Define the visual identity of Pulse's next chapter — from product to brand campaigns.", fits: ["Your skills match 7 of 10 requirements"] },
+  { id: 4, title: "Design Manager, Platform & Productivity", company: "Mindbody", logo: "MB", variant: "g3", location: "United States · Remote", salary: "Full-time", posted: "Reposted 2 weeks ago", applicantCount: 1074, remote: true, easyApply: true, match: "high", about: "At Playlist, life's richest moments happen when people step away from screens. We're building the definitive platform for intentional living — connecting people with inspiring experiences in fitness, wellness, and beyond.", fits: ["Your skills match 8 of 10 requirements", "You'd be an early applicant"] },
+  { id: 5, title: "Lead Product Designer, Partners", company: "ClassPass", logo: "CP", variant: "g4", location: "United States (Remote)", salary: "$168k – $210k", posted: "1 week ago", applicantCount: 503, remote: true, easyApply: true, match: "high", about: "Shape the partner-facing surfaces that thousands of studios use every day.", fits: ["Your skills match 9 of 10 requirements"] },
+  { id: 6, title: "Senior UI Product Designer", company: "Ford Motor Company", logo: "FM", variant: "g6", location: "United States (Remote)", salary: "1 benefit", posted: "1 week ago", applicantCount: 880, remote: true, easyApply: false, match: "medium", about: "Design connected-vehicle experiences for the next generation of Ford software.", fits: [] },
+  { id: 7, title: "Principal Product Designer", company: "TaxAct", logo: "TA", variant: "g2", location: "United States (Remote)", salary: "$190k – $230k", posted: "4 days ago", applicantCount: 210, remote: true, easyApply: false, match: "medium", about: "Lead design strategy for consumer tax products used by millions each season.", fits: ["Your skills match 7 of 10 requirements"] },
+  { id: 8, title: "Senior User Experience Designer", company: "GlobalLogic", logo: "GL", variant: "g5", location: "United States (Remote)", salary: "Medical, Vision, Dental, 401(k)", posted: "5 days ago", applicantCount: 920, remote: true, easyApply: true, match: "medium", about: "Partner with enterprise clients to design complex, data-dense workflows.", fits: [] },
+  { id: 9, title: "Senior UX Designer", company: "IMG Academy", logo: "IMG", variant: "g1", location: "United States (Remote)", salary: "401(k) benefit", posted: "1 week ago", applicantCount: 415, remote: true, easyApply: false, match: "low", about: "Craft training and performance experiences for athletes at every level.", fits: [] },
+  { id: 10, title: "Design Imagineer", company: "Abridge", logo: "AB", variant: "g4", location: "New York, NY (Remote)", salary: "$216.8k – $255k", posted: "6 days ago", applicantCount: 150, remote: true, easyApply: true, match: "high", about: "Reimagine how clinicians and patients experience medical conversations.", fits: ["Your skills match 9 of 10 requirements", "Be an early applicant"] },
+  { id: 11, title: "Senior UX/UI Product Designer, Circle Expansion", company: "Life360", logo: "L3", variant: "g6", location: "United States (Remote)", salary: "401(k), +1 benefit", posted: "2 weeks ago", applicantCount: 333, remote: true, easyApply: false, match: "medium", about: "Grow the Circles experience that keeps tens of millions of families connected.", fits: [] },
+  { id: 12, title: "Staff Product Designer, Employer Experience", company: "Handshake", logo: "HS", variant: "g2", location: "San Francisco, CA (On-site)", salary: "$190k – $240k · 401(k)", posted: "1 week ago", applicantCount: 277, remote: false, easyApply: true, match: "high", about: "Design the tools employers use to discover and hire early-career talent.", fits: ["You'd be a top applicant"] },
+  { id: 13, title: "Product Design Lead", company: "DataAnnotation", logo: "DA", variant: "g5", location: "New Hampshire, US (Remote)", salary: "Competitive", posted: "3 days ago", applicantCount: 198, remote: true, easyApply: false, match: "medium", about: "Lead design for the tooling that powers high-quality AI training data.", fits: [] },
+];
+
+/* ---- Illustrative, deterministic job insights (seeded by title) ---- */
+const JOB_CONTACTS = [
+  { name: "Christopher Hubert", role: "Full stack software developer", conn: "3rd", variant: "g2" },
+  { name: "Miriam Chen", role: "VP Design · Helix", conn: "2nd", variant: "g4" },
+  { name: "Daniel Amrani", role: "Head of Brand · Pylon", conn: "1st", variant: "g2" },
+  { name: "Priya Ravi", role: "Design Engineer · Atlas", conn: "2nd", variant: "g5" },
+];
+function reachOutFor(job) { return JOB_CONTACTS[strHash(job.title) % JOB_CONTACTS.length]; }
+function jobInsights(job) {
+  const h = strHash(job.title);
+  const senior = 35 + (h % 18);
+  const director = 14 + ((h >> 2) % 10);
+  const entry = 10 + ((h >> 4) % 10);
+  const manager = Math.max(5, 100 - senior - director - entry);
+  const edu = [["a Bachelor's Degree (Similar to you)", 14 + (h % 6)], ["a Bachelor of Fine Arts", 11 + ((h >> 2) % 7)], ["a Bachelor of Arts", 8 + ((h >> 3) % 6)]];
+  const eduOther = Math.max(10, 100 - edu.reduce((s, [, p]) => s + p, 0));
+  return {
+    total: job.applicantCount || 200 + (h % 900),
+    pastDay: 2 + (h % 9),
+    seniority: [["Senior level", senior], ["Director level", director], ["Entry level", entry], ["Manager level", manager]],
+    education: [...edu, ["other degrees", eduOther]],
+    employees: 800 + (h % 4200),
+    growth: 8 + (h % 24),
+    tenure: `${2 + (h % 4)}.${1 + (h % 8)} years`,
+  };
+}
+// Faked area-sparkline for the hiring-trend block.
+function Sparkline({ seed, height = 56 }) {
+  const h = strHash(String(seed));
+  const n = 24, w = 320;
+  const ys = Array.from({ length: n }, (_, i) => {
+    const base = 16 + (i / (n - 1)) * (height - 26);
+    return Math.max(6, Math.min(height - 4, base + (((h >> (i % 11)) % 7) - 3)));
+  });
+  const step = w / (n - 1);
+  const line = ys.map((y, i) => `${(i * step).toFixed(1)},${(height - y).toFixed(1)}`).join(" ");
+  return (
+    <svg viewBox={`0 0 ${w} ${height}`} width="100%" height={height} preserveAspectRatio="none" aria-hidden>
+      <polygon points={`0,${height} ${line} ${w},${height}`} fill="var(--accent-subtle)" />
+      <polyline points={line} fill="none" stroke="var(--accent)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
+const JD_H3 = { fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600, margin: "0 0 10px" };
+function JobMatchCard({ job }) {
+  const level = job.match || "medium";
+  const pct = { high: 88, medium: 62, low: 34 }[level];
+  const color = level === "high" ? "var(--success-fg)" : level === "medium" ? "var(--accent-fg)" : "var(--fg-muted)";
+  const fit = level === "high" ? "well" : level === "medium" ? "fairly well" : "partially";
+  return (
+    <div className="rounded-[10px] border border-[var(--border-subtle)] bg-[var(--bg-subtle)] p-4">
+      <span className="meta inline-flex items-center gap-1"><Icon name="hexagon" filled className="text-[14px]" style={{ color: "var(--alt-fg)" }} /> Premium</span>
+      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, marginTop: 2 }}>Job match is <span style={{ color }}>{level}</span></div>
+      <p className="meta" style={{ marginTop: 4 }}>Your profile and resume match the required qualifications {fit}.</p>
+      <Progress value={pct} className="mt-3" />
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button variant="outline" size="sm" pill icon="auto_awesome">Show match details</Button>
+        <Button variant="ghost" size="sm" pill icon="auto_awesome">Tailor my resume</Button>
+      </div>
+    </div>
+  );
+}
+function ApplicantCompare({ job }) {
+  const ins = jobInsights(job);
+  return (
+    <div>
+      <h3 style={JD_H3}>See how you compare to other applicants</h3>
+      <p className="meta">Based on Davinci data. Excludes subsidiaries.</p>
+      <div style={{ marginTop: 12 }}>
+        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18 }}>{ins.total.toLocaleString()}</span> <span className="meta">applicants · {ins.pastDay} in the past day</span>
+      </div>
+      <div style={{ marginTop: 16, fontWeight: 600, fontSize: 13 }}>Applicant seniority level</div>
+      {ins.seniority.map(([label, pct]) => (
+        <div key={label} style={{ marginTop: 10 }}>
+          <div style={{ fontSize: 13, marginBottom: 4 }}>{pct}% {label} people applied for this job</div>
+          <Progress value={pct} className="h-1.5" />
+        </div>
+      ))}
+      <div style={{ marginTop: 16, fontWeight: 600, fontSize: 13 }}>Applicant education level</div>
+      {ins.education.map(([label, pct]) => (
+        <div key={label} style={{ fontSize: 13, marginTop: 6 }}><strong>{pct}%</strong> have {label}</div>
+      ))}
+    </div>
+  );
+}
+function CompanyInsights({ job }) {
+  const ins = jobInsights(job);
+  const Stat = ({ label, value }) => (
+    <div><div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16 }}>{value}</div><div className="meta">{label}</div></div>
+  );
+  return (
+    <div>
+      <h3 style={JD_H3}>Insights about {job.company}</h3>
+      <div className="flex flex-wrap gap-x-10 gap-y-3">
+        <Stat label="Total employees" value={ins.employees.toLocaleString()} />
+        <Stat label="2-year growth" value={`+${ins.growth}%`} />
+        <Stat label="Median tenure" value={ins.tenure} />
+      </div>
+      <div className="mt-4"><Sparkline seed={job.company} /></div>
+      <div className="meta mt-1">Latest hiring trend · powered by illustrative data</div>
+    </div>
+  );
+}
+function JobDetail({ job, saved, onToggleSave }) {
+  const { goToCompany } = React.useContext(NavContext);
+  const cid = companyIdFor(job.company);
+  const contact = reachOutFor(job);
+  return (
+    <Panel title="Job details" action={<span className="meta">{job.posted}</span>} bodyStyle={{ padding: 24 }}>
+      <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+        <Avatar initials={job.logo} size={64} variant={job.variant} photo={brandLogo(job.company)} style={{ borderRadius: 10 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}>{job.title}</div>
+          <div style={{ fontSize: 14, marginTop: 2 }}>{cid ? <span onClick={() => goToCompany(cid)} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{job.company}</span> : job.company}</div>
+          <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 2 }}>{job.location}</div>
+          <div style={{ fontSize: 12, color: "var(--fg-subtle)", marginTop: 6, display: "flex", gap: 10, flexWrap: "wrap" }}><span>{job.posted}</span><span>·</span><span>{job.applicantCount.toLocaleString()} applicants</span><span>·</span><span>{job.salary}</span></div>
+          <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>{job.remote && <Pill>Remote</Pill>}{job.easyApply && <Pill variant="accent">Easy Apply</Pill>}</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <ApplyDialog job={job} />
+        <Button variant={saved.has(job.id) ? "secondary" : "outline"} pill icon={saved.has(job.id) ? "check" : "bookmark"} onClick={() => onToggleSave(job.id)}>{saved.has(job.id) ? "Saved" : "Save"}</Button>
+      </div>
+
+      <div className="mt-5"><JobMatchCard job={job} /></div>
+
+      {job.fits.length > 0 && (
+        <div style={{ marginTop: 20 }}>
+          <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}><Icon name="check" className="text-[14px]" style={{ color: "var(--success-fg)" }} /> How you fit</div>
+          {job.fits.map((f, i) => (<div key={i} style={{ fontSize: 13, color: "var(--fg-muted)", padding: "4px 0", display: "flex", gap: 8 }}><span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--accent-fg)", marginTop: 8, flexShrink: 0 }} />{f}</div>))}
+        </div>
+      )}
+
+      <Separator className="my-5" />
+      <h3 style={JD_H3}>People you can reach out to</h3>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <Avatar initials={initialsOf(contact.name)} size={44} variant={contact.variant} photoSeed={contact.name} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 600, fontSize: 14 }}>{contact.name} <span className="meta">· {contact.conn}</span></div>
+          <div className="meta">{contact.role}</div>
+          <div className="meta">People in your network</div>
+        </div>
+        <Button variant="outline" size="sm" pill>Message</Button>
+      </div>
+
+      <Separator className="my-5" />
+      <h3 style={JD_H3}>About the job</h3>
+      <p style={{ fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.55, margin: 0 }}>{job.about}</p>
+
+      <Separator className="my-5" />
+      <ApplicantCompare job={job} />
+
+      <Separator className="my-5" />
+      <CompanyInsights job={job} />
+    </Panel>
+  );
+}
 function JobsPage() {
   const { goToCompany } = React.useContext(NavContext);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(JOBS[0].id);
   const [saved, setSaved] = useState(new Set([1]));
-  const jobs = [
-    { id: 0, title: "Staff Product Designer", company: "Helix Systems", logo: "HX", variant: "g2", location: "Lisbon or Remote · EU", salary: "€110k – €140k · Equity", posted: "5 days ago", applicants: "48 applicants", remote: true, easyApply: true, about: "We're looking for a staff-level designer to lead our design platform — the tokens, components, and docs that power every product surface at Helix.", fits: ["Your skills match 8 of 10 requirements", "Your connections can refer you", "3 people from your network work here"] },
-    { id: 1, title: "Senior Design Engineer", company: "Atlas Docs", logo: "AT", variant: "g5", location: "Remote · Americas", salary: "$170k – $210k", posted: "2 days ago", applicants: "124 applicants", remote: true, easyApply: true, about: "Build the interactive canvas at the heart of Atlas. You'll work across React, typography, and performance.", fits: ["Your skills match 9 of 10 requirements"] },
-    { id: 2, title: "Design Systems Lead", company: "Vector Project OS", logo: "VE", variant: "g6", location: "Amsterdam, NL (hybrid)", salary: "€95k – €125k", posted: "1 week ago", applicants: "63 applicants", easyApply: false, about: "Own Vector's design system end to end. Partner with product leads to scale our visual language.", fits: [] },
-    { id: 3, title: "Staff Brand Designer", company: "Pulse Meetings", logo: "PU", variant: "g1", location: "New York, NY · Hybrid", salary: "$165k – $195k", posted: "3 days ago", applicants: "87 applicants", easyApply: true, about: "Define the visual identity of Pulse's next chapter.", fits: ["Your skills match 7 of 10 requirements"] },
-  ];
-  const current = jobs[selected];
+  const current = JOBS.find((j) => j.id === selected) || JOBS[0];
   const toggleSave = (id) => setSaved((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
   return (
     <div style={{ display: "grid", gridTemplateColumns: "380px 1fr", gap: 16, alignItems: "start" }}>
-      <Panel title="Top picks for you" action={<JobFiltersSheet count={jobs.length} />} bodyStyle={{ padding: 0 }}>
+      <Panel title="Top picks for you" action={<JobFiltersSheet count={JOBS.length} />} bodyStyle={{ padding: 0 }} className="self-start">
         <div className="jobs-list">
-          {jobs.map((j) => (
+          {JOBS.map((j) => (
             <button key={j.id} type="button" className={`job-row ${selected === j.id ? "active" : ""}`} onClick={() => setSelected(j.id)}>
-              <Avatar initials={j.logo} size={48} variant={j.variant} style={{ borderRadius: 8 }} />
+              <Avatar initials={j.logo} size={48} variant={j.variant} photo={brandLogo(j.company)} style={{ borderRadius: 8 }} />
               <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{j.title}</div>
                 <div style={{ fontSize: 12, color: "var(--fg-muted)" }}>{companyIdFor(j.company) ? <span onClick={(e) => { e.stopPropagation(); goToCompany(companyIdFor(j.company)); }} style={{ cursor: "pointer" }}>{j.company}</span> : j.company}</div>
@@ -1698,32 +1870,9 @@ function JobsPage() {
           ))}
         </div>
       </Panel>
-      <Panel title="Job details" action={<span className="meta">{current.posted}</span>}>
-        <div style={{ padding: 24 }}>
-          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-            <Avatar initials={current.logo} size={64} variant={current.variant} style={{ borderRadius: 10 }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}>{current.title}</div>
-              <div style={{ fontSize: 14, marginTop: 2 }}>{companyIdFor(current.company) ? <span onClick={() => goToCompany(companyIdFor(current.company))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{current.company}</span> : current.company}</div>
-              <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 2 }}>{current.location}</div>
-              <div style={{ fontSize: 12, color: "var(--fg-subtle)", marginTop: 6, display: "flex", gap: 10 }}><span>{current.posted}</span><span>·</span><span>{current.applicants}</span><span>·</span><span>{current.salary}</span></div>
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-            <ApplyDialog job={current} />
-            <Button variant={saved.has(current.id) ? "secondary" : "outline"} pill icon={saved.has(current.id) ? "check" : "bookmark"} onClick={() => toggleSave(current.id)}>{saved.has(current.id) ? "Saved" : "Save"}</Button>
-          </div>
-          {current.fits.length > 0 && (
-            <div style={{ marginTop: 20 }}>
-              <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}><Icon name="check" className="text-[14px]" style={{ color: "var(--success-fg)" }} /> How you fit</div>
-              {current.fits.map((f, i) => (<div key={i} style={{ fontSize: 13, color: "var(--fg-muted)", padding: "4px 0", display: "flex", gap: 8 }}><span style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--accent-fg)", marginTop: 8, flexShrink: 0 }} />{f}</div>))}
-            </div>
-          )}
-          <Separator className="my-5" />
-          <h3 style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 600, margin: "0 0 10px" }}>About the role</h3>
-          <p style={{ fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.55, margin: 0 }}>{current.about}</p>
-        </div>
-      </Panel>
+      <div style={{ position: "sticky", top: 64 }}>
+        <JobDetail job={current} saved={saved} onToggleSave={toggleSave} />
+      </div>
     </div>
   );
 }
@@ -1908,7 +2057,13 @@ function CategoryMenu({ category, onCategoryChange }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="primary" size="sm" pill icon={cat.icon} iconRight="expand_more">{cat.label}</Button>
+        {/* Plain <button>, not the lib Button: under React 18 a function
+            component can't receive the ref Radix needs to anchor the menu, so
+            an asChild lib Button trigger won't open. The .btn* classes give it
+            the same filled-pill chrome. */}
+        <button type="button" className="btn btn--primary btn--sm btn--pill btn--icon-leading btn--icon-trailing inline-flex items-center justify-center gap-2 whitespace-nowrap outline-none">
+          <Icon name={cat.icon} size="md" />{cat.label}<Icon name="expand_more" size="md" />
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-48">
         {SEARCH_CATEGORIES.map((c) => (
@@ -1932,7 +2087,7 @@ function ResultRow({ result, query }) {
     type === "person" ? () => goToProfile({ name: result.title, role: result.sub, photoSeed: result.title, variant: result.variant }) :
     type === "job" ? () => goToJobs() : null;
   return (
-    <Panel style={{ padding: 16, cursor: go ? "pointer" : undefined }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }} onClick={go || undefined}>
+    <Panel style={{ cursor: go ? "pointer" : undefined }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }} onClick={go || undefined}>
       <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} photo={["company", "product", "school", "service", "event"].includes(type) ? brandLogo(result.title) : undefined} bg={COMPANIES[cid]?.logoBg} shape={isRound ? "circle" : "rounded"} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -2005,7 +2160,7 @@ function SearchResults({ query, category = "all", onCategoryChange, onRunSearch 
 
   if (query === "") return (
     <main className="flex min-w-0 flex-col gap-3">
-      <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
+      <Panel bodyStyle={{ textAlign: "center", padding: 40 }}>
         <Icon name="search" className="text-[48px] text-[var(--fg-subtle)]" />
         <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>Search the Davinci network</h3>
         <p className="meta" style={{ marginTop: 8 }}>Pick one of these searches to explore.</p>
@@ -2017,7 +2172,7 @@ function SearchResults({ query, category = "all", onCategoryChange, onRunSearch 
   // Off-list query: not one of the curated searches → no results, by design.
   if (!valid) return (
     <main className="flex min-w-0 flex-col gap-3">
-      <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
+      <Panel bodyStyle={{ textAlign: "center", padding: 40 }}>
         <Icon name="search_off" className="text-[48px] text-[var(--fg-subtle)]" />
         <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>No results for "{query}"</h3>
         <p className="meta" style={{ marginTop: 8 }}>This demo only searches a curated set. Try one of these:</p>
@@ -2046,7 +2201,7 @@ function SearchResults({ query, category = "all", onCategoryChange, onRunSearch 
       </Panel>
 
       {filtered.length === 0 ? (
-        <Panel style={{ padding: 40 }} bodyStyle={{ textAlign: "center", padding: 40 }}>
+        <Panel bodyStyle={{ textAlign: "center", padding: 40 }}>
           <Icon name="search_off" className="text-[48px] text-[var(--fg-subtle)]" />
           <h3 style={{ marginTop: 16, fontFamily: "var(--font-display)" }}>No {category === "all" ? "" : cat.label.toLowerCase() + " "}results for "{query}"</h3>
           <p className="meta" style={{ marginTop: 8 }}>Try another category or clear your filters.</p>
