@@ -38,28 +38,41 @@ const surfaces = [
 
 export const Surfaces = {
   name: 'Surface tokens',
+  // Render inside canvas › container so the module/bristol specimens have a
+  // valid Container ancestor (no dev-only hierarchy warnings); the page
+  // background itself demonstrates the canvas surface.
   render: () => (
-    <div style={{ padding: 48, display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 720 }}>
-      <h2 style={{ marginBottom: 8 }}>Surfaces</h2>
-      {surfaces.map(({ variant, davinci, token, desc }) => (
-        <Surface key={variant} variant={variant} style={{ padding: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
-            <strong style={{ fontSize: 15 }}>{davinci}</strong>
-            <code style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.85 }}>
-              variant="{variant}" · {token}
-            </code>
-          </div>
-          <p style={{ fontSize: 13, margin: 0, opacity: 0.85 }}>{desc}</p>
+    <Surface variant="canvas" style={{ padding: 48 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 720 }}>
+        <div>
+          <h2 style={{ margin: '0 0 8px' }}>Surfaces</h2>
+          <p style={{ fontSize: 13, margin: 0, opacity: 0.85 }}>
+            The page background here is the <code style={{ fontFamily: 'var(--font-mono)' }}>canvas</code> surface
+            (<code style={{ fontFamily: 'var(--font-mono)' }}>--bg</code>). The grouping surfaces below sit inside a Container.
+          </p>
+        </div>
+        <Surface variant="container" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {surfaces.filter((s) => s.variant !== 'canvas').map(({ variant, davinci, token, desc }) => (
+            <Surface key={variant} variant={variant} style={{ padding: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 6 }}>
+                <strong style={{ fontSize: 15 }}>{davinci}</strong>
+                <code style={{ fontSize: 11, fontFamily: 'var(--font-mono)', opacity: 0.85 }}>
+                  variant="{variant}" · {token}
+                </code>
+              </div>
+              <p style={{ fontSize: 13, margin: 0, opacity: 0.85 }}>{desc}</p>
+            </Surface>
+          ))}
         </Surface>
-      ))}
-    </div>
+      </div>
+    </Surface>
   ),
 };
 
 export const Hierarchy = {
   name: 'Containment hierarchy',
   render: () => (
-    <Surface variant="canvas" style={{ minHeight: '100vh', padding: 40 }}>
+    <Surface variant="canvas" style={{ padding: 40 }}>
       <Surface variant="container" style={{ padding: 24, maxWidth: 640 }}>
         <h3 style={{ marginTop: 0 }}>Container</h3>
         <p style={{ fontSize: 13, opacity: 0.85 }}>Placed on the Canvas to indicate a content region.</p>

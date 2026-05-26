@@ -16,7 +16,7 @@ export const Horizontal = {
   render: () => (
     <ResizablePanelGroup
       direction="horizontal"
-      style={{ height: '200px', width: '500px', border: '1px solid var(--border)', borderRadius: '8px' }}
+      style={{ height: '200px', width: '100%', maxWidth: 500, border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={50}>
         <div
@@ -55,7 +55,7 @@ export const Vertical = {
   render: () => (
     <ResizablePanelGroup
       direction="vertical"
-      style={{ height: '300px', width: '400px', border: '1px solid var(--border)', borderRadius: '8px' }}
+      style={{ height: '300px', width: '100%', maxWidth: 400, border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={40}>
         <div
@@ -94,7 +94,7 @@ export const ThreePanels = {
   render: () => (
     <ResizablePanelGroup
       direction="horizontal"
-      style={{ height: '200px', width: '600px', border: '1px solid var(--border)', borderRadius: '8px' }}
+      style={{ height: '200px', width: '100%', maxWidth: 600, border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={25}>
         <div

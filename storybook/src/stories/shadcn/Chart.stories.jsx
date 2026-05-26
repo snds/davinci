@@ -44,7 +44,7 @@ const chartConfig = {
 
 export const BarChartDefault = {
   render: () => (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-[500px]">
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[500px]">
       <BarChart data={monthlyData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -64,7 +64,7 @@ export const BarChartDefault = {
 
 export const LineChartDefault = {
   render: () => (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-[500px]">
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[500px]">
       <LineChart data={monthlyData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -96,7 +96,7 @@ export const LineChartDefault = {
 
 export const AreaChartDefault = {
   render: () => (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-[500px]">
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-[500px]">
       <AreaChart data={monthlyData}>
         <CartesianGrid vertical={false} />
         <XAxis

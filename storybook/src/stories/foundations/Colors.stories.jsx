@@ -15,7 +15,12 @@ export default {
 function useVar(name) {
   const [value, setValue] = useState('');
   useEffect(() => {
-    setValue(getComputedStyle(document.documentElement).getPropertyValue(name).trim());
+    const read = () => setValue(getComputedStyle(document.documentElement).getPropertyValue(name).trim());
+    read();
+    // Re-read when the theme toolbar flips data-theme so printed values update.
+    const obs = new MutationObserver(read);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
   }, [name]);
   return value;
 }

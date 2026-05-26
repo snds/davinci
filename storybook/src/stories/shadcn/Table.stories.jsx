@@ -24,7 +24,7 @@ const invoices = [
 
 export const Default = {
   render: () => (
-    <div className="w-[600px]">
+    <div className="w-full max-w-[600px]">
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -65,7 +65,7 @@ const users = [
 
 export const UsersTable = {
   render: () => (
-    <div className="w-[700px]">
+    <div className="w-full max-w-[700px]">
       <Table>
         <TableHeader>
           <TableRow>
