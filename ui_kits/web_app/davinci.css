@@ -281,7 +281,9 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
 /* Sizes — Small / Medium (.btn default) / Large */
 .btn--sm { padding: 5px 10px 3px; font-size: 12px; border-radius: 5px; }
 .btn--lg { padding: 9px 16px 7px; font-size: 14px; border-radius: 7px; }
-.btn--icon { padding: 6px; width: 32px; height: 32px; }
+/* Plain icon button matches the default button height (36px) so it aligns with
+   text-button siblings (e.g. hero Message/Follow). icon-sm/lg/xs override w/h. */
+.btn--icon { padding: 6px; width: 36px; height: 36px; }
 
 /* ─── Pill buttons — WHEN TO USE ───────────────────────────────────────────
    A pill (fully-rounded) is a SHAPE treatment, not a variant. Pick one shape

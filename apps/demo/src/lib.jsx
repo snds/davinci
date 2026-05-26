@@ -99,21 +99,44 @@ export function Button({
   );
 }
 
-/* ---------------- Avatar (wraps @davinci/ui Avatar) ---------------- */
+/* ---------------- Brand logo (DiceBear placeholder) ----------------
+   Deterministic abstract mark from a seed (company name). Renders as an SVG;
+   if the API is unreachable the Avatar falls back to initials-on-color. */
+export function brandLogo(seed) {
+  return `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(String(seed || "").trim())}`;
+}
+
+/* ---------------- Avatar (wraps @davinci/ui Avatar) ----------------
+   `shape`: "circle" (default) | "rounded" (rounded-rectangle, e.g. company logos).
+   `ring`:  bg-surface stroke (the company-logo "sticker" frame), on by default.
+            Drawn as an OUTER box-shadow so it never crops the photo; invisible
+            on a matching surface, visible when the avatar overlaps a cover or
+            colored backdrop. Larger avatars also get a soft drop shadow. */
 const VARIANT_BG = {
   g1: "var(--blue-9)", g2: "var(--teal-9)", g3: "var(--grass-9)",
   g4: "var(--violet-9)", g5: "var(--amber-9)", g6: "var(--tomato-9)",
 };
-export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, bg, style, className = "" }) {
+function roundedRadius(size) { return Math.max(6, Math.round(size * 0.2)); }
+function ringShadow(size) {
+  const w = size >= 96 ? 4 : size >= 44 ? 3 : 2;
+  const lift = size >= 72 ? ", var(--shadow-md)" : "";
+  return `0 0 0 ${w}px var(--bg-surface)${lift}`;
+}
+export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, bg, shape = "circle", ring = true, style, className = "" }) {
   let resolved = null;
   if (photo === null) resolved = null;
   else if (typeof photo === "string") resolved = photo;
   else if (photoSeed) resolved = maybePhoto(photoSeed, size * 2, size * 2);
-  const radius = style && style.borderRadius != null ? style.borderRadius : "50%";
+  const radius = style && style.borderRadius != null
+    ? style.borderRadius
+    : shape === "rounded" ? roundedRadius(size) : "50%";
+  const boxShadow = style && style.boxShadow != null
+    ? style.boxShadow
+    : ring ? ringShadow(size) : undefined;
   return (
     <UIAvatar
       className={className}
-      style={{ width: size, height: size, borderRadius: radius, flexShrink: 0, ...style }}
+      style={{ width: size, height: size, borderRadius: radius, flexShrink: 0, boxShadow, ...style }}
     >
       {resolved && <AvatarImage src={resolved} alt="" style={{ borderRadius: "inherit" }} />}
       <AvatarFallback

@@ -31,7 +31,7 @@ import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps
 import {
   Icon, seededPhoto, Button, Avatar, Pill, Panel,
   FeedAd, RailAd, InlineAd, AD_LIBRARY,
-  Tip, HoverProfile, TooltipProvider, StatusBadge,
+  Tip, HoverProfile, TooltipProvider, StatusBadge, brandLogo,
 } from "./lib.jsx";
 import { COMPANIES, GENERIC, companyIdFor, COMPANY_LOCATIONS } from "./companies.js";
 
@@ -430,7 +430,9 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
     { id: "messaging", label: "Messages", icon: "chat_bubble" },
     { id: "notifications", label: "Alerts", icon: "notifications" },
   ];
+  const { goToProfile } = React.useContext(NavContext);
   const bellRef = useRef(null);
+  const [meOpen, setMeOpen] = useState(false);
   useEffect(() => {
     if (!alertsOpen) return;
     const onDoc = (e) => { if (!bellRef.current?.contains(e.target)) onToggleAlerts?.(false); };
@@ -451,7 +453,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
                 <button
                   className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] data-[active=true]:text-[var(--fg)] data-[active=true]:shadow-[inset_0_-2px_0_var(--fg)]"
                   data-active={active === t.id || undefined}
-                  onClick={() => (isAlerts ? onToggleAlerts?.(!alertsOpen) : onNavigate?.(t.id))}
+                  onClick={() => { if (isAlerts) { setMeOpen(false); onToggleAlerts?.(!alertsOpen); } else onNavigate?.(t.id); }}
                 >
                   <span className="relative inline-flex">
                     <Icon name={t.icon} filled={active === t.id} size="lg" />
@@ -466,7 +468,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
             );
           })}
           <Separator orientation="vertical" className="mx-2 my-auto h-8" />
-          <DropdownMenu>
+          <DropdownMenu open={meOpen} onOpenChange={(o) => { setMeOpen(o); if (o) onToggleAlerts?.(false); }}>
             <DropdownMenuTrigger asChild>
               <button className="flex h-14 w-[68px] flex-col items-center justify-center gap-0.5 text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)]">
                 <Avatar initials="YO" size={26} photo={seededPhoto("yara-okonkwo", 64, 64, "face")} />
@@ -482,7 +484,7 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
                 </div>
               </div>
               <div className="px-2 pb-2">
-                <Button variant="outline" size="sm" pill style={{ width: "100%" }} onClick={() => onNavigate?.("profile")}>View profile</Button>
+                <Button variant="outline" size="sm" pill style={{ width: "100%" }} onClick={() => goToProfile()}>View profile</Button>
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Account</DropdownMenuLabel>
@@ -492,13 +494,13 @@ function TopNav({ active, onNavigate, searchValue, onSearchChange, onSearchSubmi
               <DropdownMenuItem><Icon name="language" className="text-[18px] me-1" /> Language</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Manage</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => onNavigate?.("profile")}><Icon name="history_edu" className="text-[18px] me-1" /> Posts &amp; Activity</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => goToProfile()}><Icon name="history_edu" className="text-[18px] me-1" /> Posts &amp; Activity</DropdownMenuItem>
               <DropdownMenuItem><Icon name="work" className="text-[18px] me-1" /> Job Posting Account</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem><Icon name="logout" className="text-[18px] me-1" /> Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <button className="flex h-14 w-[72px] flex-col items-center justify-center gap-0.5 border-l border-[var(--border-subtle)] text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)]" aria-label="Advertise">
+          <button className="flex h-14 w-[72px] flex-col items-center justify-center gap-0.5 border-l border-[var(--border-subtle)] text-[11px] text-[var(--fg-muted)] outline-none hover:text-[var(--fg)] data-[active=true]:text-[var(--fg)]" data-active={active === "ads" || undefined} aria-label="Advertise" onClick={() => onNavigate?.("ads")}>
             <Icon name="campaign" size="lg" />
             Advertise
           </button>
@@ -562,7 +564,7 @@ function RightRail() {
       </Panel>
       <Panel title="People to follow" bodyStyle={{ padding: 0 }}>
         {people.map((p, i) => (
-          <div key={i} className="rail-item" onClick={() => goToProfile()} style={{ cursor: "pointer" }}>
+          <div key={i} className="rail-item" onClick={() => goToProfile({ name: p.n, role: p.r, photoSeed: p.n, variant: p.v })} style={{ cursor: "pointer" }}>
             <Avatar initials={p.i} size={40} variant={p.v} photoSeed={p.n} />
             <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
             <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
@@ -655,26 +657,27 @@ function Post({ id, author, role, time, avatar, variant = "g1", photoSeed, isCom
   const [showComments, setShowComments] = useState(false);
   const { goToCompany, goToProfile } = React.useContext(NavContext);
   const cid = isCompany ? companyIdFor(author) : null;
-  const goAuthor = cid ? () => goToCompany(cid) : isCompany ? undefined : () => goToProfile();
+  const goAuthor = cid ? () => goToCompany(cid) : isCompany ? undefined : () => goToProfile({ name: author, role, photoSeed: photoSeed || author, variant });
   const followLabel = isCompany ? "Follow" : "Connect";
+  const companyPhoto = isCompany ? brandLogo(author) : undefined;
   return (
     <Panel bare>
       <div className="post">
         <div className="post__header">
           <HoverProfile
             name={author} role={role} square={isCompany}
-            initials={avatar} variant={variant} photoSeed={photoSeed}
+            initials={avatar} variant={variant} photoSeed={photoSeed} photo={companyPhoto}
             meta={isCompany ? "Company · View page" : "View profile"}
             action={<Button variant="outline" size="sm" pill icon={isCompany ? "add" : "person_add"} onClick={goAuthor}>{followLabel}</Button>}
           >
             <button type="button" onClick={goAuthor} style={{ all: "unset", cursor: goAuthor ? "pointer" : "default" }}>
-              <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} bg={bg} style={isCompany ? { borderRadius: 8 } : undefined} />
+              <Avatar initials={avatar} size={48} variant={variant} photoSeed={photoSeed} photo={companyPhoto} bg={bg} shape={isCompany ? "rounded" : "circle"} />
             </button>
           </HoverProfile>
           <div className="post__who">
             <HoverProfile
               name={author} role={role} square={isCompany}
-              initials={avatar} variant={variant} photoSeed={photoSeed}
+              initials={avatar} variant={variant} photoSeed={photoSeed} photo={companyPhoto}
               meta={isCompany ? "Company · View page" : "View profile"}
               action={<Button variant="outline" size="sm" pill icon={isCompany ? "add" : "person_add"} onClick={goAuthor}>{followLabel}</Button>}
             >
@@ -723,7 +726,7 @@ function Feed() {
 }
 
 /* ============================ Profile ============================ */
-function ProfileRail() {
+function ProfileRail({ handle = "yara-okonkwo" }) {
   const { goToCompany } = React.useContext(NavContext);
   const viewers = [
     { name: "Ann Peng", role: "Design at TikTok", conn: "2nd" },
@@ -754,7 +757,7 @@ function ProfileRail() {
         <div style={{ fontSize: 13 }}>English</div>
         <Separator className="my-3" />
         <div style={{ fontWeight: 600, fontSize: 13 }}>Public profile &amp; URL</div>
-        <div className="meta" style={{ marginTop: 2 }}>davinci.design/in/yara-okonkwo</div>
+        <div className="meta" style={{ marginTop: 2 }}>davinci.design/in/{handle}</div>
       </Panel>
       <Panel title="Who your viewers also viewed" bodyStyle={{ padding: 0 }}>
         {viewers.map((p, i) => (
@@ -768,7 +771,7 @@ function ProfileRail() {
       <Panel title="You might like — Pages for you" bodyStyle={{ padding: 0 }}>
         {Object.values(COMPANIES).slice(0, 3).map((x) => (
           <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
-            <Avatar initials={x.initials} size={40} bg={x.logoBg} style={{ borderRadius: 8 }} />
+            <Avatar initials={x.initials} size={40} shape="rounded" photo={brandLogo(x.name)} bg={x.logoBg} />
             <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry}</div></div>
             <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
           </div>
@@ -780,8 +783,142 @@ function ProfileRail() {
   );
 }
 
+/* ============================ Profiles ============================ */
+const ME_NAME = "Yara Okonkwo";
+const PROFILE_CITIES = ["Berlin, Germany", "Amsterdam, Netherlands", "London, UK", "New York, NY", "Toronto, Canada", "Barcelona, Spain", "Lisbon, Portugal"];
+const PROFILE_SCHOOLS = ["Royal College of Art", "Carnegie Mellon University", "TU Delft", "Parsons School of Design", "University of the Arts London", "Cal Poly"];
+const PREV_ROLES = [
+  ["Senior Product Designer", "Novatech"], ["Product Designer", "Brightline"],
+  ["UX Designer", "Northwind Labs"], ["Design Lead", "Cobalt"], ["Interaction Designer", "Meridian"],
+];
+const SKILL_POOL = ["Product Design", "Figma", "Design Systems", "Prototyping", "User Research", "Interaction Design", "Accessibility", "Design Ops", "Typography", "React", "Brand", "Workshops"];
+function strHash(s) { let h = 0; const str = String(s || ""); for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0; return Math.abs(h); }
+function pickFrom(arr, seed, salt = 0) { return arr[(strHash(seed) + salt) % arr.length]; }
+function cleanRole(role) { return String(role || "").replace(/·\s*\d(?:st|nd|rd|th)\b/i, "").replace(/\s*·\s*$/, "").trim(); }
+function parseRole(role) {
+  const r = cleanRole(role) || "Product Designer";
+  if (r.includes(" at ")) { const [t, c] = r.split(" at "); return { title: t.trim(), company: c.trim() }; }
+  if (r.includes(" · ")) { const p = r.split(" · "); return { title: p[0].trim(), company: (p[1] || "").trim() }; }
+  return { title: r, company: "" };
+}
+function initialsOf(name) { return String(name || "").split(" ").filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase(); }
+
+// Reveal-on-scroll flag (shared by company + profile sticky headers).
+function useStuck(threshold) {
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setStuck(window.scrollY > threshold);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [threshold]);
+  return stuck;
+}
+
+// Sticky profile bar: overlays the top of the hero (zero net layout cost via
+// negative margin) and fades in once the hero scrolls past — mirrors the
+// company page's sticky header.
+function ProfileStickyHeader({ name, initials, photoSeed, variant, stuck, actions }) {
+  return (
+    <div className="profile-sticky">
+      <div className={`profile-subnav ${stuck ? "is-stuck" : ""}`} aria-hidden={!stuck}>
+        <Avatar size={32} initials={initials} photoSeed={photoSeed} variant={variant} ring={false} />
+        <span className="profile-subnav__name">{name}</span>
+        <div className="profile-subnav__actions">{actions}</div>
+      </div>
+    </div>
+  );
+}
+
+// Templated profile for anyone who isn't the current user. Deterministic from
+// the name so a given person always renders the same plausible details.
+function OtherProfile({ person }) {
+  const { goToCompany, goToProfile } = React.useContext(NavContext);
+  const name = person.name;
+  const first = name.split(" ")[0];
+  const initials = person.avatar || initialsOf(name);
+  const { title, company } = parseRole(person.role);
+  const cid = company ? companyIdFor(company) : null;
+  const city = pickFrom(PROFILE_CITIES, name);
+  const connections = 500 + (strHash(name) % 1900);
+  const [prevTitle, prevCo] = pickFrom(PREV_ROLES, name, 7);
+  const school = pickFrom(PROFILE_SCHOOLS, name, 3);
+  const skills = [0, 1, 2, 3, 4, 5].map((i) => SKILL_POOL[(strHash(name) + i * 5) % SKILL_POOL.length]);
+  const uniqueSkills = [...new Set(skills)];
+  const stuck = useStuck(300);
+  const companyLink = (label, id) => (id ? <span onClick={() => goToCompany(id)} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{label}</span> : label);
+  const Entry = ({ logo, logoBg, title: t, sub, time, desc }) => (
+    <div className="entry">
+      <div className="entry__logo" style={logoBg ? { background: logoBg, color: "#fff" } : undefined}>{logo}</div>
+      <div style={{ flex: 1 }}>
+        <div className="entry__title">{t}</div>
+        {sub && <div className="entry__sub">{sub}</div>}
+        {time && <div className="entry__time">{time}</div>}
+        {desc && <div className="entry__desc">{desc}</div>}
+      </div>
+    </div>
+  );
+  const main = (
+    <>
+      <ProfileStickyHeader name={name} initials={initials} photoSeed={name} variant={person.variant} stuck={stuck}
+        actions={<><Button variant="primary" size="sm" pill icon="person_add">Connect</Button><Button variant="outline" size="sm" pill icon="chat_bubble">Message</Button><MoreMenu pill /></>} />
+      <Panel bare>
+        <div className="profile-cover" style={{ backgroundImage: `url(${seededPhoto(name + "-banner", 1200, 360, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+        <div className="profile-header">
+          <Avatar initials={initials} size={128} variant={person.variant} photoSeed={name} />
+          <div className="profile-header__name">{name}</div>
+          <div className="profile-header__headline">{cleanRole(person.role) || title}</div>
+          <div className="profile-header__meta">
+            <span><Icon name="location_on" className="text-[14px]" /> {city}{company ? <> · {companyLink(company, cid)}</> : null}</span>
+            <span><Icon name="group" className="text-[14px]" /> {connections.toLocaleString()} connections</span>
+          </div>
+          <div className="profile-header__actions">
+            <Button variant="primary" icon="person_add">Connect</Button>
+            <Button variant="outline" icon="chat_bubble">Message</Button>
+            <MoreMenu size="icon" />
+          </div>
+        </div>
+      </Panel>
+
+      <Panel title="About">
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>
+          {first} is a {title.toLowerCase()}{company ? <> at {company}</> : null} who cares about craft, clear systems, and shipping work that holds up. {first} partners closely with engineering and product to turn ambiguous problems into well-defined, well-built experiences.
+        </p>
+        <div className="entry__skills" style={{ marginTop: 14 }}>
+          {uniqueSkills.slice(0, 3).map((s) => <Pill key={s} variant="accent">{s}</Pill>)}
+          {uniqueSkills.slice(3).map((s) => <Pill key={s}>{s}</Pill>)}
+        </div>
+      </Panel>
+
+      <Panel title="Activity" action={<Button variant="outline" size="sm" pill icon="add">Follow</Button>}>
+        <div className="meta" style={{ marginBottom: 12 }}>{(2000 + strHash(name) % 8000).toLocaleString()} followers</div>
+        <div className="flex flex-col gap-3">
+          <Post id={`other-${strHash(name)}`} author={name} role={cleanRole(person.role)} avatar={initials} variant={person.variant} photoSeed={name}
+            body={`Some of the most valuable work I do never ships as a feature — it's the shared language, the patterns, and the small decisions that make everything after easier. Grateful to be doing it alongside this team${company ? ` at ${company}` : ""}.`}
+            reactions={120 + strHash(name) % 400} comments={4 + strHash(name) % 30} topReactions={["like", "insightful", "celebrate"]} />
+        </div>
+      </Panel>
+
+      <Panel title="Experience">
+        <Entry logo={cid ? COMPANIES[cid].initials : initialsOf(company || title)} logoBg={cid ? COMPANIES[cid].logoBg : "var(--bg-active)"} title={title} sub={companyLink(company || "Independent", cid)} time={`${2021 + strHash(name) % 3} – Present`} desc={`Leads ${title.toLowerCase()} work${company ? ` at ${company}` : ""}, partnering across product and engineering.`} />
+        <Entry logo={initialsOf(prevCo)} title={prevTitle} sub={prevCo} time={`${2016 + strHash(name) % 3} – ${2021 + strHash(name) % 3}`} desc="Shipped end-to-end product work across web and mobile." />
+      </Panel>
+
+      <Panel title="Education">
+        <Entry logo={initialsOf(school)} title={school} sub="BA / MA, Design" time={`${2012 + strHash(name) % 3} – ${2016 + strHash(name) % 3}`} />
+      </Panel>
+
+      <Panel title="Skills">
+        <div className="entry__skills">{uniqueSkills.map((s) => <Pill key={s} variant="accent">{s}</Pill>)}</div>
+      </Panel>
+    </>
+  );
+  return <PageTwoColRight right={<ProfileRail handle={name.toLowerCase().replace(/[^a-z]+/g, "-")} />}>{main}</PageTwoColRight>;
+}
+
 function ProfilePage() {
   const { goToCompany } = React.useContext(NavContext);
+  const stuck = useStuck(300);
   const co = (name) => (companyIdFor(name) ? <span onClick={() => goToCompany(companyIdFor(name))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{name}</span> : name);
   const Entry = ({ logo, logoBg, title, sub, time, desc, skills }) => (
     <div className="entry">
@@ -797,6 +934,8 @@ function ProfilePage() {
   );
   const main = (
     <>
+      <ProfileStickyHeader name="Yara Okonkwo" initials="YO" photoSeed="yara okonkwo" stuck={stuck}
+        actions={<><Button variant="primary" size="sm" pill icon="work">Open to</Button><Button variant="outline" size="sm" pill icon="add">Add section</Button><MoreMenu pill /></>} />
       <Panel bare>
         <div className="profile-cover" style={{ backgroundImage: `url(${seededPhoto("yara-okonkwo-banner", 1200, 360, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div className="profile-header">
@@ -944,7 +1083,7 @@ function ProfilePage() {
           const cid = p.company ? companyIdFor(p.n) : null;
           return (
             <div key={i} className="rail-item" onClick={cid ? () => goToCompany(cid) : undefined} style={cid ? { cursor: "pointer" } : undefined}>
-              <Avatar initials={p.i} size={40} variant={p.v} bg={COMPANIES[cid]?.logoBg} photoSeed={p.company ? null : p.n} style={p.company ? { borderRadius: 8 } : undefined} />
+              <Avatar initials={p.i} size={40} variant={p.v} bg={COMPANIES[cid]?.logoBg} photoSeed={p.company ? null : p.n} photo={p.company ? brandLogo(p.n) : undefined} shape={p.company ? "rounded" : "circle"} />
               <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
               <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
             </div>
@@ -983,7 +1122,7 @@ function CompanySubnav({ c, tabs, tab, setTab, stuck }) {
   return (
     <div className={`company-subnav ${stuck ? "is-stuck" : ""}`}>
       <div className="company-subnav__id">
-        <span className="company-subnav__logo" style={{ background: c.logoBg }}>{c.initials}</span>
+        <Avatar size={28} shape="rounded" photo={brandLogo(c.name)} initials={c.initials} bg={c.logoBg} ring={false} />
         <span className="company-subnav__name">{c.name}</span>
       </div>
       <nav className="company-tabs">
@@ -1008,7 +1147,7 @@ function CompanyRail({ c, goToCompany }) {
         const id = companyIdFor(name);
         return (
           <div key={i} className="rail-item" onClick={id ? () => goToCompany(id) : undefined} style={id ? { cursor: "pointer" } : undefined}>
-            <Avatar initials={name.slice(0, 2).toUpperCase()} size={40} variant="g2" bg={COMPANIES[id]?.logoBg} style={{ borderRadius: 8 }} />
+            <Avatar initials={name.slice(0, 2).toUpperCase()} size={40} variant="g2" shape="rounded" photo={brandLogo(name)} bg={COMPANIES[id]?.logoBg} />
             <div className="rail-item__text"><div className="rail-item__title">{name}</div><div className="rail-item__sub">{kind}</div></div>
             <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
           </div>
@@ -1021,7 +1160,7 @@ function CompanyRail({ c, goToCompany }) {
       <Panel title="Pages people also viewed" bodyStyle={{ padding: 0 }}>
         {others.map((x) => (
           <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
-            <Avatar initials={x.initials} size={40} bg={x.logoBg} style={{ borderRadius: 8 }} />
+            <Avatar initials={x.initials} size={40} shape="rounded" photo={brandLogo(x.name)} bg={x.logoBg} />
             <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry}</div></div>
             <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
           </div>
@@ -1061,7 +1200,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
 
   const companyRow = (x) => (
     <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
-      <Avatar initials={x.initials} size={44} bg={x.logoBg} style={{ borderRadius: 8 }} />
+      <Avatar initials={x.initials} size={44} shape="rounded" photo={brandLogo(x.name)} bg={x.logoBg} />
       <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry} · {x.followers} followers</div></div>
       <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
     </div>
@@ -1095,7 +1234,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
       <Panel title="Recent job openings" action={<Button variant="ghost" size="sm" onClick={() => setTab("jobs")}>Show all jobs</Button>} bodyStyle={{ padding: 0 }}>
         {denseJobs.slice(0, 3).map(([title, loc, posted], i) => (
           <div key={i} className="entry" style={{ alignItems: "center", padding: "12px 16px", borderBottom: i < 2 ? "1px solid var(--border-subtle)" : "none" }}>
-            <Avatar initials={c.initials} size={40} bg={c.logoBg} style={{ borderRadius: 8 }} />
+            <Avatar initials={c.initials} size={40} shape="rounded" photo={brandLogo(c.name)} bg={c.logoBg} />
             <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__time">{loc} · {posted}</div></div>
           </div>
         ))}
@@ -1158,7 +1297,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
     <Panel title={`${c.name} has ${denseJobs.length} open roles`} bodyStyle={{ padding: 0 }}>
       {denseJobs.map(([title, loc, posted], i) => (
         <div key={i} className="entry" style={{ alignItems: "center", padding: "14px 16px", borderBottom: i < denseJobs.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
-          <Avatar initials={c.initials} size={48} bg={c.logoBg} style={{ borderRadius: 8 }} />
+          <Avatar initials={c.initials} size={48} shape="rounded" photo={brandLogo(c.name)} bg={c.logoBg} />
           <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__sub">{c.name}</div><div className="entry__time">{loc} · {posted}</div></div>
           <Button variant="outline" size="sm" pill>Easy apply</Button>
         </div>
@@ -1241,7 +1380,7 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
         <Panel bare className="company-hero">
           <div className="profile-cover" style={{ height: 130, backgroundImage: `url(${seededPhoto(c.coverSeed, 1200, 300, c.coverKind || "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
-            <div className="company-logo" style={{ background: c.logoBg }}>{c.initials}</div>
+            <Avatar size={88} shape="rounded" photo={brandLogo(c.name)} initials={c.initials} bg={c.logoBg} />
             <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-end", flexWrap: "wrap", marginTop: 12 }}>
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}><span className="profile-header__name">{c.name}</span>{c.verified && <Icon name="verified" className="text-[18px]" style={{ color: "var(--accent-fg)" }} />}<StatusBadge status="hiring" /></div>
@@ -1283,10 +1422,10 @@ function SuggestionCard({ person }) {
   const [state, setState] = useState("idle"); // idle | pending | dismissed
   if (state === "dismissed") return null;
   return (
-    <div className="suggestion-card" style={{ position: "relative", cursor: "pointer" }} onClick={() => goToProfile()}>
+    <div className="suggestion-card" style={{ position: "relative", cursor: "pointer" }} onClick={() => goToProfile({ name: person.name, role: person.role, photoSeed: person.name, variant: person.variant, avatar: person.avatar })}>
       <button className="suggestion-card__dismiss" aria-label="Dismiss" onClick={(e) => { e.stopPropagation(); setState("dismissed"); }}><Icon name="close" size="sm" /></button>
       <div className="suggestion-card__cover" style={{ backgroundImage: `url(${seededPhoto(person.name + "-banner", 240, 56, "banner")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
-      <Avatar initials={person.avatar} size={72} variant={person.variant} photoSeed={person.name} style={{ border: "3px solid var(--bg-surface)", marginTop: -36, position: "relative" }} />
+      <Avatar initials={person.avatar} size={72} variant={person.variant} photoSeed={person.name} style={{ marginTop: -36, position: "relative" }} />
       <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, marginTop: 8, textAlign: "center", padding: "0 8px" }}>{person.name}</div>
       <div style={{ fontSize: 12, color: "var(--fg-muted)", textAlign: "center", marginTop: 2, minHeight: 32, lineHeight: 1.35, padding: "0 8px" }}>{person.role}</div>
       <div className="meta" style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, justifyContent: "center", padding: "0 8px" }}>
@@ -1629,7 +1768,14 @@ function AlertsPage() {
           </div>
         </Panel>
         <Panel bodyStyle={{ padding: 0 }}>
-          {filtered.map((a, i) => (<React.Fragment key={a.id}><AlertRow alert={a} />{i === 2 && <InlineAd ad={AD_LIBRARY.course} />}</React.Fragment>))}
+          {filtered.map((a, i) => (
+            <React.Fragment key={a.id}>
+              <AlertRow alert={a} />
+              {/* Ad has its own border; give it breathing room from the panel
+                  frame even though the alert rows above/below are edge-to-edge. */}
+              {i === 2 && <div style={{ padding: "12px 16px" }}><InlineAd ad={AD_LIBRARY.course} /></div>}
+            </React.Fragment>
+          ))}
         </Panel>
       </main>
       <aside className="flex flex-col gap-3">
@@ -1665,11 +1811,11 @@ function ResultRow({ result, query }) {
   // Whole-row destination by result type.
   const go =
     type === "company" && cid ? () => goToCompany(cid) :
-    type === "person" ? () => goToProfile() :
+    type === "person" ? () => goToProfile({ name: result.title, role: result.sub, photoSeed: result.title, variant: result.variant }) :
     type === "job" ? () => goToJobs() : null;
   return (
     <Panel style={{ padding: 16, cursor: go ? "pointer" : undefined }} bodyStyle={{ display: "flex", gap: 14, alignItems: "flex-start" }} onClick={go || undefined}>
-      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} bg={COMPANIES[cid]?.logoBg} style={{ borderRadius: isRound ? "50%" : 8 }} />
+      <Avatar initials={result.avatar} size={48} variant={result.variant} photoSeed={isRound ? result.title : null} photo={type === "company" ? brandLogo(result.title) : undefined} bg={COMPANIES[cid]?.logoBg} shape={isRound ? "circle" : "rounded"} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15 }}>{highlightMatch(result.title, query)}</span>
@@ -1785,6 +1931,7 @@ function AdGallery() {
 export function App() {
   const [route, setRoute] = useState("home");
   const [companyId, setCompanyId] = useState("davinci");
+  const [profilePerson, setProfilePerson] = useState(null);
   const [theme, setTheme] = useState("dark");
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [footerOpen, setFooterOpen] = useState(false);
@@ -1794,10 +1941,16 @@ export function App() {
   useEffect(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
 
   const goToCompany = (id) => { setCompanyId(id); setRoute("company"); window.scrollTo({ top: 0 }); };
+  // A person object routes to that member's profile; no arg (or the current
+  // user) routes to the owner's profile.
+  const goToProfile = (person) => {
+    setProfilePerson(person && person.name && person.name !== ME_NAME ? person : null);
+    setRoute("profile"); window.scrollTo({ top: 0 });
+  };
   const navValue = {
     goToCompany,
     openFooter: () => setFooterOpen(true),
-    goToProfile: () => { setRoute("profile"); window.scrollTo({ top: 0 }); },
+    goToProfile,
     goToJobs: () => { setRoute("jobs"); window.scrollTo({ top: 0 }); },
   };
 
@@ -1806,8 +1959,8 @@ export function App() {
   const onSearchSubmit = (q) => { setSubmittedQuery(q); setSearchValue(q); setRoute("search"); };
 
   const pages = {
-    home: <PageThreeCol left={<LeftRail onViewProfile={() => setRoute("profile")} />} right={<RightRail />}><Feed /></PageThreeCol>,
-    profile: <ProfilePage />,
+    home: <PageThreeCol left={<LeftRail onViewProfile={() => goToProfile()} />} right={<RightRail />}><Feed /></PageThreeCol>,
+    profile: profilePerson ? <OtherProfile person={profilePerson} /> : <ProfilePage />,
     company: <CompanyPage companyId={companyId} goToCompany={goToCompany} />,
     network: <NetworkPage />,
     jobs: <JobsPage />,
