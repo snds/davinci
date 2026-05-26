@@ -45,6 +45,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Token-hygiene check (stories + docs)
+        run: npm run check:tokens
+
       - name: Build docs
         env:
           STORYBOOK_URL: https://snds.github.io/davinci/storybook/

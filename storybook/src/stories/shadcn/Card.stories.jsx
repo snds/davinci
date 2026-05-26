@@ -26,7 +26,7 @@ export const Default = {
         <CardDescription>Card description goes here.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p style={{ fontSize: '14px', color: '#6b7280' }}>
+        <p style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>
           This is the main content area of the card. You can put any content here.
         </p>
       </CardContent>
@@ -80,9 +80,9 @@ export const ProductCard = {
       </CardHeader>
       <CardContent>
         <p style={{ fontSize: '28px', fontWeight: 700 }}>
-          $49<span style={{ fontSize: '14px', fontWeight: 400, color: '#6b7280' }}>/mo</span>
+          $49<span style={{ fontSize: '14px', fontWeight: 400, color: 'var(--fg-muted)' }}>/mo</span>
         </p>
-        <ul style={{ marginTop: '12px', fontSize: '14px', color: '#6b7280', lineHeight: '2' }}>
+        <ul style={{ marginTop: '12px', fontSize: '14px', color: 'var(--fg-muted)', lineHeight: '2' }}>
           <li>Unlimited projects</li>
           <li>Priority support</li>
           <li>Advanced analytics</li>
@@ -102,7 +102,7 @@ export const Simple = {
         <CardTitle>Notifications</CardTitle>
       </CardHeader>
       <CardContent>
-        <p style={{ fontSize: '14px', color: '#6b7280' }}>You have 3 unread messages.</p>
+        <p style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>You have 3 unread messages.</p>
       </CardContent>
     </Card>
   ),

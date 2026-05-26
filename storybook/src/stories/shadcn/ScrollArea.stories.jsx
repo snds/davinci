@@ -13,7 +13,7 @@ export default {
 
 export const Default = {
   render: () => (
-    <ScrollArea style={{ height: '300px', width: '240px', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+    <ScrollArea style={{ height: '300px', width: '240px', border: '1px solid var(--border)', borderRadius: '8px' }}>
       <div style={{ padding: '12px' }}>
         <h4 style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: 600 }}>Items</h4>
         {TAGS.map((tag, i) => (
@@ -29,7 +29,7 @@ export const Default = {
 
 export const HorizontalScroll = {
   render: () => (
-    <ScrollArea style={{ width: '300px', whiteSpace: 'nowrap', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+    <ScrollArea style={{ width: '300px', whiteSpace: 'nowrap', border: '1px solid var(--border)', borderRadius: '8px' }}>
       <div style={{ display: 'flex', padding: '12px', gap: '12px' }}>
         {Array.from({ length: 20 }, (_, i) => (
           <div

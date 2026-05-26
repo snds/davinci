@@ -12,11 +12,11 @@ export const Horizontal = {
   render: () => (
     <div style={{ width: '300px' }}>
       <div style={{ fontSize: '14px', fontWeight: 500 }}>Section A</div>
-      <p style={{ fontSize: '13px', color: '#6b7280', margin: '4px 0 8px' }}>
+      <p style={{ fontSize: '13px', color: 'var(--fg-muted)', margin: '4px 0 8px' }}>
         Content above the separator.
       </p>
       <Separator />
-      <p style={{ fontSize: '13px', color: '#6b7280', margin: '8px 0 0' }}>
+      <p style={{ fontSize: '13px', color: 'var(--fg-muted)', margin: '8px 0 0' }}>
         Content below the separator.
       </p>
     </div>

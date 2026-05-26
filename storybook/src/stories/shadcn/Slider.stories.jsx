@@ -20,7 +20,7 @@ export const Default = {
           value={value}
           onValueChange={setValue}
         />
-        <span style={{ fontSize: '14px', color: '#6b7280' }}>Value: {value[0]}</span>
+        <span style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>Value: {value[0]}</span>
       </div>
     );
   },
@@ -38,7 +38,7 @@ export const Range = {
           value={value}
           onValueChange={setValue}
         />
-        <span style={{ fontSize: '14px', color: '#6b7280' }}>
+        <span style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>
           Range: {value[0]} – {value[1]}
         </span>
       </div>
@@ -58,7 +58,7 @@ export const StepFive = {
           value={value}
           onValueChange={setValue}
         />
-        <span style={{ fontSize: '14px', color: '#6b7280' }}>Step 5 — Value: {value[0]}</span>
+        <span style={{ fontSize: '14px', color: 'var(--fg-muted)' }}>Step 5 — Value: {value[0]}</span>
       </div>
     );
   },

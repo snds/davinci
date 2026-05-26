@@ -61,7 +61,7 @@ export const AvatarGroup = {
             key={i}
             style={{
               marginLeft: i === 0 ? 0 : '-8px',
-              border: '2px solid white',
+              border: '2px solid var(--bg-surface)',
               zIndex: users.length - i,
             }}
           >
@@ -74,14 +74,14 @@ export const AvatarGroup = {
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            background: '#f3f4f6',
-            border: '2px solid white',
+            background: 'var(--bg-subtle)',
+            border: '2px solid var(--bg-surface)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '12px',
             fontWeight: 600,
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
             marginLeft: '-8px',
           }}
         >

@@ -16,7 +16,7 @@ export const Horizontal = {
   render: () => (
     <ResizablePanelGroup
       direction="horizontal"
-      style={{ height: '200px', width: '500px', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+      style={{ height: '200px', width: '500px', border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={50}>
         <div
@@ -26,7 +26,7 @@ export const Horizontal = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '14px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Left Panel
@@ -41,7 +41,7 @@ export const Horizontal = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '14px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Right Panel
@@ -55,7 +55,7 @@ export const Vertical = {
   render: () => (
     <ResizablePanelGroup
       direction="vertical"
-      style={{ height: '300px', width: '400px', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+      style={{ height: '300px', width: '400px', border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={40}>
         <div
@@ -65,7 +65,7 @@ export const Vertical = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '14px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Top Panel
@@ -80,7 +80,7 @@ export const Vertical = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '14px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Bottom Panel
@@ -94,7 +94,7 @@ export const ThreePanels = {
   render: () => (
     <ResizablePanelGroup
       direction="horizontal"
-      style={{ height: '200px', width: '600px', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+      style={{ height: '200px', width: '600px', border: '1px solid var(--border)', borderRadius: '8px' }}
     >
       <ResizablePanel defaultSize={25}>
         <div
@@ -104,7 +104,7 @@ export const ThreePanels = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '13px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Sidebar
@@ -119,7 +119,7 @@ export const ThreePanels = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '13px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Main
@@ -134,7 +134,7 @@ export const ThreePanels = {
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '13px',
-            color: '#6b7280',
+            color: 'var(--fg-muted)',
           }}
         >
           Detail

@@ -62,7 +62,7 @@ export const WithValue = {
             <InputOTPSlot index={5} />
           </InputOTPGroup>
         </InputOTP>
-        <p style={{ fontSize: '13px', color: '#6b7280' }}>
+        <p style={{ fontSize: '13px', color: 'var(--fg-muted)' }}>
           {value.length < 6 ? `Enter ${6 - value.length} more digit(s)` : 'Code complete!'}
         </p>
       </div>

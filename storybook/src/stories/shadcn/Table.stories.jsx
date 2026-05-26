@@ -85,8 +85,8 @@ export const UsersTable = {
                 <span
                   className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                     user.status === 'Active'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-600'
+                      ? 'bg-[var(--green-3)] text-[var(--green-11)]'
+                      : 'bg-[var(--bg-subtle)] text-[var(--fg-muted)]'
                   }`}
                 >
                   {user.status}

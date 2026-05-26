@@ -12,7 +12,7 @@ export const Static = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '320px' }}>
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '13px', color: '#6b7280' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '13px', color: 'var(--fg-muted)' }}>
           <span>Progress</span>
           <span>60%</span>
         </div>
@@ -33,7 +33,7 @@ export const Animated = {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '320px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#6b7280' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--fg-muted)' }}>
           <span>Loading…</span>
           <span>{progress}%</span>
         </div>
@@ -53,9 +53,9 @@ export const MultipleValues = {
         { label: 'Bandwidth', value: 30 },
       ].map(({ label, value }) => (
         <div key={label}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '13px', color: '#374151' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '13px', color: 'var(--fg)' }}>
             <span>{label}</span>
-            <span style={{ color: '#6b7280' }}>{value}%</span>
+            <span style={{ color: 'var(--fg-muted)' }}>{value}%</span>
           </div>
           <Progress value={value} />
         </div>
@@ -67,7 +67,7 @@ export const MultipleValues = {
 export const IndeterminateStyle = {
   render: () => (
     <div style={{ width: '320px' }}>
-      <p style={{ fontSize: '13px', color: '#6b7280', marginBottom: '8px' }}>
+      <p style={{ fontSize: '13px', color: 'var(--fg-muted)', marginBottom: '8px' }}>
         No value = indeterminate appearance
       </p>
       <Progress />
