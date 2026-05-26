@@ -42,6 +42,25 @@ export const GENERIC = {
     alsoViewed: [["ClassPass", "Consumer Services"], ["Headspace", "Mental Health Care"], ["Lovable", "Software Development"]],
     alsoFollow: [["OpenAI", "Research Services"], ["ChatGPT", "Technology, Information and Internet"]],
   },
+  // Filler used to pad every company to a consistent, "lived-in" density.
+  fillerPosts: [
+    { body: "We're growing the team — check out our open roles and help us build what's next. 🚀", reactions: 142, comments: 8 },
+    { body: "Behind the scenes: how we think about shipping quality at speed. New on the blog.", attachment: { title: "How we ship — our engineering principles", sub: "Blog · 6 min read", image: "article-ship" }, reactions: 326, comments: 21 },
+    { body: "Proud to share our latest customer story — real teams, real outcomes. Thank you for building with us. 💚", reactions: 211, comments: 13 },
+    { body: "ICYMI: replays from last month's community event are live. Three talks you shouldn't miss.", attachment: { title: "Community event — talk replays", sub: "youtube.com · Watch now", image: "article-event" }, reactions: 188, comments: 9 },
+  ],
+  fillerJobs: [
+    ["Software Engineer", "Remote · EU", "1 week ago"],
+    ["Product Marketing Manager", "Hybrid", "2 weeks ago"],
+    ["Customer Success Lead", "Remote", "3 days ago"],
+    ["Data Analyst", "Remote · EU", "5 days ago"],
+  ],
+  pymk: [
+    { name: "Sarah LeCroy", role: "Product Design", seed: "sarah lecroy" },
+    { name: "Paul Twohey", role: "Engineering Leader", seed: "paul twohey" },
+    { name: "Kristen Buck", role: "Lead Instructional Designer", seed: "kristen buck" },
+    { name: "Jeff Novich", role: "Principal Product Manager", seed: "jeff novich" },
+  ],
 };
 
 export const COMPANIES = {

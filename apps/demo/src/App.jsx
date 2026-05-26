@@ -491,6 +491,7 @@ function Feed() {
 
 /* ============================ Profile ============================ */
 function ProfilePage() {
+  const { goToCompany } = React.useContext(NavContext);
   return (
     <main className="flex flex-col gap-3">
       <Panel bare>
@@ -529,7 +530,7 @@ function ProfilePage() {
             <div className="entry__logo">{e.logo}</div>
             <div style={{ flex: 1 }}>
               <div className="entry__title">{e.title}</div>
-              <div className="entry__sub">{e.co}</div>
+              <div className="entry__sub">{companyIdFor(e.co) ? <span onClick={() => goToCompany(companyIdFor(e.co))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{e.co}</span> : e.co}</div>
               <div className="entry__time">{e.time}</div>
               <div className="entry__desc">{e.desc}</div>
               <div className="entry__skills">{e.skills.map((s) => <Pill key={s}>{s}</Pill>)}</div>
@@ -579,13 +580,16 @@ function ProfilePage() {
           { n: "Helix Systems", r: "24,802 followers", i: "HX", v: "g2", company: true },
           { n: "Design Systems Guild", r: "28,402 members", i: "DS", v: "g4", company: true },
           { n: "Miriam Chen", r: "VP Design · Helix", i: "MC", v: "g4" },
-        ].map((p, i) => (
-          <div key={i} className="rail-item">
-            <Avatar initials={p.i} size={40} variant={p.v} photoSeed={p.company ? null : p.n} style={p.company ? { borderRadius: 8 } : undefined} />
-            <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
-            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
-          </div>
-        ))}
+        ].map((p, i) => {
+          const cid = p.company ? companyIdFor(p.n) : null;
+          return (
+            <div key={i} className="rail-item" onClick={cid ? () => goToCompany(cid) : undefined} style={cid ? { cursor: "pointer" } : undefined}>
+              <Avatar initials={p.i} size={40} variant={p.v} bg={COMPANIES[cid]?.logoBg} photoSeed={p.company ? null : p.n} style={p.company ? { borderRadius: 8 } : undefined} />
+              <div className="rail-item__text"><div className="rail-item__title">{p.n}</div><div className="rail-item__sub">{p.r}</div></div>
+              <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
+            </div>
+          );
+        })}
       </Panel>
     </main>
   );
@@ -628,7 +632,8 @@ function CompanySubnav({ c, tabs, tab, setTab, stuck }) {
   );
 }
 
-function CompanyRail({ goToCompany }) {
+function CompanyRail({ c, goToCompany }) {
+  const others = Object.values(COMPANIES).filter((x) => x.id !== c.id);
   const Mod = ({ title, sub, rows }) => (
     <Panel title={title} bodyStyle={{ padding: 0 }}>
       {sub && <div style={{ fontSize: 11, color: "var(--fg-muted)", padding: "0 16px 8px" }}>{sub}</div>}
@@ -638,7 +643,7 @@ function CompanyRail({ goToCompany }) {
           <div key={i} className="rail-item" onClick={id ? () => goToCompany(id) : undefined} style={id ? { cursor: "pointer" } : undefined}>
             <Avatar initials={name.slice(0, 2).toUpperCase()} size={40} variant="g2" bg={COMPANIES[id]?.logoBg} style={{ borderRadius: 8 }} />
             <div className="rail-item__text"><div className="rail-item__title">{name}</div><div className="rail-item__sub">{kind}</div></div>
-            <Button variant="outline" size="sm" pill icon="add">Follow</Button>
+            <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
           </div>
         );
       })}
@@ -646,8 +651,16 @@ function CompanyRail({ goToCompany }) {
   );
   return (
     <aside className="hidden flex-col gap-3 lg:flex">
+      <Panel title="Pages people also viewed" bodyStyle={{ padding: 0 }}>
+        {others.map((x) => (
+          <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
+            <Avatar initials={x.initials} size={40} bg={x.logoBg} style={{ borderRadius: 8 }} />
+            <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry}</div></div>
+            <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
+          </div>
+        ))}
+      </Panel>
       <Mod title="Products people also use" rows={GENERIC.rail.alsoUse} />
-      <Mod title="Pages people also viewed" rows={GENERIC.rail.alsoViewed} />
       <Mod title="People also follow" rows={GENERIC.rail.alsoFollow} />
     </aside>
   );
@@ -672,26 +685,66 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
     reactions: p.reactions, comments: p.comments, topReactions: ["like", "celebrate", "support"],
   });
 
+  // Pad to a consistent, "lived-in" density across every company.
+  const densePosts = [...c.posts, ...GENERIC.fillerPosts.map((p, i) => ({ id: `${c.id}-f${i}`, time: ["6h", "2d", "1w", "2w"][i] || "1w", ...p }))].slice(0, 4);
+  const denseJobs = [...c.jobs, ...GENERIC.fillerJobs].slice(0, 5);
+  const customers = Object.values(COMPANIES).filter((x) => x.id !== c.id);
+  const stats = [["employees", c.employees], ["founded", c.founded], ["open roles", String(denseJobs.length)], ["followers", c.followers]];
+
+  const companyRow = (x) => (
+    <div key={x.id} className="rail-item" onClick={() => goToCompany(x.id)} style={{ cursor: "pointer" }}>
+      <Avatar initials={x.initials} size={44} bg={x.logoBg} style={{ borderRadius: 8 }} />
+      <div className="rail-item__text"><div className="rail-item__title">{x.name}</div><div className="rail-item__sub">{x.industry} · {x.followers} followers</div></div>
+      <Button variant="outline" size="sm" pill icon="add" onClick={(e) => e.stopPropagation()}>Follow</Button>
+    </div>
+  );
+
   const homeTab = (
     <>
       <Panel title="Overview" action={<Button variant="ghost" size="sm" onClick={() => setTab("about")}>Show all details</Button>}>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: 0 }}>{c.about}</p>
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--fg-muted)", margin: "0 0 16px" }}>{c.about}</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          {stats.map(([v, l]) => <div className="stat" key={l}><div className="stat__value">{v}</div><div className="stat__label">{l}</div></div>)}
+        </div>
       </Panel>
       <div>
         <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, margin: "2px 2px 8px" }}>Page posts</div>
-        <div className="flex flex-col gap-3">{c.posts.map((p) => <Post key={p.id} {...postProps(p)} />)}</div>
+        <div className="flex flex-col gap-3">{densePosts.slice(0, 3).map((p) => <Post key={p.id} {...postProps(p)} />)}</div>
       </div>
       <Panel title="Products" action={<Button variant="ghost" size="sm" onClick={() => setTab("products")}>Show all</Button>}>
         <div style={{ fontWeight: 600 }}>{c.product.name}</div>
         <p style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 4 }}>{c.product.desc}</p>
       </Panel>
+      <Panel title="People highlights" bodyStyle={{ padding: 0 }}>
+        {GENERIC.pymk.slice(0, 3).map((p, i) => (
+          <div key={i} className="rail-item">
+            <Avatar initials={p.name.slice(0, 2).toUpperCase()} size={44} photoSeed={p.name} />
+            <div className="rail-item__text"><div className="rail-item__title">{p.name}</div><div className="rail-item__sub">{p.role} · {c.name}</div></div>
+            <Button variant="outline" size="sm" pill>Message</Button>
+          </div>
+        ))}
+      </Panel>
       <Panel title="Recent job openings" action={<Button variant="ghost" size="sm" onClick={() => setTab("jobs")}>Show all jobs</Button>} bodyStyle={{ padding: 0 }}>
-        {c.jobs.slice(0, 2).map(([title, loc, posted], i) => (
-          <div key={i} className="entry" style={{ alignItems: "center", padding: "12px 16px", borderBottom: i === 0 ? "1px solid var(--border-subtle)" : "none" }}>
+        {denseJobs.slice(0, 3).map(([title, loc, posted], i) => (
+          <div key={i} className="entry" style={{ alignItems: "center", padding: "12px 16px", borderBottom: i < 2 ? "1px solid var(--border-subtle)" : "none" }}>
             <Avatar initials={c.initials} size={40} bg={c.logoBg} style={{ borderRadius: 8 }} />
             <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__time">{loc} · {posted}</div></div>
           </div>
         ))}
+      </Panel>
+      <Panel title="Events">
+        <div className="flex flex-col gap-3">
+          {GENERIC.events.map((e, i) => (
+            <div key={i} style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              <div style={{ width: 44, height: 44, borderRadius: 8, background: "var(--bg-subtle)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent-fg)" }}><Icon name="event" /></div>
+              <div style={{ flex: 1 }}><div className="entry__title">{e.title}</div><div className="entry__time">{e.date} · {e.attendees} attendees</div></div>
+              <Button variant="outline" size="sm" pill>View</Button>
+            </div>
+          ))}
+        </div>
+      </Panel>
+      <Panel title="Featured customers" bodyStyle={{ padding: 0 }}>
+        {customers.slice(0, 4).map((x) => companyRow(x))}
       </Panel>
     </>
   );
@@ -731,12 +784,12 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
     </>
   );
 
-  const postsTab = <>{c.posts.map((p) => <Post key={p.id} {...postProps(p)} />)}</>;
+  const postsTab = <div className="flex flex-col gap-3">{densePosts.map((p) => <Post key={p.id} {...postProps(p)} />)}</div>;
 
   const jobsTab = (
-    <Panel title={`${c.name} has ${c.jobs.length} open roles`} bodyStyle={{ padding: 0 }}>
-      {c.jobs.map(([title, loc, posted], i) => (
-        <div key={i} className="entry" style={{ alignItems: "center", padding: "14px 16px", borderBottom: i < c.jobs.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
+    <Panel title={`${c.name} has ${denseJobs.length} open roles`} bodyStyle={{ padding: 0 }}>
+      {denseJobs.map(([title, loc, posted], i) => (
+        <div key={i} className="entry" style={{ alignItems: "center", padding: "14px 16px", borderBottom: i < denseJobs.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
           <Avatar initials={c.initials} size={48} bg={c.logoBg} style={{ borderRadius: 8 }} />
           <div style={{ flex: 1 }}><div className="entry__title">{title}</div><div className="entry__sub">{c.name}</div><div className="entry__time">{loc} · {posted}</div></div>
           <Button variant="outline" size="sm" pill>Easy apply</Button>
@@ -816,9 +869,8 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
   const content = { home: homeTab, about: aboutTab, products: productsTab, posts: postsTab, jobs: jobsTab, people: peopleTab, insights: insightsTab }[tab] || homeTab;
 
   return (
-    <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
-      <div className="flex min-w-0 flex-col gap-3">
-        <Panel bare>
+    <div className="flex flex-col">
+        <Panel bare className="rounded-b-none">
           <div className="profile-cover" style={{ height: 130, backgroundImage: `url(${seededPhoto(c.coverSeed, 1200, 300, c.coverKind || "office")})`, backgroundSize: "cover", backgroundPosition: "center" }} />
           <div style={{ padding: "0 24px 16px", marginTop: -40, position: "relative" }}>
             <div className="company-logo" style={{ background: c.logoBg }}>{c.initials}</div>
@@ -840,9 +892,10 @@ function CompanyPage({ companyId = "davinci", goToCompany }) {
           </div>
         </Panel>
         <CompanySubnav c={c} tabs={TABS} tab={tab} setTab={setTab} stuck={stuck} />
-        <div className="flex flex-col gap-3">{content}</div>
-      </div>
-      <CompanyRail goToCompany={goToCompany} />
+        <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="flex min-w-0 flex-col gap-3">{content}</div>
+          <CompanyRail c={c} goToCompany={goToCompany} />
+        </div>
     </div>
   );
 }
@@ -927,6 +980,7 @@ function NetworkPage() {
 
 /* ============================ Jobs ============================ */
 function JobsPage() {
+  const { goToCompany } = React.useContext(NavContext);
   const [selected, setSelected] = useState(0);
   const [saved, setSaved] = useState(new Set([1]));
   const jobs = [
@@ -946,7 +1000,7 @@ function JobsPage() {
               <Avatar initials={j.logo} size={48} variant={j.variant} style={{ borderRadius: 8 }} />
               <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{j.title}</div>
-                <div style={{ fontSize: 12, color: "var(--fg-muted)" }}>{j.company}</div>
+                <div style={{ fontSize: 12, color: "var(--fg-muted)" }}>{companyIdFor(j.company) ? <span onClick={(e) => { e.stopPropagation(); goToCompany(companyIdFor(j.company)); }} style={{ cursor: "pointer" }}>{j.company}</span> : j.company}</div>
                 <div style={{ fontSize: 11, color: "var(--fg-subtle)", marginTop: 2 }}>{j.location}</div>
                 <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>{j.easyApply && <Pill variant="accent">Easy Apply</Pill>}{j.remote && <Pill>Remote</Pill>}</div>
               </div>
@@ -961,7 +1015,7 @@ function JobsPage() {
             <Avatar initials={current.logo} size={64} variant={current.variant} style={{ borderRadius: 10 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 700, letterSpacing: "-0.01em" }}>{current.title}</div>
-              <div style={{ fontSize: 14, marginTop: 2 }}>{current.company}</div>
+              <div style={{ fontSize: 14, marginTop: 2 }}>{companyIdFor(current.company) ? <span onClick={() => goToCompany(companyIdFor(current.company))} style={{ cursor: "pointer", color: "var(--accent-fg)" }}>{current.company}</span> : current.company}</div>
               <div style={{ fontSize: 13, color: "var(--fg-muted)", marginTop: 2 }}>{current.location}</div>
               <div style={{ fontSize: 12, color: "var(--fg-subtle)", marginTop: 6, display: "flex", gap: 10 }}><span>{current.posted}</span><span>·</span><span>{current.applicants}</span><span>·</span><span>{current.salary}</span></div>
             </div>
