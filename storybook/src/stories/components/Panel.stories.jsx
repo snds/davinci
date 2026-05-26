@@ -1,7 +1,7 @@
 import React from 'react';
-import Panel from '../../components/Panel';
-import Button from '../../components/Button';
-import Icon from '../../components/Icon';
+import { Panel } from '@davinci/ui/components/davinci/panel';
+import { Button } from '@davinci/ui/components/davinci/button';
+import { Icon } from '@davinci/ui/components/davinci/icon';
 
 export default {
   title: 'Components/Panel',
