@@ -51,7 +51,10 @@
   --destructive:             var(--danger);
   --destructive-foreground:  var(--fg-on-accent);
 
-  --border:                  var(--border);
+  /* NOTE: --border is the Davinci semantic token (colors_and_type.css) — do
+     NOT redeclare it as `--border: var(--border)`; that self-reference is a
+     CSS cycle, making --border (and --input) invalid → borders fall back to
+     currentColor. Just consume it. */
   --input:                   var(--border);
   --ring:                    var(--border-focus);
 
@@ -106,7 +109,10 @@
   --destructive:             var(--danger);
   --destructive-foreground:  var(--fg-on-accent);
 
-  --border:                  var(--border);
+  /* NOTE: --border is the Davinci semantic token (colors_and_type.css) — do
+     NOT redeclare it as `--border: var(--border)`; that self-reference is a
+     CSS cycle, making --border (and --input) invalid → borders fall back to
+     currentColor. Just consume it. */
   --input:                   var(--border);
   --ring:                    var(--border-focus);
 
