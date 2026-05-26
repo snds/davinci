@@ -42,6 +42,11 @@ body {
 [data-slot="select-trigger"] {
   border-color: var(--border-subtle);
 }
+/* Rich text editor: soften the outer frame + toolbar divider to match */
+[data-slot="rich-textarea"],
+[data-slot="rich-textarea"] [role="toolbar"] {
+  border-color: var(--border-subtle);
+}
 .btn--secondary {
   border-color: var(--border-subtle);
 }
