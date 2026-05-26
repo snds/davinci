@@ -607,48 +607,55 @@ body {
   height: 16px;
 }
 
+/* Per-type variants — single source (the duplicate block further down was
+   folded in here). Border = Radix step-7, icon = step-9, heading = *-fg. */
+
 /* Note */
 .admonition-note {
   background: var(--bg-surface);
   border-color: var(--border);
 }
 .admonition-note .admonition-heading h5,
-.admonition-note .admonition-icon { color: var(--fg-muted); }
+.admonition-note .admonition-icon,
+.admonition-note svg { color: var(--fg-muted); }
 
 /* Info */
 .admonition-info {
   background: var(--accent-subtle);
-  border-color: var(--accent-border);
+  border-color: var(--blue-7);
 }
-.admonition-info .admonition-heading h5,
-.admonition-info .admonition-icon { color: var(--accent-fg); }
+.admonition-info .admonition-heading h5 { color: var(--accent-fg); }
+.admonition-info .admonition-icon,
+.admonition-info svg { color: var(--blue-9); }
 
 /* Tip */
 .admonition-tip {
   background: var(--green-a3);
-  border-color: rgba(48,164,108,.35);
+  border-color: var(--green-7);
 }
-.admonition-tip .admonition-heading h5,
-.admonition-tip .admonition-icon { color: var(--success-fg); }
+.admonition-tip .admonition-heading h5 { color: var(--success-fg); }
+.admonition-tip .admonition-icon,
+.admonition-tip svg { color: var(--green-9); }
 
 /* Warning */
 .admonition-warning,
 .admonition-caution {
   background: var(--alt-subtle);
-  border-color: rgba(101,89,0,.3);
+  border-color: var(--amber-7);
 }
 .admonition-warning .admonition-heading h5,
-.admonition-warning .admonition-icon,
-.admonition-caution .admonition-heading h5,
-.admonition-caution .admonition-icon { color: var(--alt-fg); }
+.admonition-caution .admonition-heading h5 { color: var(--alt-fg); }
+.admonition-warning .admonition-icon, .admonition-warning svg,
+.admonition-caution .admonition-icon, .admonition-caution svg { color: var(--amber-9); }
 
 /* Danger */
 .admonition-danger {
   background: var(--red-a3);
-  border-color: rgba(229,72,77,.35);
+  border-color: var(--red-7);
 }
 .admonition-danger .admonition-heading h5,
-.admonition-danger .admonition-icon { color: var(--danger-fg); }
+.admonition-danger .admonition-icon,
+.admonition-danger svg { color: var(--danger-fg); }
 
 .admonition > :last-child { margin-bottom: 0; }
 
@@ -855,21 +862,6 @@ article header {
   font-size: var(--text-base);
   line-height: var(--lh-normal);
 }
-
-/* ============================================================
-   ADMONITION TYPE VARIANTS (swizzled Alert component)
-   ============================================================ */
-
-.admonition-note   { border-color: var(--border); }
-.admonition-info   { border-color: var(--blue-7); --tw-ring-color: var(--blue-7); }
-.admonition-info   svg { color: var(--blue-9); }
-.admonition-tip    { border-color: var(--green-7); }
-.admonition-tip    svg { color: var(--green-9); }
-.admonition-warning, .admonition-caution {
-  border-color: var(--amber-7);
-}
-.admonition-warning svg, .admonition-caution svg { color: var(--amber-9); }
-.admonition-danger { border-color: var(--red-7); }
 
 /* ============================================================
    DOC PAGINATOR (swizzled Button-based nav)

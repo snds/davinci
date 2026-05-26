@@ -68,7 +68,7 @@ export const WithPhoto = {
     initials: 'YO',
     size: 40,
     variant: 'g1',
-    photo: 'https://i.pravatar.cc/150?img=5',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces&auto=format&q=75',
   },
 };
 

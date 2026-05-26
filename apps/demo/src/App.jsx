@@ -655,10 +655,11 @@ function RightRail() {
 function Composer() {
   const [open, setOpen] = useState(false);
   const composerActions = [
-    { icon: "image", label: "Photo", color: "var(--accent-fg)" },
-    { icon: "play_circle", label: "Video", color: "var(--success-fg)" },
-    { icon: "event", label: "Event", color: "var(--warning-fg)" },
-    { icon: "article", label: "Article", color: "var(--danger-fg)" },
+    // Vivid category colors (step-9 solids), not the muted step-11 text tokens.
+    { icon: "image", label: "Photo", color: "var(--accent)" },
+    { icon: "play_circle", label: "Video", color: "var(--success)" },
+    { icon: "event", label: "Event", color: "var(--warning)" },
+    { icon: "article", label: "Article", color: "var(--danger)" },
   ];
   return (
     <Dialog open={open} onOpenChange={setOpen}>
