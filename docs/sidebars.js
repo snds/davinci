@@ -37,6 +37,8 @@ const sidebars = {
         'primitives/rich-textarea',
         'shadcn/label',
         'shadcn/badge',
+        'primitives/pill',
+        'primitives/status-badge',
         'shadcn/avatar',
         'shadcn/progress',
         'shadcn/slider',

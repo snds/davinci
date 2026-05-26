@@ -1,0 +1,41 @@
+---
+title: Pill
+sidebar_label: Pill
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Pill
+
+Pill is a fully-rounded status/label chip — the Davinci tonal variant of [Badge](/shadcn/badge). Use it for connection degrees, counts, and short status labels. It ships from the design system as `@davinci/ui/components/davinci/pill`.
+
+<StorybookEmbed story="primitives-pill--all-variants" height={120} title="Pill variants" />
+
+## Variants
+
+| Variant | Appearance | Use for |
+|---|---|---|
+| _(default)_ | Neutral secondary chip | Counts, neutral metadata (e.g. "2nd") |
+| `accent` | Accent-subtle fill, accent text | Highlighted state (e.g. "Open to work") |
+| `success` | Solid success fill | Positive/affirmative status (e.g. "Hiring") |
+| `alt` | Alt-subtle fill, alt text | Secondary categorical tag |
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `"accent" \| "success" \| "alt"` | — | Tonal variant; omit for the neutral chip. |
+| `children` | `ReactNode` | — | Pill label. |
+| `style` | `CSSProperties` | — | Style overrides merged over the variant. |
+
+## Usage
+
+```jsx
+import { Pill } from '@davinci/ui/components/davinci/pill';
+
+<Pill variant="accent">Open to work</Pill>
+<Pill variant="success">Hiring</Pill>
+<Pill>2nd</Pill>
+```
+
+Pills are color-only signals — always pair the tone with a text label (never rely on color alone), and keep labels to one or two words. For status with a leading indicator dot, use [StatusBadge](/primitives/status-badge) instead.

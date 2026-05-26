@@ -1,0 +1,40 @@
+---
+title: StatusBadge
+sidebar_label: StatusBadge
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# StatusBadge
+
+StatusBadge is an outline chip with a leading colored dot — the dot carries the semantic tone so the chip itself stays quiet. Use it for entity status (online, hiring, away, closed, new). It ships from the design system as `@davinci/ui/components/davinci/status-badge`.
+
+<StorybookEmbed story="primitives-statusbadge--all-statuses" height={120} title="StatusBadge statuses" />
+
+## Statuses
+
+| Status | Dot | Default label |
+|---|---|---|
+| `online` | success | Online |
+| `hiring` | success | Actively hiring |
+| `away` | warning | Away |
+| `closed` | subtle | Closed |
+| `new` | accent | New |
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `status` | `"online" \| "hiring" \| "away" \| "closed" \| "new"` | `"online"` | Tone — sets the dot color and default label. |
+| `children` | `ReactNode` | — | Override the default label. |
+
+## Usage
+
+```jsx
+import { StatusBadge } from '@davinci/ui/components/davinci/status-badge';
+
+<StatusBadge status="hiring" />
+<StatusBadge status="online">Available now</StatusBadge>
+```
+
+The dot is the only color signal, so the badge stays legible on any surface and in both themes. For a fully-filled tonal chip (no dot), use [Pill](/primitives/pill).
