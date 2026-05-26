@@ -1,34 +1,23 @@
 import * as React from "react";
 
-import { Button as UIButton } from "@davinci/ui/components/ui/button";
-import {
-  Avatar as UIAvatar,
-  AvatarImage,
-  AvatarFallback,
-} from "@davinci/ui/components/ui/avatar";
-import { Badge } from "@davinci/ui/components/ui/badge";
-import { Card } from "@davinci/ui/components/ui/card";
 import {
   Tooltip, TooltipTrigger, TooltipContent, TooltipProvider,
 } from "@davinci/ui/components/ui/tooltip";
 import {
   HoverCard, HoverCardTrigger, HoverCardContent,
 } from "@davinci/ui/components/ui/hover-card";
+import { Card } from "@davinci/ui/components/ui/card";
 
-/* ---------------- Icon (Material Symbols Rounded) ----------------
-   Three UI sizes: small 12 / medium 20 (default) / large 24. */
-const ICON_SIZE_CLASS = { sm: "icon--sm", md: "icon--md", lg: "icon--lg" };
-export function Icon({ name, filled, size, style, className = "" }) {
-  return (
-    <span
-      className={`material-symbols-rounded ${filled ? "filled" : ""} ${size ? ICON_SIZE_CLASS[size] : ""} ${className}`}
-      style={style}
-      aria-hidden
-    >
-      {name}
-    </span>
-  );
-}
+/* ---------------- Design system (single source of truth) ----------------
+   The component layer lives in @davinci/ui; the demo consumes it. Only
+   demo-specific glue (seeded portraits, brand-logo placeholders, the
+   photoSeed-resolving Avatar shim, HoverProfile, ad fixtures) lives here. */
+import { Avatar as DvAvatar } from "@davinci/ui/components/davinci/avatar";
+export { Icon } from "@davinci/ui/components/davinci/icon";
+export { Button } from "@davinci/ui/components/davinci/button";
+export { Pill } from "@davinci/ui/components/davinci/pill";
+export { StatusBadge } from "@davinci/ui/components/davinci/status-badge";
+export { Panel } from "@davinci/ui/components/davinci/panel";
 
 /* ---------------- Seeded portraits (ported from the original demo) ---------------- */
 const PORTRAIT_MAP = {
@@ -79,26 +68,6 @@ export function maybePhoto(seed, w = 200, h = 200) {
   return seededPhoto(seed, w, h, "face");
 }
 
-/* ---------------- Button (wraps @davinci/ui Button, keeps demo's API) ---------------- */
-export function Button({
-  variant = "secondary", size, pill, children, onClick, icon, iconRight, style, className = "", ...rest
-}) {
-  return (
-    <UIButton
-      variant={variant}
-      size={size || "default"}
-      onClick={onClick}
-      style={style}
-      className={`${pill ? "btn--pill" : ""} ${icon && children ? "btn--icon-leading" : ""} ${iconRight && children ? "btn--icon-trailing" : ""} ${className}`.trim()}
-      {...rest}
-    >
-      {icon && <Icon name={icon} size="md" />}
-      {children}
-      {iconRight && <Icon name={iconRight} size="md" />}
-    </UIButton>
-  );
-}
-
 /* ---------------- Brand logo (DiceBear placeholder) ----------------
    Deterministic abstract mark from a seed (company name). Renders as an SVG;
    if the API is unreachable the Avatar falls back to initials-on-color. */
@@ -106,84 +75,14 @@ export function brandLogo(seed) {
   return `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(String(seed || "").trim())}`;
 }
 
-/* ---------------- Avatar (wraps @davinci/ui Avatar) ----------------
-   `shape`: "circle" (default) | "rounded" (rounded-rectangle, e.g. company logos).
-   `ring`:  bg-surface stroke (the company-logo "sticker" frame), on by default.
-            Drawn as an OUTER box-shadow so it never crops the photo; invisible
-            on a matching surface, visible when the avatar overlaps a cover or
-            colored backdrop. Larger avatars also get a soft drop shadow. */
-const VARIANT_BG = {
-  g1: "var(--blue-9)", g2: "var(--teal-9)", g3: "var(--grass-9)",
-  g4: "var(--violet-9)", g5: "var(--amber-9)", g6: "var(--tomato-9)",
-};
-function roundedRadius(size) { return Math.max(6, Math.round(size * 0.2)); }
-function ringShadow(size) {
-  const w = size >= 96 ? 4 : size >= 44 ? 3 : 2;
-  const lift = size >= 72 ? ", var(--shadow-md)" : "";
-  return `0 0 0 ${w}px var(--bg-surface)${lift}`;
-}
-export function Avatar({ initials, size = 40, variant = "g1", photo, photoSeed, bg, shape = "circle", ring = true, style, className = "" }) {
-  let resolved = null;
-  if (photo === null) resolved = null;
-  else if (typeof photo === "string") resolved = photo;
-  else if (photoSeed) resolved = maybePhoto(photoSeed, size * 2, size * 2);
-  const radius = style && style.borderRadius != null
-    ? style.borderRadius
-    : shape === "rounded" ? roundedRadius(size) : "50%";
-  const boxShadow = style && style.boxShadow != null
-    ? style.boxShadow
-    : ring ? ringShadow(size) : undefined;
-  return (
-    <UIAvatar
-      className={className}
-      style={{ width: size, height: size, borderRadius: radius, flexShrink: 0, boxShadow, ...style }}
-    >
-      {resolved && <AvatarImage src={resolved} alt="" style={{ borderRadius: "inherit" }} />}
-      <AvatarFallback
-        style={{
-          background: bg || VARIANT_BG[variant] || "var(--bg-active)",
-          color: "#fff", borderRadius: "inherit",
-          fontSize: Math.round(size * 0.38), fontWeight: 600,
-        }}
-      >
-        {initials}
-      </AvatarFallback>
-    </UIAvatar>
-  );
-}
-
-/* ---------------- Pill (wraps @davinci/ui Badge) ---------------- */
-const PILL_STYLE = {
-  accent: { background: "var(--accent-subtle)", color: "var(--accent-fg)", borderColor: "transparent" },
-  success: { background: "var(--success)", color: "#fff", borderColor: "transparent" },
-  alt: { background: "var(--alt-subtle)", color: "var(--alt-fg)", borderColor: "transparent" },
-};
-export function Pill({ children, variant, style }) {
-  return (
-    <Badge variant="secondary" className="rounded-full" style={{ ...(PILL_STYLE[variant] || {}), ...style }}>
-      {children}
-    </Badge>
-  );
-}
-
-/* ---------------- StatusBadge (wraps @davinci/ui Badge) ----------------
-   Status with a leading dot — online/hiring/away/closed. Uses the outline
-   Badge variant so the dot carries the semantic color, not the whole chip. */
-const STATUS_TONE = {
-  online: { dot: "var(--success)", label: "Online" },
-  hiring: { dot: "var(--success)", label: "Actively hiring" },
-  away: { dot: "var(--warning)", label: "Away" },
-  closed: { dot: "var(--fg-subtle)", label: "Closed" },
-  new: { dot: "var(--accent)", label: "New" },
-};
-export function StatusBadge({ status = "online", children }) {
-  const t = STATUS_TONE[status] || STATUS_TONE.online;
-  return (
-    <Badge variant="outline" className="rounded-full gap-1.5" style={{ borderColor: "var(--border-subtle)", color: "var(--fg-muted)" }}>
-      <span style={{ width: 7, height: 7, borderRadius: "50%", background: t.dot, flexShrink: 0 }} />
-      {children || t.label}
-    </Badge>
-  );
+/* ---------------- Avatar (demo shim over the system Avatar) ----------------
+   The system Avatar takes a resolved `photo` src; this shim adds the demo's
+   `photoSeed` → seeded-portrait resolution and otherwise forwards everything. */
+export function Avatar({ photoSeed, photo, size = 40, ...rest }) {
+  const resolvedPhoto = photo === null ? null
+    : typeof photo === "string" ? photo
+    : photoSeed ? maybePhoto(photoSeed, size * 2, size * 2) : undefined;
+  return <DvAvatar photo={resolvedPhoto} size={size} {...rest} />;
 }
 
 /* ---------------- Tooltip ----------------
@@ -234,23 +133,6 @@ export function HoverProfile({
         )}
       </HoverCardContent>
     </HoverCard>
-  );
-}
-
-/* ---------------- Panel (wraps @davinci/ui Card; reuses .panel__* chrome) ---------------- */
-export function Panel({ title, action, children, style, bodyStyle, className = "", bare = false, ...rest }) {
-  return (
-    <Card className={`gap-0 overflow-hidden py-0 ${className}`.trim()} style={style} {...rest}>
-      {(title || action) && (
-        <header className="panel__header">
-          {title ? <span>{title}</span> : <span />}
-          {action}
-        </header>
-      )}
-      {/* `bare` skips the .panel__body padding for content that carries its
-          own (composer, post) — otherwise padding stacks. */}
-      {bare ? children : <div className="panel__body" style={bodyStyle}>{children}</div>}
-    </Card>
   );
 }
 
