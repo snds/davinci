@@ -1965,8 +1965,24 @@ const CONVERSATIONS = [
   ] },
   { id: 1, name: "Daniel Amrani", role: "Head of Brand · Pylon", avatar: "DA", variant: "g2", time: "10:42 AM", preview: "Totally — let me know when the deck is ready.", unread: true, messages: [{ from: "them", text: "Totally — let me know when the deck is ready and I'll review.", time: "10:42 AM" }] },
   { id: 2, name: "Priya Ravi", role: "Design Engineer · Atlas", avatar: "PR", variant: "g5", time: "Yesterday", preview: "You: Congrats on the launch 🎉", unread: false, messages: [{ from: "me", text: "Thanks! Congrats on the launch btw 🎉", time: "Yesterday 4:12 PM" }] },
-  { id: 3, name: "Helix Recruiting", role: "Company page", avatar: "HX", variant: "g2", time: "Yesterday", preview: "We just opened a Staff role — interested?", unread: false, messages: [{ from: "them", text: "We just opened a Staff role on the platform team — interested?", time: "Yesterday 2:03 PM" }] },
+  { id: 3, name: "Helix Recruiting", role: "Company page", avatar: "HX", variant: "g2", company: true, other: true, time: "Yesterday", preview: "We just opened a Staff role — interested?", unread: false, label: "Jobs", messages: [{ from: "them", text: "We just opened a Staff role on the platform team — interested?", time: "Yesterday 2:03 PM" }] },
+  { id: 4, name: "Massive", role: "Computer Software", avatar: "MV", variant: "g3", company: true, time: "May 24", preview: "You: I have tried several times …", unread: false, messages: [{ from: "me", text: "I have tried several times to start the trial but the signup flow breaks every time. Could you take a look?", time: "Sun 2:39 PM" }] },
+  { id: 5, name: "Kyle Zehner", role: "Lead Design System · Weedmaps", avatar: "KZ", variant: "g2", time: "May 14", preview: "Lead the Evolution of the Design System for the Cannabis…", unread: true, label: "Jobs", messages: [{ from: "them", text: "Hey — we're looking for someone to lead the evolution of our design system. Open to a chat?", time: "May 14" }] },
+  { id: 6, name: "Lisa Hertzberg Sands", role: "Content Designer", avatar: "LS", variant: "g4", time: "May 11", preview: "Lisa sent a post", unread: false, messages: [{ from: "them", text: "Thought you'd find this interesting 👀", time: "May 11" }] },
+  { id: 7, name: "Justyn Harkin", role: "B2B Copywriter & Content Architect", avatar: "JH", variant: "g5", time: "Apr 25", preview: "You: You're welcome", unread: false, messages: [{ from: "me", text: "You're welcome!", time: "Apr 25" }] },
+  { id: 8, name: "Jasmine Madronio", role: "Sr. UX Analyst · Elk Grove, CA", avatar: "JM", variant: "g6", time: "Apr 24", preview: "Sr. UX Analyst | Elk Grove, CA", unread: false, starred: true, messages: [{ from: "them", text: "Hi! I came across your profile and would love to connect.", time: "Apr 24" }] },
+  { id: 9, name: "Sarah Volynsky", role: "Product Designer", avatar: "SV", variant: "g1", time: "Apr 7", preview: "Sarah: Hey, thanks for connecting. I'm currently workin…", unread: false, messages: [{ from: "them", text: "Hey, thanks for connecting. I'm currently working on a few side projects — happy to share.", time: "Apr 7" }] },
+  { id: 10, name: "Joe Kit Yong", role: "Head of Growth · Airfoil", avatar: "JY", variant: "g2", time: "Mar 17", preview: "Joe Kit: If you happen to know any other talented designers…", unread: false, messages: [{ from: "them", text: "If you happen to know any other talented designers, send them our way!", time: "Mar 17" }] },
 ];
+const SUGGESTED_PEOPLE = [
+  { name: "Tim Schavitz", role: "Product Design @ ŌURA · Meta Reality Labs", variant: "g2" },
+  { name: "Diego Valdes", role: "Senior Design Engineer", variant: "g5" },
+  { name: "Annie Thayer", role: "Inclusive Product Designer | UX", variant: "g4" },
+  { name: "Jason Kondo", role: "Director, Product Design at Zuora", variant: "g6" },
+  { name: "Tom Giannattasio", role: "Design Tools! Figma, Clover, InVision", variant: "g1" },
+  { name: "Jason Burley", role: "Lead Instructing Artist", variant: "g3" },
+];
+const EMOJIS = ["👏","👍","😊","😀","😂","🙌","🎉","🔥","💡","✨","❤️","🙏","👀","😅","🤔","💯","🚀","✅","👋","😍","🤝","💪","🥳","😎"];
 function MessagesPage() {
   const [selectedId, setSelectedId] = useState(0);
   const [draft, setDraft] = useState("");
@@ -2008,6 +2024,233 @@ function MessagesPage() {
         </div>
       </div>
     </Panel>
+  );
+}
+
+/* ============================ Messaging dock ============================ */
+/* LinkedIn-style floating messenger: a collapsible dock (bottom-right) plus
+   stacked chat windows. Self-contained — holds its own conversation/message
+   state so sending, starring, archiving etc. work without a backend. */
+const MSG_FILTERS = ["Unread", "Jobs", "Starred", "InMail", "Connections", "Archived", "Spam"];
+
+function EmojiPicker({ onPick }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button type="button" className="msg-icon-btn" aria-label="Emoji"><Icon name="mood" className="text-[20px]" /></button>
+      </PopoverTrigger>
+      <PopoverContent side="top" align="start" className="w-64 p-2">
+        <div className="grid grid-cols-8 gap-1">
+          {EMOJIS.map((e) => <button key={e} type="button" className="rounded p-1 text-lg leading-none hover:bg-[var(--bg-hover)]" onClick={() => { onPick(e); setOpen(false); }}>{e}</button>)}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+function SendModeMenu({ mode, onChange }) {
+  const Item = ({ value, title, desc }) => (
+    <DropdownMenuItem onClick={() => onChange(value)} className="items-start gap-2">
+      <Icon name={mode === value ? "radio_button_checked" : "radio_button_unchecked"} className="mt-0.5 text-[18px]" style={{ color: mode === value ? "var(--accent)" : "var(--fg-subtle)" }} />
+      <span><span style={{ display: "block", fontWeight: 600 }}>{title}</span><span className="meta">{desc}</span></span>
+    </DropdownMenuItem>
+  );
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild><button type="button" className="msg-sendmode">{mode === "enter" ? "Press Enter to Send" : "Click Send"}</button></DropdownMenuTrigger>
+      <DropdownMenuContent side="top" align="end" className="w-64">
+        <Item value="enter" title="Press Enter to Send" desc="Pressing Enter will send message" />
+        <Item value="click" title="Click Send" desc="Clicking Send will send message" />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+function ChatWindow({ convo, sendMode, onSendMode, onSend, onClose, onToggleStar, onMarkUnread, onArchive }) {
+  const [draft, setDraft] = useState("");
+  const [size, setSize] = useState("normal"); // min | normal | tall
+  const bodyRef = useRef(null);
+  const send = () => { const t = draft.trim(); if (!t) return; onSend(convo.id, t); setDraft(""); };
+  useEffect(() => { if (size !== "min" && bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight; }, [convo.messages.length, size]);
+  const stop = (fn) => (e) => { e.stopPropagation(); fn(); };
+  return (
+    <div className={`msg-window msg-window--${size}`}>
+      <div className="msg-window__head" onClick={() => setSize((s) => (s === "min" ? "normal" : "min"))}>
+        <Avatar initials={convo.avatar} size={32} variant={convo.variant} photoSeed={convo.company ? null : convo.name} ring={false} style={convo.company ? { borderRadius: 6 } : undefined} />
+        <span className="msg-window__name">{convo.name}</span>
+        <div className="msg-window__head-actions" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><button type="button" className="msg-icon-btn" aria-label="Conversation options"><Icon name="more_horiz" className="text-[20px]" /></button></DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuItem>Move to Other</DropdownMenuItem>
+              <DropdownMenuItem>Label as Jobs</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onMarkUnread(convo.id)}>Mark as unread</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onToggleStar(convo.id)}>{convo.starred ? "Remove star" : "Star"}</DropdownMenuItem>
+              <DropdownMenuItem>Mute</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onArchive(convo.id)}>Archive</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Report / Block</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onArchive(convo.id)}>Delete conversation</DropdownMenuItem>
+              <DropdownMenuItem>Manage settings</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button type="button" className="msg-icon-btn" aria-label={size === "tall" ? "Restore" : "Expand"} onClick={stop(() => setSize(size === "tall" ? "normal" : "tall"))}><Icon name={size === "tall" ? "close_fullscreen" : "open_in_full"} className="text-[18px]" /></button>
+          <button type="button" className="msg-icon-btn" aria-label="Close" onClick={stop(() => onClose(convo.id))}><Icon name="close" className="text-[20px]" /></button>
+        </div>
+      </div>
+      {size !== "min" && (
+        <>
+          <div className="msg-window__body" ref={bodyRef}>
+            {convo.messages.length === 0 ? <div className="meta" style={{ margin: "auto", textAlign: "center" }}>No messages yet. Say hello 👋</div>
+              : convo.messages.map((m, i) => <div key={i} className={`msg msg--${m.from}`}><div className="msg__bubble">{m.text}</div><div className="msg__time">{m.time}</div></div>)}
+          </div>
+          <div className="msg-window__composer">
+            <Textarea size="sm" rows={size === "tall" ? 6 : 2} placeholder="Write a message…" value={draft} onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && sendMode === "enter") { e.preventDefault(); send(); } }} />
+            <div className="msg-window__composer-bar">
+              <div className="msg-window__composer-icons">
+                <button type="button" className="msg-icon-btn" aria-label="Add a photo"><Icon name="image" className="text-[20px]" /></button>
+                <button type="button" className="msg-icon-btn" aria-label="Attach a file"><Icon name="attach_file" className="text-[20px]" /></button>
+                <EmojiPicker onPick={(e) => setDraft((d) => d + e)} />
+              </div>
+              <div className="ms-auto flex items-center gap-1">
+                <SendModeMenu mode={sendMode} onChange={onSendMode} />
+                {(sendMode === "click" || draft.trim()) && <Button variant="primary" size="sm" pill onClick={send}>Send</Button>}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+function NewMessageWindow({ onClose, onStart }) {
+  const [q, setQ] = useState("");
+  const list = SUGGESTED_PEOPLE.filter((p) => p.name.toLowerCase().includes(q.trim().toLowerCase()));
+  return (
+    <div className="msg-window msg-window--tall">
+      <div className="msg-window__head" style={{ cursor: "default" }}>
+        <span className="msg-window__name" style={{ marginInlineStart: 4 }}>New message</span>
+        <div className="msg-window__head-actions">
+          <button type="button" className="msg-icon-btn" aria-label="Close" onClick={onClose}><Icon name="close" className="text-[20px]" /></button>
+        </div>
+      </div>
+      <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border-subtle)" }}>
+        <Input size="sm" placeholder="Type a name" value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
+      </div>
+      <div className="msg-window__body" style={{ padding: 0, gap: 0 }}>
+        <div className="typeahead__section-title">Suggested</div>
+        {list.map((p) => (
+          <button key={p.name} type="button" className="conv-row" onClick={() => onStart(p)}>
+            <Avatar initials={initialsOf(p.name)} size={44} variant={p.variant} photoSeed={p.name} />
+            <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>{p.name}</div>
+              <div className="meta" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.role}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+function MessagingDock() {
+  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState("focused");
+  const [filter, setFilter] = useState(null);
+  const [query, setQuery] = useState("");
+  const [sendMode, setSendMode] = useState("enter");
+  const [convos, setConvos] = useState(() => CONVERSATIONS.map((c) => ({ starred: false, archived: false, other: false, label: null, ...c })));
+  const [openIds, setOpenIds] = useState([]);
+  const [composing, setComposing] = useState(false);
+
+  const update = (id, patch) => setConvos((cs) => cs.map((c) => (c.id === id ? { ...c, ...(typeof patch === "function" ? patch(c) : patch) } : c)));
+  const byId = (id) => convos.find((c) => c.id === id);
+  const openChat = (id) => { update(id, { unread: false }); setOpenIds((ids) => (ids.includes(id) ? ids : [...ids, id]).slice(-3)); };
+  const closeChat = (id) => setOpenIds((ids) => ids.filter((x) => x !== id));
+  const send = (id, text) => update(id, (c) => ({ messages: [...c.messages, { from: "me", text, time: "Just now" }], preview: "You: " + text, unread: false }));
+  const archive = (id) => { update(id, { archived: true }); closeChat(id); };
+  const startNew = (person) => {
+    let existing = convos.find((c) => c.name === person.name);
+    if (!existing) {
+      existing = { id: 1000 + convos.length, name: person.name, role: person.role, avatar: initialsOf(person.name), variant: person.variant, time: "Now", preview: "", unread: false, starred: false, archived: false, other: false, label: null, messages: [] };
+      setConvos((cs) => [existing, ...cs]);
+    }
+    setComposing(false);
+    openChat(existing.id);
+  };
+
+  const q = query.trim().toLowerCase();
+  const visible = convos.filter((c) => {
+    if (filter === "Archived") { if (!c.archived) return false; } else if (c.archived) return false;
+    if (tab === "other" ? !c.other : c.other) return false;
+    if (filter === "Unread" && !c.unread) return false;
+    if (filter === "Jobs" && c.label !== "Jobs") return false;
+    if (filter === "Starred" && !c.starred) return false;
+    if (filter === "InMail" || filter === "Connections" || filter === "Spam") return false;
+    if (q && !c.name.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const unreadCount = convos.filter((c) => c.unread && !c.archived).length;
+
+  return (
+    <div className="msg-dock-layer">
+      {composing && <NewMessageWindow onClose={() => setComposing(false)} onStart={startNew} />}
+      {openIds.map((id) => byId(id) && (
+        <ChatWindow key={id} convo={byId(id)} sendMode={sendMode} onSendMode={setSendMode} onSend={send} onClose={closeChat}
+          onToggleStar={(i) => update(i, (c) => ({ starred: !c.starred }))} onMarkUnread={(i) => { update(i, { unread: true }); closeChat(i); }} onArchive={archive} />
+      ))}
+
+      <div className={`msg-dock ${open ? "msg-dock--open" : ""}`}>
+        <div className="msg-dock__head" onClick={() => setOpen((o) => !o)}>
+          <Avatar initials="YO" size={28} photo={seededPhoto("yara-okonkwo", 64, 64, "face")} ring={false} />
+          <span className="msg-dock__title">Messaging{!open && unreadCount > 0 && <span className="msg-dock__badge">{unreadCount}</span>}</span>
+          <div className="msg-dock__head-actions" onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild><button type="button" className="msg-icon-btn" aria-label="Messaging options"><Icon name="more_horiz" className="text-[20px]" /></button></DropdownMenuTrigger>
+              <DropdownMenuContent align="end"><DropdownMenuItem>Manage conversations</DropdownMenuItem><DropdownMenuItem>Messaging settings</DropdownMenuItem><DropdownMenuItem>Set away message</DropdownMenuItem></DropdownMenuContent>
+            </DropdownMenu>
+            <button type="button" className="msg-icon-btn" aria-label="Compose message" onClick={() => { setOpen(true); setComposing(true); }}><Icon name="edit_square" className="text-[20px]" /></button>
+            <button type="button" className="msg-icon-btn" aria-label={open ? "Collapse" : "Expand"} onClick={() => setOpen((o) => !o)}><Icon name={open ? "expand_more" : "expand_less"} className="text-[20px]" /></button>
+          </div>
+        </div>
+        {open && (
+          <div className="msg-dock__body">
+            <div className="msg-dock__search">
+              <Icon name="search" className="pointer-events-none absolute left-[18px] top-1/2 -translate-y-1/2 text-[18px] text-[var(--fg-subtle)]" />
+              <Input size="sm" className="ps-9 flex-1" placeholder="Search messages" value={query} onChange={(e) => setQuery(e.target.value)} />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><button type="button" className="msg-icon-btn" aria-label="Filter conversations"><Icon name="tune" className="text-[20px]" /></button></DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  {MSG_FILTERS.map((f) => <DropdownMenuItem key={f} onClick={() => setFilter((cur) => (cur === f ? null : f))}>{filter === f && <Icon name="check" className="text-[16px] me-1" />}{f}</DropdownMenuItem>)}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <Tabs value={tab} onValueChange={setTab}>
+              <TabsList variant="line" className="w-full justify-start rounded-none px-2">
+                <TabsTrigger value="focused" className="flex-none px-3">Focused</TabsTrigger>
+                <TabsTrigger value="other" className="flex-none px-3">Other</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="msg-dock__list">
+              {visible.length === 0 ? <div className="meta" style={{ padding: 24, textAlign: "center" }}>No conversations{filter ? ` in ${filter}` : ""}.</div>
+                : visible.map((c) => (
+                  <button key={c.id} type="button" className="conv-row" onClick={() => openChat(c.id)}>
+                    <Avatar initials={c.avatar} size={48} variant={c.variant} photoSeed={c.company ? null : c.name} style={c.company ? { borderRadius: 8 } : undefined} />
+                    <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                        <span style={{ fontFamily: "var(--font-display)", fontWeight: c.unread ? 700 : 600, fontSize: 14, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</span>
+                        <span style={{ fontSize: 11, color: c.unread ? "var(--accent-fg)" : "var(--fg-subtle)", flexShrink: 0 }}>{c.time}</span>
+                      </div>
+                      <div style={{ fontSize: 12, color: c.unread ? "var(--fg)" : "var(--fg-muted)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.preview}</div>
+                    </div>
+                    {c.starred && <Icon name="star" filled className="text-[14px]" style={{ color: "var(--alt-fg)", flexShrink: 0 }} />}
+                    {c.unread && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)", flexShrink: 0 }} />}
+                  </button>
+                ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -2460,6 +2703,7 @@ export function App() {
         </div>
       </div>
       <div className="mx-auto max-w-[1180px] px-4 py-5">{pages[route] || pages.home}</div>
+      <MessagingDock />
     </Surface>
     {footerOpen && <SiteFooter onClose={() => setFooterOpen(false)} />}
     </TooltipProvider>
