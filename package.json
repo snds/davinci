@@ -21,7 +21,8 @@
     "generate:stories":   "node scripts/generate-stories.js",
     "generate:docs":      "node scripts/generate-docs.js",
     "check-updates":      "node scripts/check-updates.js",
-    "check:tokens":       "node scripts/check-token-hygiene.js"
+    "check:tokens":       "node scripts/check-token-hygiene.js",
+    "check:refs":         "node scripts/check-component-refs.js"
   },
   "engines": {
     "node": ">=20.0.0",

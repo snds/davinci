@@ -48,6 +48,9 @@ jobs:
       - name: Token-hygiene check (stories + docs)
         run: npm run check:tokens
 
+      - name: Component-reference check (demo)
+        run: npm run check:refs
+
       - name: Build docs
         env:
           STORYBOOK_URL: https://snds.github.io/davinci/storybook/
