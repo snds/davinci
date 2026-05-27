@@ -13,7 +13,11 @@ import React, { useState } from 'react';
  *   pad     — string  CSS padding for the preview area (default '24px')
  *   center  — bool    Center preview content (default false)
  */
-export default function LiveDemo({ html, title, height, pad = '24px', center = false }) {
+export default function LiveDemo({ html, children, code, title, height, pad = '24px', center = false }) {
+  // Two modes:
+  //   children — render real @davinci/ui React components inline (preferred:
+  //              the docs consume the actual system). Pass `code` to show source.
+  //   html     — legacy: a raw Davinci-class HTML string.
   const [showCode, setShowCode] = useState(false);
 
   return (
@@ -77,21 +81,39 @@ export default function LiveDemo({ html, title, height, pad = '24px', center = f
       </div>
 
       {/* Live preview */}
-      <div
-        className="live-demo-preview"
-        style={{
-          padding: pad,
-          background: 'var(--bg)',
-          minHeight: height ? `${height}px` : undefined,
-          display: center ? 'flex' : undefined,
-          alignItems: center ? 'center' : undefined,
-          justifyContent: center ? 'center' : undefined,
-        }}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      {children ? (
+        <div
+          className="live-demo-preview"
+          style={{
+            padding: pad,
+            background: 'var(--bg)',
+            minHeight: height ? `${height}px` : undefined,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '12px',
+            alignItems: 'center',
+            justifyContent: center ? 'center' : 'flex-start',
+          }}
+        >
+          {children}
+        </div>
+      ) : (
+        <div
+          className="live-demo-preview"
+          style={{
+            padding: pad,
+            background: 'var(--bg)',
+            minHeight: height ? `${height}px` : undefined,
+            display: center ? 'flex' : undefined,
+            alignItems: center ? 'center' : undefined,
+            justifyContent: center ? 'center' : undefined,
+          }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
 
       {/* Code block */}
-      {showCode && (
+      {showCode && (code || html) && (
         <div style={{ borderTop: '1px solid var(--border)' }}>
           <pre
             style={{
@@ -106,7 +128,7 @@ export default function LiveDemo({ html, title, height, pad = '24px', center = f
               whiteSpace: 'pre',
             }}
           >
-            <code>{html.replace(/^\n/, '').replace(/\n$/, '')}</code>
+            <code>{(code || html || '').replace(/^\n/, '').replace(/\n$/, '')}</code>
           </pre>
         </div>
       )}

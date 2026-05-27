@@ -4,8 +4,9 @@ sidebar_position: 10
 description: Triggers an action or event. Six variants, icon ergonomics, and the skeuomorphic .btn chrome.
 ---
 
-import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 import PropsTable from '@site/src/components/PropsTable';
+import { Button } from '@davinci/ui/components/davinci/button';
 
 # Button
 
@@ -99,4 +100,22 @@ import { Button as BaseButton } from '@davinci/ui/components/ui/button';
 
 ## Preview
 
-<StorybookEmbed story="components-button--variants" height={280} />
+The real `@davinci/ui` Button, rendered inline (not an iframe):
+
+<LiveDemo title="Button variants" code={`import { Button } from '@davinci/ui/components/davinci/button';
+
+<Button variant="primary">Primary</Button>
+<Button>Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="alt">Spotlight</Button>
+<Button icon="add">With icon</Button>
+<Button pill variant="primary" icon="add">Pill</Button>`}>
+  <Button variant="primary">Primary</Button>
+  <Button>Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="alt">Spotlight</Button>
+  <Button icon="add">With icon</Button>
+  <Button pill variant="primary" icon="add">Pill</Button>
+</LiveDemo>
