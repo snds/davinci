@@ -55,8 +55,8 @@ export const BarChartDefault = {
         />
         <YAxis tickLine={false} axisLine={false} />
         <ChartTooltip content={<ChartTooltipContent />} />
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} isAnimationActive={false} />
+        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} isAnimationActive={false} />
       </BarChart>
     </ChartContainer>
   ),
@@ -81,6 +81,7 @@ export const LineChartDefault = {
           stroke="var(--color-desktop)"
           strokeWidth={2}
           dot={false}
+          isAnimationActive={false}
         />
         <Line
           type="monotone"
@@ -88,6 +89,7 @@ export const LineChartDefault = {
           stroke="var(--color-mobile)"
           strokeWidth={2}
           dot={false}
+          isAnimationActive={false}
         />
       </LineChart>
     </ChartContainer>
@@ -114,6 +116,7 @@ export const AreaChartDefault = {
           fill="var(--color-desktop)"
           fillOpacity={0.2}
           strokeWidth={2}
+          isAnimationActive={false}
         />
         <Area
           type="monotone"
@@ -122,6 +125,7 @@ export const AreaChartDefault = {
           fill="var(--color-mobile)"
           fillOpacity={0.2}
           strokeWidth={2}
+          isAnimationActive={false}
         />
       </AreaChart>
     </ChartContainer>
