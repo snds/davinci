@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@davinci/ui/components/ui/input';
+import { Input } from '@davinci/ui/components/davinci/input';
 import { Label } from '@davinci/ui/components/ui/label';
 
 export default {

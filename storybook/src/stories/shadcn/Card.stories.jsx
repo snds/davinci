@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from '@davinci/ui/components/ui/card';
 import { Button } from '@davinci/ui/components/ui/button';
-import { Input } from '@davinci/ui/components/ui/input';
+import { Input } from '@davinci/ui/components/davinci/input';
 import { Label } from '@davinci/ui/components/ui/label';
 
 export default {

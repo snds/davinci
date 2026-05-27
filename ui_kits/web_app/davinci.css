@@ -329,6 +329,212 @@ body { background-color: var(--bg); color: var(--fg); margin: 0; min-height: 100
 .btn--sm.btn--pill.btn--icon-leading { padding-left: 8px; }
 .btn--sm.btn--pill.btn--icon-trailing { padding-right: 8px; }
 
+/* ============================================================
+   Button — theme-applied chrome via shadcn data-attributes.
+
+   The base component (packages/ui/src/components/ui/button.jsx) is
+   PRISTINE STOCK shadcn and is never hand-edited — it emits
+   data-slot/data-variant/data-size. All Davinci skin lives here,
+   keyed off those stable hooks. Compound selectors (specificity
+   0,2,0) deterministically beat Tailwind utilities (0,1,0)
+   regardless of stylesheet load order. The .btn / .btn--* classes
+   above remain for the static HTML prototypes; this block is the
+   single source of the SAME chrome for real components + the
+   davinci/button wrapper. Reference pattern for the three-way
+   contract — see CLAUDE.md.
+
+   Deliberate deltas from the old base-cva mapping:
+   • focus uses shadcn's bridged --ring (stock focus-visible) rather
+     than a separate outline.
+   • destructive renders honest stock red (the old base conflated
+     destructive → yellow/alt; alt remains its own variant).
+   ============================================================ */
+
+/* shared shell (size-independent): every button has data-variant */
+[data-slot="button"][data-variant] {
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  border: 1px solid transparent;
+  line-height: 1.2;
+  /* shared filled bezel — flat variants clear it below */
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(0,0,0,.22),
+    0 1px 0 rgba(0,0,0,.10),
+    0 1px 2px rgba(0,0,0,.22);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast),
+    box-shadow var(--dur-fast),
+    transform var(--dur-fast);
+}
+[data-theme="light"] [data-slot="button"][data-variant] {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.18),
+    0 1px 0 rgba(0,0,0,.08),
+    0 1px 2px rgba(0,0,0,.16);
+}
+[data-slot="button"][data-variant]:active { transform: translateY(1px); }
+[data-slot="button"][data-variant]:disabled,
+[data-slot="button"][data-variant][aria-disabled="true"] {
+  opacity: .55; cursor: not-allowed;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 1px 0 rgba(0,0,0,.04);
+}
+[data-slot="button"][data-variant] > [class*="material-symbols"] {
+  position: relative; top: -1px;
+}
+
+/* sizes — height:auto neutralises stock height utilities so Davinci padding drives height */
+[data-slot="button"][data-size="default"] { height: auto; padding: 8px 14px 6px; font-size: 13px; border-radius: 6px; }
+[data-slot="button"][data-size="sm"]      { height: auto; padding: 5px 10px 3px; font-size: 12px; border-radius: 5px; }
+[data-slot="button"][data-size="lg"]      { height: auto; padding: 9px 16px 7px; font-size: 14px; border-radius: 7px; }
+[data-slot="button"][data-size="xs"]      { height: auto; padding: 5px 8px 3px;  font-size: 12px; border-radius: 5px; }
+[data-slot="button"][data-size="icon"]    { width: 36px; height: 36px; padding: 6px; border-radius: 6px; }
+[data-slot="button"][data-size="icon-xs"] { width: 24px; height: 24px; padding: 4px; border-radius: 6px; }
+[data-slot="button"][data-size="icon-sm"] { width: 32px; height: 32px; padding: 6px; border-radius: 6px; }
+[data-slot="button"][data-size="icon-lg"] { width: 40px; height: 40px; padding: 6px; border-radius: 6px; }
+
+/* filled — primary (blue) */
+[data-slot="button"][data-variant="default"],
+[data-slot="button"][data-variant="primary"] {
+  background: linear-gradient(to bottom, var(--blue-9), var(--blue-8));
+  color: var(--fg-on-accent);
+  border-color: var(--blue-7);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.28);
+}
+[data-slot="button"][data-variant="default"]:hover,
+[data-slot="button"][data-variant="primary"]:hover {
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-9));
+  border-color: var(--blue-7);
+}
+[data-slot="button"][data-variant="default"]:active,
+[data-slot="button"][data-variant="primary"]:active {
+  background: linear-gradient(to bottom, var(--blue-8), var(--blue-9));
+}
+[data-theme="light"] [data-slot="button"][data-variant="default"],
+[data-theme="light"] [data-slot="button"][data-variant="primary"] {
+  background: linear-gradient(to bottom, var(--blue-9), var(--blue-10));
+  border-color: var(--blue-12);
+  text-shadow: 0 -1px 0 rgba(0,0,0,.32);
+}
+[data-theme="light"] [data-slot="button"][data-variant="default"]:hover,
+[data-theme="light"] [data-slot="button"][data-variant="primary"]:hover {
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-11));
+  border-color: var(--blue-12);
+}
+[data-theme="light"] [data-slot="button"][data-variant="default"]:active,
+[data-theme="light"] [data-slot="button"][data-variant="primary"]:active {
+  background: linear-gradient(to bottom, var(--blue-10), var(--blue-9));
+}
+
+/* filled — alt (yellow spotlight) */
+[data-slot="button"][data-variant="alt"],
+[data-slot="button"][data-variant="warning"] {
+  background: linear-gradient(to bottom, var(--yellow-10), var(--yellow-8));
+  color: var(--fg-on-alt);
+  border-color: var(--yellow-8);
+  text-shadow: 0 1px 0 rgba(255,255,255,.45);
+}
+[data-slot="button"][data-variant="alt"]:hover,
+[data-slot="button"][data-variant="warning"]:hover {
+  background: linear-gradient(to bottom, var(--yellow-11), var(--yellow-9));
+  border-color: var(--yellow-8);
+}
+[data-slot="button"][data-variant="alt"]:active,
+[data-slot="button"][data-variant="warning"]:active {
+  background: linear-gradient(to bottom, var(--yellow-8), var(--yellow-10));
+}
+[data-theme="light"] [data-slot="button"][data-variant="alt"],
+[data-theme="light"] [data-slot="button"][data-variant="warning"] {
+  background: linear-gradient(to bottom, var(--yellow-8), var(--yellow-10));
+  border-color: var(--yellow-9);
+}
+[data-theme="light"] [data-slot="button"][data-variant="alt"]:hover,
+[data-theme="light"] [data-slot="button"][data-variant="warning"]:hover {
+  background: linear-gradient(to bottom, var(--yellow-7), var(--yellow-9));
+  border-color: var(--yellow-9);
+}
+[data-theme="light"] [data-slot="button"][data-variant="alt"]:active,
+[data-theme="light"] [data-slot="button"][data-variant="warning"]:active {
+  background: linear-gradient(to bottom, var(--yellow-10), var(--yellow-8));
+}
+
+/* flat — secondary / outline / ghost / link clear the bezel */
+[data-slot="button"][data-variant="secondary"] {
+  background: transparent; color: var(--fg);
+  border-color: var(--border-subtle); box-shadow: none; text-shadow: none;
+}
+[data-slot="button"][data-variant="secondary"]:hover {
+  background: var(--bg-hover); border-color: var(--border); color: var(--fg);
+}
+[data-slot="button"][data-variant="secondary"]:active { background: var(--bg-active); box-shadow: none; }
+[data-slot="button"][data-variant="outline"] {
+  background: transparent; color: var(--accent-fg);
+  border-color: var(--accent-border); box-shadow: none; text-shadow: none;
+}
+[data-slot="button"][data-variant="outline"]:hover { background: var(--accent-subtle); }
+[data-slot="button"][data-variant="ghost"] {
+  background: transparent; color: var(--fg-muted); box-shadow: none; text-shadow: none;
+}
+[data-slot="button"][data-variant="ghost"]:hover { background: var(--bg-hover); color: var(--fg); }
+[data-slot="button"][data-variant="link"] {
+  box-shadow: none; text-shadow: none; background: transparent; border-color: transparent;
+}
+
+/* shape: pill (wrapper sets data-pill) */
+[data-slot="button"][data-pill]              { border-radius: 9999px; padding-left: 16px; padding-right: 16px; }
+[data-slot="button"][data-size="sm"][data-pill] { padding-left: 12px; padding-right: 12px; }
+[data-slot="button"][data-size="lg"][data-pill] { padding-left: 20px; padding-right: 20px; }
+[data-slot="button"][data-size="icon"][data-pill],
+[data-slot="button"][data-size="icon-sm"][data-pill],
+[data-slot="button"][data-size="icon-lg"][data-pill] { border-radius: 9999px; padding-left: 6px; padding-right: 6px; }
+
+/* leading / trailing icon optical padding (wrapper sets data-icon / data-icon-right) */
+[data-slot="button"][data-icon]        { padding-left: 8px; }
+[data-slot="button"][data-icon-right]  { padding-right: 8px; }
+[data-slot="button"][data-size="sm"][data-icon]       { padding-left: 6px; }
+[data-slot="button"][data-size="sm"][data-icon-right] { padding-right: 6px; }
+[data-slot="button"][data-size="lg"][data-icon]       { padding-left: 10px; }
+[data-slot="button"][data-size="lg"][data-icon-right] { padding-right: 10px; }
+[data-slot="button"][data-pill][data-icon]       { padding-left: 10px; }
+[data-slot="button"][data-pill][data-icon-right] { padding-right: 10px; }
+[data-slot="button"][data-size="sm"][data-pill][data-icon]       { padding-left: 8px; }
+[data-slot="button"][data-size="sm"][data-pill][data-icon-right] { padding-right: 8px; }
+
+/* ============================================================
+   Input / Textarea / Select-trigger — Davinci solid-surface skin
+   via shadcn data-attributes.
+
+   The bases (components/ui/input|textarea|select.jsx) are pristine
+   stock (bg-transparent / dark:bg-input/30). The solid fill + hover
+   border live here, keyed off data-slot. The [data-theme] ancestor
+   lifts specificity above Tailwind's dark: utilities. The size ramp
+   keys off data-size, which the davinci/input|textarea wrappers set.
+   The .input / .textarea / .select classes above remain for the
+   static HTML prototypes.
+   ============================================================ */
+[data-theme] input[data-slot="input"],
+[data-theme] textarea[data-slot="textarea"],
+[data-theme] button[data-slot="select-trigger"] {
+  background: var(--bg-surface);
+}
+[data-theme] input[data-slot="input"]:hover:not(:disabled),
+[data-theme] textarea[data-slot="textarea"]:hover:not(:disabled),
+[data-theme] button[data-slot="select-trigger"]:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+[data-theme] input[data-slot="input"]:disabled,
+[data-theme] textarea[data-slot="textarea"]:disabled {
+  background: var(--bg-subtle);
+}
+/* size ramp — default = stock (h-9 / min-h-16); sm + lg only */
+input[data-slot="input"][data-size="sm"] { height: 2rem;    padding-left: .625rem; padding-right: .625rem; }
+input[data-slot="input"][data-size="lg"] { height: 2.75rem; padding-left: .875rem; padding-right: .875rem; }
+textarea[data-slot="textarea"][data-size="sm"] { min-height: 3rem; padding: .375rem .625rem; }
+textarea[data-slot="textarea"][data-size="lg"] { min-height: 6rem; padding: .625rem .875rem; }
+
 /* ─── Split button (regular + caret pane) ─── */
 .btn-split {
   display: inline-flex;

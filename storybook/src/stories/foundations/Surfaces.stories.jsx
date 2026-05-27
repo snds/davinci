@@ -1,5 +1,5 @@
 import React from 'react';
-import { Surface } from '@davinci/ui/components/ui/surface';
+import { Surface } from '@davinci/ui/components/davinci/surface';
 
 export default {
   title: 'Foundations/Surfaces',

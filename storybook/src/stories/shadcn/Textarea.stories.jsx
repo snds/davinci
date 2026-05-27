@@ -1,5 +1,5 @@
 import React from 'react';
-import { Textarea } from '@davinci/ui/components/ui/textarea';
+import { Textarea } from '@davinci/ui/components/davinci/textarea';
 import { Label } from '@davinci/ui/components/ui/label';
 
 export default {

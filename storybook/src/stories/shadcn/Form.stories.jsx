@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@davinci/ui/components/ui/form';
-import { Input } from '@davinci/ui/components/ui/input';
+import { Input } from '@davinci/ui/components/davinci/input';
 import { Button } from '@davinci/ui/components/ui/button';
 
 export default {

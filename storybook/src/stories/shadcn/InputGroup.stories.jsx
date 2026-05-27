@@ -1,6 +1,6 @@
 import React from 'react';
-import { InputGroup } from '@davinci/ui/components/ui/input-group';
-import { Input } from '@davinci/ui/components/ui/input';
+import { InputGroup } from '@davinci/ui/components/davinci/input-group';
+import { Input } from '@davinci/ui/components/davinci/input';
 import { Button } from '@davinci/ui/components/ui/button';
 import { Label } from '@davinci/ui/components/ui/label';
 

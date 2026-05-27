@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { Surface } from "@davinci/ui/components/ui/surface";
-import { Input } from "@davinci/ui/components/ui/input";
-import { Textarea } from "@davinci/ui/components/ui/textarea";
-import { RichTextarea } from "@davinci/ui/components/ui/rich-textarea";
+import { Surface } from "@davinci/ui/components/davinci/surface";
+import { Input } from "@davinci/ui/components/davinci/input";
+import { Textarea } from "@davinci/ui/components/davinci/textarea";
+import { RichTextarea } from "@davinci/ui/components/davinci/rich-textarea";
 import { Separator } from "@davinci/ui/components/ui/separator";
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,

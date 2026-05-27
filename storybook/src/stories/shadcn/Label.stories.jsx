@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from '@davinci/ui/components/ui/label';
-import { Input } from '@davinci/ui/components/ui/input';
+import { Input } from '@davinci/ui/components/davinci/input';
 import { Checkbox } from '@davinci/ui/components/ui/checkbox';
 
 export default {

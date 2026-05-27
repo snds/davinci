@@ -42,8 +42,8 @@ const chartData = [
 ];
 
 const chartConfig = {
-  desktop: { label: 'Desktop', color: 'hsl(var(--chart-1))' },
-  mobile:  { label: 'Mobile',  color: 'hsl(var(--chart-2))' },
+  desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+  mobile:  { label: 'Mobile',  color: 'var(--chart-2)' },
 } satisfies ChartConfig;
 
 export function BarChartDemo() {
@@ -64,7 +64,7 @@ export function BarChartDemo() {
 
 ## Theming
 
-`ChartContainer` injects `--color-<key>` CSS variables for each entry in `config`, sourced from the `color` field. Use `hsl(var(--chart-1))` through `hsl(var(--chart-5))` as the Davinci palette defaults, or supply any arbitrary color.
+`ChartContainer` injects `--color-<key>` CSS variables for each entry in `config`, sourced from the `color` field. Use `var(--chart-1)` through `var(--chart-5)` as the Davinci palette defaults, or supply any arbitrary color.
 
 | Token | Purpose |
 |-------|---------|

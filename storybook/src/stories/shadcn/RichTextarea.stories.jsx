@@ -1,6 +1,6 @@
 import React from 'react';
-import { RichTextarea } from '@davinci/ui/components/ui/rich-textarea';
-import { Textarea } from '@davinci/ui/components/ui/textarea';
+import { RichTextarea } from '@davinci/ui/components/davinci/rich-textarea';
+import { Textarea } from '@davinci/ui/components/davinci/textarea';
 import { Label } from '@davinci/ui/components/ui/label';
 
 export default {
