@@ -51,6 +51,9 @@ jobs:
       - name: Component-reference check (demo)
         run: npm run check:refs
 
+      - name: Doc-embed check (storybook ids)
+        run: npm run check:embeds
+
       - name: Build docs
         env:
           STORYBOOK_URL: https://snds.github.io/davinci/storybook/
