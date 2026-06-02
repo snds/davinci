@@ -1,0 +1,51 @@
+---
+title: Textarea
+sidebar_position: 47
+description: Multi-line text input styled to match the Davinci design system.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Textarea
+
+Multi-line text input — a styled wrapper around the native `<textarea>` element. No Radix dependency.
+
+```bash
+cd packages/ui && npx shadcn@latest add textarea
+```
+
+## Usage
+
+```jsx
+import { Textarea } from '@davinci/ui/components/davinci/textarea';
+import { Label } from '@davinci/ui/components/ui/label';
+
+// Basic
+<Textarea placeholder="Write a message…" />
+
+// With label
+<div className="flex flex-col gap-1.5">
+  <Label htmlFor="message">Message</Label>
+  <Textarea id="message" placeholder="Type your message here." />
+</div>
+
+// Controlled
+const [value, setValue] = React.useState('');
+
+<Textarea
+  value={value}
+  onChange={(e) => setValue(e.target.value)}
+  placeholder="Describe the issue…"
+  rows={4}
+/>
+
+// Disabled
+<Textarea disabled placeholder="Not available" />
+```
+
+All native `<textarea>` props (`rows`, `cols`, `maxLength`, `readOnly`, etc.) are forwarded directly.
+
+## Preview
+
+<StorybookEmbed story="components-textarea--default" height={220} />

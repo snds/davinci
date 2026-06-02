@@ -1,0 +1,87 @@
+---
+title: Select
+sidebar_position: 12
+description: Accessible dropdown built on Radix Select — keyboard, screen reader, custom styles.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Select
+
+A custom-styled dropdown built on `@radix-ui/react-select`. Fully keyboard-navigable, screen-reader accessible, and renders in a portal so it's never clipped by overflow.
+
+```bash
+cd packages/ui && npx shadcn@latest add select
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Select` | Root context |
+| `SelectTrigger` | The visible button that opens the dropdown |
+| `SelectValue` | Placeholder / selected value display |
+| `SelectContent` | Dropdown panel (portal) |
+| `SelectGroup` | Logical grouping inside content |
+| `SelectLabel` | Non-selectable group heading |
+| `SelectItem` | An option |
+| `SelectSeparator` | Divider between groups |
+
+## Usage
+
+```jsx
+import {
+  Select, SelectTrigger, SelectValue, SelectContent,
+  SelectGroup, SelectLabel, SelectItem, SelectSeparator,
+} from '@davinci/ui/components/ui/select';
+
+<Select>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Select a timezone" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>North America</SelectLabel>
+      <SelectItem value="est">Eastern (UTC-5)</SelectItem>
+      <SelectItem value="cst">Central (UTC-6)</SelectItem>
+      <SelectItem value="pst">Pacific (UTC-8)</SelectItem>
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectGroup>
+      <SelectLabel>Europe</SelectLabel>
+      <SelectItem value="gmt">GMT (UTC+0)</SelectItem>
+      <SelectItem value="cet">Central European (UTC+1)</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+## Controlled
+
+```jsx
+const [value, setValue] = React.useState('');
+
+<Select value={value} onValueChange={setValue}>
+  <SelectTrigger><SelectValue placeholder="Choose…" /></SelectTrigger>
+  <SelectContent>
+    <SelectItem value="a">Option A</SelectItem>
+    <SelectItem value="b">Option B</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Trigger border | `--border` |
+| Trigger background | `--bg` |
+| Trigger focus ring | `--border-focus` |
+| Content background | `--bg-elevated` |
+| Item hover | `--bg-hover` |
+| Item selected | `--accent-subtle` / `--accent-fg` |
+
+## Preview
+
+<StorybookEmbed story="components-select--default" height={260} />

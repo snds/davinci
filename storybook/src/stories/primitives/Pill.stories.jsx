@@ -1,5 +1,5 @@
 import React from 'react';
-import Pill from '../../components/Pill';
+import { Pill } from '@davinci/ui/components/davinci/pill';
 
 export default {
   title: 'Primitives/Pill',

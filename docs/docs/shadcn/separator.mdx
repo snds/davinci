@@ -1,0 +1,67 @@
+---
+title: Separator
+sidebar_position: 21
+description: Radix Separator — visual or semantic divider, horizontal or vertical.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+# Separator
+
+A thin line that visually or semantically separates content. Built on `@radix-ui/react-separator`. Supports horizontal and vertical orientations and can be marked decorative to hide it from assistive technologies.
+
+```bash
+cd packages/ui && npx shadcn@latest add separator
+```
+
+## Orientations
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', margin: '24px 0' }}>
+  <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px' }}>
+    <p style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: 600, color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Horizontal</p>
+    <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Section A</div>
+    <hr style={{ border: 'none', borderTop: '1px solid var(--ifm-color-emphasis-300)', margin: '10px 0' }} />
+    <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Section B</div>
+    <hr style={{ border: 'none', borderTop: '1px solid var(--ifm-color-emphasis-300)', margin: '10px 0' }} />
+    <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Section C</div>
+  </div>
+  <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px' }}>
+    <p style={{ margin: '0 0 12px', fontSize: '12px', fontWeight: 600, color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Vertical</p>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', height: '28px' }}>
+      <span style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Posts</span>
+      <div style={{ width: '1px', height: '100%', background: 'var(--ifm-color-emphasis-300)' }} />
+      <span style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Comments</span>
+      <div style={{ width: '1px', height: '100%', background: 'var(--ifm-color-emphasis-300)' }} />
+      <span style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)' }}>Likes</span>
+    </div>
+  </div>
+</div>
+
+## Usage
+
+```jsx
+import { Separator } from '@davinci/ui/components/ui/separator';
+
+// Horizontal (default)
+<Separator />
+
+// Vertical — needs explicit height on parent
+<div className="flex h-5 items-center gap-4">
+  <span>Posts</span>
+  <Separator orientation="vertical" />
+  <span>Comments</span>
+  <Separator orientation="vertical" />
+  <span>Likes</span>
+</div>
+
+// Decorative (no ARIA role)
+<Separator decorative />
+```
+
+## Theming
+
+Uses `--border-subtle` (sand-4). Override with `className="bg-border"` or any Tailwind color utility.
+
+## Preview
+
+<StorybookEmbed story="components-separator--in-list" height={200} />

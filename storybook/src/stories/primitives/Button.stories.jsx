@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../components/Button';
+import { Button } from '@davinci/ui/components/davinci/button';
 
 export default {
   title: 'Primitives/Button',

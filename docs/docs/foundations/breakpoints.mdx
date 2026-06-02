@@ -1,0 +1,190 @@
+---
+title: Breakpoints & Layout
+sidebar_label: Breakpoints & Layout
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import LiveDemo from '@site/src/components/LiveDemo';
+
+# Breakpoints & Layout
+
+Davinci provides named breakpoint tokens and responsive layout utilities to ensure consistent adaptive behavior across all surfaces. All breakpoint values are exposed as CSS custom properties so they can be referenced in both CSS and JavaScript.
+
+## Breakpoints
+
+Five named breakpoints define the responsive grid. They align with Tailwind's default scale so utility classes and token-based code stay in sync.
+
+<LiveDemo
+  title="Breakpoint scale"
+  html={`<div style="display:flex;flex-direction:column;gap:6px;font-family:var(--font-mono);">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:72px;font-size:11px;color:var(--fg-muted);">--bp-sm</div>
+    <div style="height:20px;width:64px;background:var(--accent);border-radius:3px;opacity:.7;"></div>
+    <div style="font-size:11px;color:var(--fg-subtle);">640px — large phone / small tablet</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:72px;font-size:11px;color:var(--fg-muted);">--bp-md</div>
+    <div style="height:20px;width:96px;background:var(--accent);border-radius:3px;opacity:.8;"></div>
+    <div style="font-size:11px;color:var(--fg-subtle);">768px — tablet portrait</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:72px;font-size:11px;color:var(--fg-muted);">--bp-lg</div>
+    <div style="height:20px;width:128px;background:var(--accent);border-radius:3px;opacity:.9;"></div>
+    <div style="font-size:11px;color:var(--fg-subtle);">1024px — tablet landscape / small laptop</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:72px;font-size:11px;color:var(--fg-muted);">--bp-xl</div>
+    <div style="height:20px;width:160px;background:var(--accent);border-radius:3px;"></div>
+    <div style="font-size:11px;color:var(--fg-subtle);">1280px — desktop standard</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:72px;font-size:11px;color:var(--fg-muted);">--bp-2xl</div>
+    <div style="height:20px;width:200px;background:var(--accent);border-radius:3px;"></div>
+    <div style="font-size:11px;color:var(--fg-subtle);">1536px — wide desktop / large monitor</div>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+<TokenTable tokens={[
+  { name: '--bp-sm',  description: '640px — large phones, small tablets. Single-column layouts switch to two columns here.' },
+  { name: '--bp-md',  description: '768px — tablets in portrait. Rail navigation becomes available.' },
+  { name: '--bp-lg',  description: '1024px — small laptops. Full three-column layout (left rail + content + right rail) unlocks here.' },
+  { name: '--bp-xl',  description: '1280px — standard desktop. Comfortable for all layout patterns.' },
+  { name: '--bp-2xl', description: '1536px — wide monitors. Max-width containers prevent content from over-stretching.' },
+]} />
+
+### Usage in CSS
+
+Breakpoint tokens are CSS custom properties, not native `@media` conditions — so they cannot be used directly inside `@media`. Use them in JavaScript or alongside named constants:
+
+```css
+/* ✅ Use the token value in JS */
+const isMobile = window.innerWidth < getComputedStyle(document.documentElement)
+  .getPropertyValue('--bp-sm').trim();
+
+/* ✅ Use in media queries by value */
+@media (min-width: 640px) { /* --bp-sm */ }
+@media (min-width: 1024px) { /* --bp-lg */ }
+
+/* ❌ This does NOT work — CSS variables can't be used in @media */
+@media (min-width: var(--bp-sm)) { }
+```
+
+### Tailwind alignment
+
+All breakpoint names map to Tailwind v4 prefix shorthands (`sm:`, `md:`, `lg:`, `xl:`, `2xl:`). Keep Tailwind utility classes and token-based breakpoints in sync — never introduce a custom viewport that sits between named steps.
+
+---
+
+## Layout tokens
+
+These tokens set the horizontal rhythm of every page surface.
+
+<TokenTable tokens={[
+  { name: '--page-inset-x', description: 'Responsive horizontal page padding. 20px on mobile, 24px at ≥640px, 32px at ≥1024px. Use on every full-width wrapper instead of hardcoding.' },
+  { name: '--container-doc', description: '860px — maximum width for single-column editorial and documentation content.' },
+  { name: '--container-max', description: '1280px — maximum width for wide app shells and full-page layouts.' },
+]} />
+
+<LiveDemo
+  title="Page inset visualization"
+  html={`<div style="display:flex;flex-direction:column;gap:8px;font-size:12px;font-family:var(--font-mono);">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div style="width:80px;color:var(--fg-muted);">&lt;640px</div>
+    <div style="flex:1;background:var(--bg-surface);border:1px solid var(--border);border-radius:6px;display:flex;overflow:hidden;">
+      <div style="width:20px;background:var(--accent-subtle);border-right:1px dashed var(--accent-border);"></div>
+      <div style="flex:1;padding:8px;color:var(--fg-subtle);">page content</div>
+      <div style="width:20px;background:var(--accent-subtle);border-left:1px dashed var(--accent-border);"></div>
+    </div>
+    <div style="color:var(--fg-subtle);">20px</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div style="width:80px;color:var(--fg-muted);">640–1023px</div>
+    <div style="flex:1;background:var(--bg-surface);border:1px solid var(--border);border-radius:6px;display:flex;overflow:hidden;">
+      <div style="width:24px;background:var(--accent-subtle);border-right:1px dashed var(--accent-border);"></div>
+      <div style="flex:1;padding:8px;color:var(--fg-subtle);">page content</div>
+      <div style="width:24px;background:var(--accent-subtle);border-left:1px dashed var(--accent-border);"></div>
+    </div>
+    <div style="color:var(--fg-subtle);">24px</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div style="width:80px;color:var(--fg-muted);">≥1024px</div>
+    <div style="flex:1;background:var(--bg-surface);border:1px solid var(--border);border-radius:6px;display:flex;overflow:hidden;">
+      <div style="width:32px;background:var(--accent-subtle);border-right:1px dashed var(--accent-border);"></div>
+      <div style="flex:1;padding:8px;color:var(--fg-subtle);">page content</div>
+      <div style="width:32px;background:var(--accent-subtle);border-left:1px dashed var(--accent-border);"></div>
+    </div>
+    <div style="color:var(--fg-subtle);">32px</div>
+  </div>
+</div>`}
+  pad="20px"
+/>
+
+### Page inset pattern
+
+Every page-level wrapper should use `--page-inset-x` as its horizontal padding. This creates a consistent safe zone across all viewports without requiring individual `@media` overrides in each component:
+
+```css
+.page-wrapper {
+  padding-left:  var(--page-inset-x);
+  padding-right: var(--page-inset-x);
+}
+```
+
+```jsx
+/* In React inline styles */
+<div style={{ padding: '0 var(--page-inset-x)' }}>
+  {/* content */}
+</div>
+```
+
+### Container widths
+
+Constrain content width with `--container-doc` or `--container-max`, then center with `margin: 0 auto`:
+
+```css
+.doc-content {
+  max-width: var(--container-doc);
+  margin: 0 auto;
+  padding: 0 var(--page-inset-x);
+}
+
+.app-shell {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+```
+
+---
+
+## Responsive layout guide
+
+| Viewport | Columns | Rails | Page inset |
+|---|---|---|---|
+| `< --bp-sm` | 1 | Hidden | 20px |
+| `--bp-sm → --bp-lg` | 1–2 | Left only | 24px |
+| `≥ --bp-lg` | 2–3 | Both visible | 32px |
+
+### Pattern-specific breakpoints
+
+| Pattern | Hide right rail | Collapse left rail | Single column |
+|---|---|---|---|
+| Feed | `< --bp-xl` | `< --bp-lg` | `< --bp-md` |
+| Profile | `< --bp-xl` | `< --bp-lg` | `< --bp-md` |
+| Rails | `< --bp-xl` | `< --bp-lg` | `< --bp-md` |
+
+---
+
+## Dark mode integration
+
+Davinci's theme system uses `data-theme="dark"` on the `<html>` element as the authoritative signal for dark mode. The Tailwind dark variant supports both `data-theme="dark"` and the `.dark` class so the system works in Docusaurus, standalone React apps, and any host using shadcn's default class-based approach:
+
+```css
+/* In packages/ui/src/styles/globals.css */
+@custom-variant dark (&:is(.dark *, [data-theme="dark"] *));
+```
+
+**For host applications using Docusaurus:** the `Root` swizzle component (`src/theme/Root/index.jsx`) uses a `MutationObserver` to keep `.dark` in sync with `data-theme`, ensuring any embedded shadcn components that check the class directly continue to work.
+
+**For standalone React apps:** add `dark` to `<html>` when the user selects dark mode, or set `data-theme="dark"` — either works.

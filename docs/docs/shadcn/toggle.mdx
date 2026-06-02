@@ -1,0 +1,65 @@
+---
+title: Toggle
+sidebar_position: 48
+description: A two-state pressed/unpressed button for toggling options or modes.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Toggle
+
+A stateful button that switches between pressed and unpressed states. Built on `@radix-ui/react-toggle`.
+
+```bash
+cd packages/ui && npx shadcn@latest add toggle
+```
+
+## Usage
+
+```jsx
+import { Toggle } from '@davinci/ui/components/ui/toggle';
+import { Bold, Italic, Underline } from 'lucide-react';
+
+// Default variant — uncontrolled
+<Toggle aria-label="Bold">
+  <Bold className="h-4 w-4" />
+</Toggle>
+
+// Outline variant
+<Toggle variant="outline" aria-label="Italic">
+  <Italic className="h-4 w-4" />
+</Toggle>
+
+// Sizes
+<Toggle size="sm" aria-label="Small toggle">S</Toggle>
+<Toggle size="default" aria-label="Default toggle">M</Toggle>
+<Toggle size="lg" aria-label="Large toggle">L</Toggle>
+
+// Controlled
+const [pressed, setPressed] = React.useState(false);
+
+<Toggle
+  pressed={pressed}
+  onPressedChange={setPressed}
+  aria-label="Underline"
+>
+  <Underline className="h-4 w-4" />
+</Toggle>
+
+// Disabled
+<Toggle disabled aria-label="Disabled">
+  <Bold className="h-4 w-4" />
+</Toggle>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"default" \| "outline"` | `"default"` | Visual style |
+| `size` | `"sm" \| "default" \| "lg"` | `"default"` | Button size |
+| `pressed` | `boolean` | — | Controlled pressed state |
+| `onPressedChange` | `(pressed: boolean) => void` | — | Change handler |
+
+## Preview
+
+<StorybookEmbed story="components-toggle--default" height={220} />

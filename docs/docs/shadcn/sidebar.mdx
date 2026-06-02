@@ -1,0 +1,109 @@
+---
+title: Sidebar
+sidebar_position: 43
+description: Collapsible navigation sidebar with full layout integration and state management hook.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Sidebar
+
+Fully-featured collapsible navigation sidebar intended to wrap an entire page layout. No Radix dependency — built as a Davinci/shadcn composition with its own context.
+
+```bash
+cd packages/ui && npx shadcn@latest add sidebar
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `SidebarProvider` | Root context — must wrap the layout |
+| `Sidebar` | The sidebar panel itself |
+| `SidebarHeader` | Top section (logo, workspace switcher) |
+| `SidebarContent` | Scrollable middle section |
+| `SidebarFooter` | Bottom section (user avatar, settings) |
+| `SidebarGroup` | Logical group of nav items |
+| `SidebarGroupLabel` | Non-interactive group heading |
+| `SidebarGroupContent` | Wrapper for items inside a group |
+| `SidebarMenu` | `<ul>` list of nav items |
+| `SidebarMenuItem` | `<li>` item wrapper |
+| `SidebarMenuButton` | Clickable nav button (supports `asChild`) |
+| `useSidebar()` | Hook — exposes `open`, `setOpen`, `toggle` |
+
+## Usage
+
+```jsx
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  useSidebar,
+} from '@davinci/ui/components/ui/sidebar';
+
+// Layout wrapper — add SidebarProvider at the root
+function RootLayout({ children }) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>{children}</main>
+    </SidebarProvider>
+  );
+}
+
+function AppSidebar() {
+  const navItems = [
+    { label: 'Dashboard', href: '/' },
+    { label: 'Projects', href: '/projects' },
+    { label: 'Settings', href: '/settings' },
+  ];
+
+  return (
+    <Sidebar>
+      <SidebarHeader>
+        <span className="font-semibold">Davinci</span>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.href}>{item.label}</a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <p className="text-xs text-muted-foreground">v1.0.0</p>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
+
+// Toggle sidebar from anywhere inside SidebarProvider
+function CollapseButton() {
+  const { toggle } = useSidebar();
+  return <button onClick={toggle}>Toggle sidebar</button>;
+}
+```
+
+## Preview
+
+<StorybookEmbed story="components-sidebar--default" height={520} />

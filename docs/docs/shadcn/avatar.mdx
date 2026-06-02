@@ -1,0 +1,72 @@
+---
+title: Avatar
+sidebar_position: 52
+description: Radix Avatar — profile image with automatic fallback to initials.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Avatar
+
+Built on `@radix-ui/react-avatar`. Renders an image with a graceful fallback to initials or an icon when the image fails to load or is not provided.
+
+```bash
+cd packages/ui && npx shadcn@latest add avatar
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Avatar` | Container — sets size and shape |
+| `AvatarImage` | The `<img>` — hidden until loaded |
+| `AvatarFallback` | Shown while loading or on error |
+
+## Usage
+
+```jsx
+import { Avatar, AvatarImage, AvatarFallback } from '@davinci/ui/components/ui/avatar';
+
+// With image
+<Avatar>
+  <AvatarImage src="https://example.com/photo.jpg" alt="@username" />
+  <AvatarFallback>JD</AvatarFallback>
+</Avatar>
+
+// Initials only
+<Avatar>
+  <AvatarFallback>SN</AvatarFallback>
+</Avatar>
+
+// Custom size via className
+<Avatar className="h-16 w-16">
+  <AvatarImage src="/photo.jpg" alt="@username" />
+  <AvatarFallback className="text-lg">JD</AvatarFallback>
+</Avatar>
+```
+
+## Avatar group (stacked)
+
+```jsx
+<div className="flex -space-x-3">
+  {users.map((u) => (
+    <Avatar key={u.id} className="border-2 border-background">
+      <AvatarImage src={u.avatar} alt={u.name} />
+      <AvatarFallback>{u.initials}</AvatarFallback>
+    </Avatar>
+  ))}
+</div>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Fallback background | `--bg-subtle` (muted) |
+| Fallback text | `--fg-muted` |
+| Shape | `border-radius: 9999px` (full) |
+
+## Preview
+
+<StorybookEmbed story="components-avatar--with-image" height={280} />

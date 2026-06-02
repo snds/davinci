@@ -1,0 +1,38 @@
+---
+title: Label
+sidebar_position: 35
+description: Accessible form label that associates text with a form control.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Label
+
+Accessible label element that associates descriptive text with a form control. Built on `@radix-ui/react-label`.
+
+```bash
+cd packages/ui && npx shadcn@latest add label
+```
+
+## Usage
+
+```jsx
+import { Label } from '@davinci/ui/components/ui/label';
+import { Input } from '@davinci/ui/components/davinci/input';
+
+// Basic — links label to input via htmlFor / id
+<Label htmlFor="email">Email address</Label>
+<Input id="email" type="email" placeholder="you@example.com" />
+
+// Inline with a checkbox
+import { Checkbox } from '@davinci/ui/components/ui/checkbox';
+<div className="flex items-center gap-2">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms">Accept terms and conditions</Label>
+</div>
+```
+
+## Preview
+
+<StorybookEmbed story="components-label--default" height={200} />

@@ -16,6 +16,22 @@
       "port": 3001,
       "cwd": "ui_kits/web_app",
       "description": "Serves the React UI kit app at http://localhost:3001/"
+    },
+    {
+      "name": "Docs",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start", "-w", "docs"],
+      "port": 3002,
+      "cwd": ".",
+      "description": "Docusaurus docs site at http://localhost:3002/"
+    },
+    {
+      "name": "Storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "storybook", "-w", "storybook"],
+      "port": 6006,
+      "cwd": ".",
+      "description": "Storybook design system explorer at http://localhost:6006/"
     }
   ]
 }

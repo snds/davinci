@@ -4,10 +4,89 @@ sidebar_label: Navigation
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Navigation
 
 Davinci has two navigation components: **TopNav** — the horizontal page header — and **NavList** — the vertical sidebar navigation used in the left rail.
+
+<LiveDemo
+  title="TopNav"
+  html={`<div class="topnav" style="position:relative;border-radius:8px;border:1px solid var(--border-subtle);">
+  <div class="topnav__brand">
+    <div style="font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:-0.02em;">
+      D<span style="color:var(--alt);">·</span>
+    </div>
+  </div>
+  <div class="topnav__search">
+    <span class="material-symbols-outlined" style="font-size:18px;">search</span>
+    <input type="text" placeholder="Search" />
+  </div>
+  <div class="topnav__tabs">
+    <div class="topnav__tab active">
+      <span class="material-symbols-outlined">home</span>
+      Home
+    </div>
+    <div class="topnav__tab">
+      <span class="material-symbols-outlined">group</span>
+      Network
+    </div>
+    <div class="topnav__tab" style="position:relative;">
+      <span class="material-symbols-outlined">notifications</span>
+      Notifications
+      <span class="badge" style="position:absolute;top:6px;right:8px;">3</span>
+    </div>
+    <div class="topnav__tab">
+      <span class="material-symbols-outlined">chat</span>
+      Messages
+    </div>
+  </div>
+  <div class="avatar avatar--32">JD</div>
+</div>`}
+  pad="16px"
+/>
+
+<LiveDemo
+  title="NavList sidebar"
+  html={`<div class="panel" style="max-width:240px;">
+  <ul class="nav-list">
+    <li class="active">
+      <span class="material-symbols-rounded">home</span>
+      Home
+    </li>
+    <li>
+      <span class="material-symbols-rounded">group</span>
+      Network
+      <span class="count">12</span>
+    </li>
+    <li>
+      <span class="material-symbols-rounded">work</span>
+      Jobs
+    </li>
+    <li>
+      <span class="material-symbols-rounded">notifications</span>
+      Notifications
+      <span class="count">3</span>
+    </li>
+    <li>
+      <span class="material-symbols-rounded">chat_bubble_outline</span>
+      Messages
+    </li>
+  </ul>
+  <hr class="separator" style="margin:4px 0;" />
+  <ul class="nav-list">
+    <li>
+      <span class="material-symbols-rounded">person</span>
+      Profile
+    </li>
+    <li>
+      <span class="material-symbols-rounded">settings</span>
+      Settings
+    </li>
+  </ul>
+</div>`}
+  pad="16px"
+/>
 
 ---
 

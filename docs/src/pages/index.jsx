@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
@@ -17,25 +17,25 @@ const LAYERS = [
     eyebrow: 'Layer 02',
     label: 'Primitives',
     description:
-      'Buttons, avatars, icons, and pills — atomic interactive elements composed directly from tokens with no additional dependencies.',
-    href: '/primitives/buttons',
-    items: ['Buttons', 'Avatars', 'Icons', 'Pills'],
+      'Button, input, avatar, badge, and icons — atomic building blocks wrapped from Radix UI and shadcn/ui on top of the tokens.',
+    href: '/primitives/icons',
+    items: ['Button', 'Input', 'Avatar', 'Icons'],
     accentClass: 'pill--accent',
   },
   {
     eyebrow: 'Layer 03',
     label: 'Components',
     description:
-      'Panels, posts, composers, and navigation — structured UI units that assemble primitives into coherent product interactions.',
-    href: '/components/panel',
-    items: ['Panel', 'Post', 'Composer', 'Navigation'],
+      'Card, dialog, tabs, table, and the full shadcn-based library — composed, interactive, multi-part components.',
+    href: '/shadcn/',
+    items: ['Card', 'Dialog', 'Tabs', 'Table'],
     accentClass: 'pill--alt',
   },
   {
     eyebrow: 'Layer 04',
     label: 'Patterns',
     description:
-      'Feed, profile, and rails — full page layout patterns that compose components into complete product surfaces.',
+      'Panel, post, composer, navigation, feed, profile, and rails — Davinci app compositions that assemble the library into product surfaces.',
     href: '/patterns/feed',
     items: ['Feed', 'Profile', 'Rails'],
     accentClass: 'pill--alt',
@@ -140,8 +140,21 @@ function LayerCard({ eyebrow, label, description, href, items, accentClass }) {
   );
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    setIsMobile(mq.matches);
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isMobile;
+}
+
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
+  const isMobile = useIsMobile();
 
   return (
     <Layout title="Davinci Design System" description={siteConfig.tagline} noFooter={false}>
@@ -150,18 +163,18 @@ export default function Home() {
         style={{
           maxWidth: '860px',
           margin: '0 auto',
-          padding: '80px 24px 64px',
+          padding: isMobile ? '40px var(--page-inset-x) 32px' : '56px var(--page-inset-x) 40px',
           textAlign: 'center',
         }}
       >
         {/* Logo mark */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
           <div
             style={{
-              width: '72px',
-              height: '72px',
+              width: '64px',
+              height: '64px',
               background: 'var(--accent)',
-              borderRadius: '18px',
+              borderRadius: '16px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -172,7 +185,7 @@ export default function Home() {
             <span
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: '38px',
+                fontSize: '34px',
                 fontWeight: 'var(--fw-heavy)',
                 color: '#fff',
                 letterSpacing: '-0.04em',
@@ -183,14 +196,13 @@ export default function Home() {
             >
               D
             </span>
-            {/* Yellow accent dot */}
             <span
               style={{
                 position: 'absolute',
-                bottom: '10px',
-                right: '10px',
-                width: '10px',
-                height: '10px',
+                bottom: '9px',
+                right: '9px',
+                width: '9px',
+                height: '9px',
                 borderRadius: '50%',
                 background: 'var(--alt)',
               }}
@@ -206,7 +218,7 @@ export default function Home() {
             letterSpacing: 'var(--ls-wider)',
             textTransform: 'uppercase',
             color: 'var(--fg-muted)',
-            marginBottom: '16px',
+            marginBottom: '12px',
           }}
         >
           Design System
@@ -215,11 +227,11 @@ export default function Home() {
         {/* Title */}
         <h1
           style={{
-            fontSize: 'var(--text-7xl)',
+            fontSize: isMobile ? 'var(--text-5xl)' : 'var(--text-7xl)',
             fontWeight: 'var(--fw-heavy)',
             letterSpacing: 'var(--ls-tight)',
             lineHeight: 'var(--lh-tight)',
-            margin: '0 0 20px',
+            margin: '0 0 16px',
             color: 'var(--fg)',
             fontFamily: 'var(--font-display)',
           }}
@@ -230,10 +242,10 @@ export default function Home() {
         {/* Tagline */}
         <p
           style={{
-            fontSize: 'var(--text-lg)',
+            fontSize: isMobile ? 'var(--text-base)' : 'var(--text-lg)',
             color: 'var(--fg-muted)',
             lineHeight: 'var(--lh-loose)',
-            margin: '0 auto 40px',
+            margin: '0 auto 32px',
             maxWidth: '520px',
           }}
         >
@@ -245,7 +257,7 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
-            gap: '10px',
+            gap: '8px',
             justifyContent: 'center',
             flexWrap: 'wrap',
           }}
@@ -291,18 +303,15 @@ export default function Home() {
       <div
         style={{
           maxWidth: '860px',
-          margin: '0 auto 64px',
-          padding: '0 24px',
+          margin: '0 auto 48px',
+          padding: '0 var(--page-inset-x)',
         }}
       >
-        <div
-          className="panel"
-          style={{ padding: '24px 0' }}
-        >
+        <div className="panel" style={{ padding: '20px 0' }}>
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
+              gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
               gap: '0',
             }}
           >
@@ -310,8 +319,13 @@ export default function Home() {
               <div
                 key={s.label}
                 style={{
-                  padding: '8px 0',
-                  borderRight: i < STATS.length - 1 ? '1px solid var(--border-subtle)' : 'none',
+                  padding: isMobile ? '12px 0' : '8px 0',
+                  borderRight:
+                    isMobile
+                      ? i % 2 === 0 ? '1px solid var(--border-subtle)' : 'none'
+                      : i < STATS.length - 1 ? '1px solid var(--border-subtle)' : 'none',
+                  borderBottom:
+                    isMobile && i < 2 ? '1px solid var(--border-subtle)' : 'none',
                 }}
               >
                 <StatItem value={s.value} label={s.label} />
@@ -325,10 +339,10 @@ export default function Home() {
       <div
         style={{
           maxWidth: '860px',
-          margin: '0 auto 80px',
-          padding: '0 24px',
+          margin: '0 auto 64px',
+          padding: '0 var(--page-inset-x)',
           display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
           gap: '12px',
         }}
       >
@@ -341,8 +355,8 @@ export default function Home() {
       <div
         style={{
           maxWidth: '860px',
-          margin: '0 auto 64px',
-          padding: '0 24px',
+          margin: '0 auto 48px',
+          padding: '0 var(--page-inset-x)',
           textAlign: 'center',
         }}
       >

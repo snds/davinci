@@ -1,0 +1,166 @@
+# ============================================================
+# Davinci Design System — Dependency Sync Workflow
+#
+# Triggers:
+#   • Weekly cron (Mondays 08:00 UTC)
+#   • Manual dispatch (with optional scope and force flags)
+#   • Push to scripts/sync*.js or packages/ui/components.json
+#
+# What it does:
+#   1. Checks @radix-ui/colors for new version → regenerates palette.css
+#   2. Checks shadcn/ui registry for updated installed components → re-adds them
+#   3. Generates missing Storybook stories for any new components
+#   4. Generates missing MDX doc stubs for any new components
+#   5. If any files changed, opens a PR titled "chore: sync design system deps"
+# ============================================================
+
+name: Sync Design System Dependencies
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'   # Every Monday at 08:00 UTC
+
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: 'What to sync'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - radix-only
+          - shadcn-only
+      force:
+        description: 'Force re-add even if version unchanged'
+        required: false
+        default: false
+        type: boolean
+
+  push:
+    paths:
+      - 'scripts/sync*.js'
+      - 'scripts/generate-*.js'
+      - 'packages/ui/components.json'
+
+jobs:
+  sync:
+    name: Sync & generate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # ── Setup ───────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install root workspace deps
+        run: npm install --workspaces --if-present
+
+      # ── Build sync flags from inputs ─────────────────────────────────────
+      - name: Resolve sync flags
+        id: flags
+        run: |
+          SCOPE="${{ github.event.inputs.scope || 'all' }}"
+          FORCE="${{ github.event.inputs.force || 'false' }}"
+          FLAGS=""
+          if [ "$SCOPE" = "radix-only" ]; then FLAGS="--radix-only"; fi
+          if [ "$SCOPE" = "shadcn-only" ]; then FLAGS="--shadcn-only"; fi
+          if [ "$FORCE" = "true" ]; then FLAGS="$FLAGS --force"; fi
+          echo "flags=$FLAGS" >> $GITHUB_OUTPUT
+          echo "Sync flags: $FLAGS"
+
+      # ── Run sync ─────────────────────────────────────────────────────────
+      - name: Run sync pipeline
+        run: node scripts/sync.js ${{ steps.flags.outputs.flags }}
+        env:
+          CI: true
+
+      # ── Detect changes ────────────────────────────────────────────────────
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && git diff --staged --quiet
+          if [ $? -ne 0 ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changed files:"
+            git diff --name-only
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected."
+          fi
+
+      # ── Commit + open PR ─────────────────────────────────────────────────
+      - name: Configure git
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create sync branch
+        if: steps.changes.outputs.changed == 'true'
+        id: branch
+        run: |
+          BRANCH="chore/sync-design-system-$(date +%Y%m%d)"
+          git checkout -b "$BRANCH"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git add -A
+          git commit -m "chore: sync design system dependencies
+
+          - @radix-ui/colors: check for palette updates
+          - shadcn/ui: re-add updated components with --overwrite
+          - Auto-generated Storybook stories for new components
+          - Auto-generated MDX doc stubs for new components
+
+          [skip ci]"
+
+      - name: Push branch
+        if: steps.changes.outputs.changed == 'true'
+        run: git push origin "${{ steps.branch.outputs.branch }}"
+
+      - name: Open pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: ${{ steps.branch.outputs.branch }}
+          title: 'chore: sync design system dependencies'
+          body: |
+            ## Design System Dependency Sync
+
+            This PR was opened automatically by the **Sync Design System Dependencies** workflow.
+
+            ### What changed
+            - `palette.css` — regenerated if `@radix-ui/colors` was updated
+            - `packages/ui/src/components/ui/` — shadcn components re-added if registry has newer versions
+            - `storybook/src/stories/shadcn/` — new story stubs generated for any new components
+            - `docs/docs/shadcn/` — new MDX doc stubs generated for any new components
+
+            ### Review checklist
+            - [ ] Verify `palette.css` looks correct (run `npm run storybook` and check Colors story)
+            - [ ] Verify updated shadcn components render as expected in Storybook
+            - [ ] Fill in any new story stubs in `storybook/src/stories/shadcn/`
+            - [ ] Fill in any new doc stubs in `docs/docs/shadcn/`
+
+            > Stories and docs stubs are intentionally minimal — they are never overwritten once created.
+          labels: |
+            dependencies
+            automated
+          delete-branch: true
+
+      - name: No changes
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "✓ Everything is up to date. No PR needed."

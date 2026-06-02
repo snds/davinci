@@ -1,0 +1,52 @@
+---
+title: Switch
+sidebar_position: 14
+description: Radix Switch — binary toggle for on/off settings.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Switch
+
+Built on `@radix-ui/react-switch`. A binary toggle — prefer this over a checkbox when the action takes immediate effect (e.g., enabling a feature without a save button).
+
+```bash
+cd packages/ui && npx shadcn@latest add switch
+```
+
+## Usage
+
+```jsx
+import { Switch } from '@davinci/ui/components/ui/switch';
+import { Label } from '@davinci/ui/components/ui/label';
+
+// Standalone
+<Switch />
+
+// With label
+<div className="flex items-center gap-2">
+  <Switch id="notifications" />
+  <Label htmlFor="notifications">Email notifications</Label>
+</div>
+
+// Controlled
+const [enabled, setEnabled] = React.useState(false);
+<Switch checked={enabled} onCheckedChange={setEnabled} />
+
+// Disabled
+<Switch disabled />
+```
+
+## Theming
+
+| State | Davinci token |
+|-------|---------------|
+| Off track | `--border` / `--bg-subtle` |
+| On track | `--accent` (blue-9) |
+| Thumb | white |
+| Focus ring | `--border-focus` |
+
+## Preview
+
+<StorybookEmbed story="components-switch--default" height={220} />

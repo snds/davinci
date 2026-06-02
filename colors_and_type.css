@@ -1,82 +1,18 @@
 /* ============================================================
    Davinci Design System — Core tokens
-   Radix-based palette (blue primary, sand neutral, yellow alt)
+   Palette: @radix-ui/colors v3 (see palette.css, auto-generated)
    Default theme: dark. Light available via [data-theme="light"]
    ============================================================ */
 
-/* ---------- Fonts (Google Fonts) ---------- */
-/* Display + body: Inter — default, modern-neutral workhorse
-   Mono: JetBrains Mono
-   Icons: Material Symbols Rounded */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+/* Fonts (Inter, JetBrains Mono, Material Symbols Rounded) are loaded by
+   the bundle entry point — @davinci/tokens/all.css for docs, or via
+   <link> injection in storybook/.storybook/preview.jsx. Direct importers
+   of this file are responsible for loading them. */
 
-/* ============================================================
-   RADIX COLOR SCALES (full)
-   All scales shipped; consumers reference via semantic vars.
-   Scales: 1-2 backgrounds, 3-5 component bg, 6-8 borders,
-           9-10 solid, 11 low-contrast text, 12 high-contrast text
-   ============================================================ */
+/* Full Radix palette — all 31 scales, both themes, opaque + alpha + P3 */
+@import './palette.css';
 
 :root, [data-theme="dark"] {
-  /* ---------- Sand (neutral) — dark ---------- */
-  --sand-1: #111110;
-  --sand-2: #191918;
-  --sand-3: #222221;
-  --sand-4: #2a2a28;
-  --sand-5: #31312e;
-  --sand-6: #3b3a37;
-  --sand-7: #494844;
-  --sand-8: #62605b;
-  --sand-9: #6f6d66;
-  --sand-10: #7c7b74;
-  --sand-11: #b5b3ad;
-  --sand-12: #eeeeec;
-  --sand-a1: #00000000;
-  --sand-a12: #fffff0ee;
-
-  /* ---------- Blue (primary) — dark ---------- */
-  --blue-1: #0d1520;
-  --blue-2: #111927;
-  --blue-3: #0d2847;
-  --blue-4: #003362;
-  --blue-5: #004074;
-  --blue-6: #104d87;
-  --blue-7: #205d9e;
-  --blue-8: #2870bd;
-  --blue-9: #0090ff;
-  --blue-10: #3b9eff;
-  --blue-11: #70b8ff;
-  --blue-12: #c2e6ff;
-
-  /* ---------- Yellow (alt brand) — dark ---------- */
-  --yellow-1: #14120b;
-  --yellow-2: #1b180f;
-  --yellow-3: #2d2305;
-  --yellow-4: #362b00;
-  --yellow-5: #433500;
-  --yellow-6: #524202;
-  --yellow-7: #665417;
-  --yellow-8: #836a21;
-  --yellow-9: #ffe629;
-  --yellow-10: #ffff57;
-  --yellow-11: #f5e147;
-  --yellow-12: #f6eeb4;
-
-  /* ---------- Functional scales (dark) ---------- */
-  --green-9: #30a46c;
-  --green-10: #33b074;
-  --green-11: #4cc38a;
-  --green-a3: #2bd27922;
-  --green-a11: #63e39c;
-  --red-9: #e5484d;
-  --red-10: #ec5d5e;
-  --red-11: #ff9592;
-  --red-a3: #ff525533;
-  --amber-9: #ffc53d;
-  --amber-11: #ffc944;
-  --gray-a3: #ffffff1a;
-  --gray-a6: #ffffff33;
 
   /* ---------- Semantic (dark-mode) ---------- */
   --bg:            var(--sand-1);
@@ -89,13 +25,24 @@
 
   --fg:            var(--sand-12);
   --fg-muted:      var(--sand-11);
-  --fg-subtle:     var(--sand-10);
+  --fg-subtle:     var(--fg-muted); /* DEPRECATED — alias of --fg-muted (see DDR DS-2026-001). Radix has only two AA-legible text steps (11/12); a third "tertiary text" colour cannot meet WCAG AA. Express tertiary emphasis via size/weight, not a fainter colour. Migrate consumers to --fg-muted. */
   --fg-disabled:   var(--sand-8);
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #1a1500;
 
-  --border:        var(--sand-6);
-  --border-subtle: var(--sand-4);
+  /* Inverse / contrast surface — DaVinci "Bristol".
+     sand-1 / sand-12 already flip polarity per theme, so a single
+     definition yields a dark region in light mode and a light region
+     in dark mode — the modern equivalent of Material's inverseSurface. */
+  --bg-inverse:          var(--sand-12);
+  --fg-on-inverse:       var(--sand-1);
+  --fg-on-inverse-muted: var(--sand-3);
+  --border-inverse:      var(--sand-11);
+
+  /* Radix border steps: 6 = subtle borders/separators, 7 = UI element border,
+     8 = strong/hovered border. */
+  --border:        var(--sand-7);
+  --border-subtle: var(--sand-6);
   --border-strong: var(--sand-8);
   --border-focus:  var(--blue-8);
 
@@ -117,8 +64,9 @@
   --warning:       var(--amber-9);
   --warning-fg:    var(--amber-11);
 
-  /* Background pattern */
-  --bg-pattern: url('assets/noise_lines_dark.webp');
+  /* Background pattern — texture tinted toward --bg so the canvas reads at the
+     same brightness as the flat background token (keeps borders reading subtle). */
+  --bg-pattern: linear-gradient(color-mix(in srgb, var(--bg) 62%, transparent), color-mix(in srgb, var(--bg) 62%, transparent)), url('assets/noise_lines_dark.webp');
 
   /* Overlays */
   --overlay:       rgba(0,0,0,.7);
@@ -137,61 +85,6 @@
    LIGHT THEME
    ============================================================ */
 [data-theme="light"] {
-  /* Sand — light */
-  --sand-1: #fdfdfc;
-  --sand-2: #f9f9f8;
-  --sand-3: #f1f0ef;
-  --sand-4: #e9e8e6;
-  --sand-5: #e2e1de;
-  --sand-6: #dad9d6;
-  --sand-7: #cfceca;
-  --sand-8: #bcbbb5;
-  --sand-9: #8d8d86;
-  --sand-10: #82827c;
-  --sand-11: #63635e;
-  --sand-12: #21201c;
-
-  /* Blue — light */
-  --blue-1: #fbfdff;
-  --blue-2: #f4faff;
-  --blue-3: #e6f4fe;
-  --blue-4: #d5efff;
-  --blue-5: #c2e5ff;
-  --blue-6: #acd8fc;
-  --blue-7: #8ec8f6;
-  --blue-8: #5eb1ef;
-  --blue-9: #0090ff;
-  --blue-10: #0588f0;
-  --blue-11: #0d74ce;
-  --blue-12: #113264;
-
-  /* Yellow — light */
-  --yellow-1: #fdfdf9;
-  --yellow-2: #fefce9;
-  --yellow-3: #fffab8;
-  --yellow-4: #fff394;
-  --yellow-5: #ffe770;
-  --yellow-6: #f3d768;
-  --yellow-7: #e4c767;
-  --yellow-8: #d5ae39;
-  --yellow-9: #ffe629;
-  --yellow-10: #ffdc00;
-  --yellow-11: #9e6c00;
-  --yellow-12: #473b1f;
-
-  --green-9: #30a46c;
-  --green-10: #2b9a66;
-  --green-11: #218358;
-  --green-a3: #00803b1a;
-  --red-9: #e5484d;
-  --red-10: #dc3e42;
-  --red-11: #ce2c31;
-  --red-a3: #ff0a0a1a;
-  --amber-9: #ffc53d;
-  --amber-11: #ab6400;
-  --gray-a3: #0000001a;
-  --gray-a6: #00000033;
-
   --bg:            var(--sand-1);
   --bg-subtle:     var(--sand-2);
   --bg-surface:    #ffffff;
@@ -202,13 +95,24 @@
 
   --fg:            var(--sand-12);
   --fg-muted:      var(--sand-11);
-  --fg-subtle:     var(--sand-10);
+  --fg-subtle:     var(--fg-muted); /* DEPRECATED — alias of --fg-muted (see DDR DS-2026-001). Radix has only two AA-legible text steps (11/12); a third "tertiary text" colour cannot meet WCAG AA. Express tertiary emphasis via size/weight, not a fainter colour. Migrate consumers to --fg-muted. */
   --fg-disabled:   var(--sand-8);
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #2a2200;
 
-  --border:        var(--sand-6);
-  --border-subtle: var(--sand-4);
+  /* Inverse / contrast surface — DaVinci "Bristol".
+     sand-1 / sand-12 already flip polarity per theme, so a single
+     definition yields a dark region in light mode and a light region
+     in dark mode — the modern equivalent of Material's inverseSurface. */
+  --bg-inverse:          var(--sand-12);
+  --fg-on-inverse:       var(--sand-1);
+  --fg-on-inverse-muted: var(--sand-3);
+  --border-inverse:      var(--sand-11);
+
+  /* Radix border steps: 6 = subtle borders/separators, 7 = UI element border,
+     8 = strong/hovered border. */
+  --border:        var(--sand-7);
+  --border-subtle: var(--sand-6);
   --border-strong: var(--sand-8);
   --border-focus:  var(--blue-8);
 
@@ -230,8 +134,8 @@
   --warning:       var(--amber-9);
   --warning-fg:    var(--amber-11);
 
-  /* Background pattern */
-  --bg-pattern: url('assets/noise_lines.webp');
+  /* Background pattern — texture tinted toward --bg (see dark theme note). */
+  --bg-pattern: linear-gradient(color-mix(in srgb, var(--bg) 62%, transparent), color-mix(in srgb, var(--bg) 62%, transparent)), url('assets/noise_lines.webp');
 
   --overlay:       rgba(0,0,0,.45);
   --scrim:         rgba(0,0,0,.30);
@@ -314,13 +218,19 @@
   --radius-2xl: 16px;
   --radius-full: 9999px;
 
+  /* Semantic radii: canvas-bound containers (cards/panels in the page flow)
+     use the smaller step; surfaces that float above the layout (dialogs,
+     sheets, popovers, menus) use the larger step. */
+  --radius-container: var(--radius-lg);  /* 8px */
+  --radius-surface:   var(--radius-xl);  /* 12px */
+
   /* ---------- Shadows (warm, subtle) ---------- */
   --shadow-xs: 0 1px 2px rgba(17, 17, 16, 0.06);
   --shadow-sm: 0 1px 2px rgba(17, 17, 16, 0.08), 0 1px 3px rgba(17, 17, 16, 0.06);
   --shadow-md: 0 2px 4px rgba(17, 17, 16, 0.08), 0 4px 8px rgba(17, 17, 16, 0.06);
   --shadow-lg: 0 4px 8px rgba(17, 17, 16, 0.08), 0 12px 24px rgba(17, 17, 16, 0.10);
   --shadow-xl: 0 8px 16px rgba(17, 17, 16, 0.12), 0 24px 48px rgba(17, 17, 16, 0.14);
-  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--blue-8) 40%, transparent);
+  --shadow-focus: 0 0 0 3px var(--blue-a6);
 
   /* Motion */
   --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
@@ -329,6 +239,28 @@
   --dur-fast:   120ms;
   --dur-base:   180ms;
   --dur-slow:   280ms;
+
+  /* ---------- Breakpoints ---------- */
+  --bp-sm:  640px;
+  --bp-md:  768px;
+  --bp-lg:  1024px;
+  --bp-xl:  1280px;
+  --bp-2xl: 1536px;
+
+  /* ---------- Layout ---------- */
+  /* Page-level horizontal inset — scales with viewport */
+  --page-inset-x:  20px;
+  /* Content column max-widths */
+  --container-doc: 860px;   /* single-column doc/editorial content */
+  --container-max: 1280px;  /* wide layouts, full app shell */
+}
+
+/* Responsive page inset — use var(--page-inset-x) everywhere instead of hardcoding */
+@media (min-width: 640px) {
+  :root { --page-inset-x: 24px; }
+}
+@media (min-width: 1024px) {
+  :root { --page-inset-x: 32px; }
 }
 
 /* ============================================================
@@ -401,6 +333,14 @@ p, .body {
 .body-lg { font-size: var(--text-lg); line-height: var(--lh-normal); }
 .caption { font-size: var(--text-xs); color: var(--fg-muted); line-height: var(--lh-normal); }
 
+/* Tertiary emphasis (timestamps, metadata, supporting labels) — the sanctioned
+   replacement for the deprecated `color: var(--fg-subtle)` (see DDR DS-2026-001).
+   De-emphasis is carried by the smaller size, NOT a fainter colour: --fg-muted
+   (sand-11) is the lowest text colour that meets WCAG AA, so the only AA-safe
+   lever below secondary text is scale. Shares the caption treatment by design —
+   `.caption` is for prose captions, `.text-tertiary` is the general intent name. */
+.text-tertiary { font-size: var(--text-xs); color: var(--fg-muted); line-height: var(--lh-normal); }
+
 code, .code, kbd, samp, pre {
   font-family: var(--font-mono);
   font-size: 0.92em;
@@ -426,7 +366,7 @@ hr {
   margin: var(--s-7) 0;
 }
 
-::selection { background: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--fg); }
+::selection { background: var(--blue-a5); color: var(--fg); }
 
 /* ============================================================
    Material Symbols (Rounded) — default for the whole system

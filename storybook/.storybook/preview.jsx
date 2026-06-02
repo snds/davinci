@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import '../../colors_and_type.css';
 import '../../ui_kits/web_app/davinci.css';
+import '@davinci/ui/styles/globals.css';
 
 // Inject Google Fonts and Material Symbols via <link> tags
 function injectFonts() {
@@ -78,7 +79,13 @@ const preview = {
     },
     options: {
       storySort: {
-        order: ['Foundations', 'Primitives', 'Components', 'Patterns'],
+        order: [
+          'Foundations',
+          'Primitives',
+          'Components', ['Panel', 'Post', 'Composer', 'NavList', 'TopNav'],
+          'Patterns', ['Feed', 'LeftRail', 'RightRail', 'ProfilePage'],
+          'shadcn',
+        ],
       },
     },
   },

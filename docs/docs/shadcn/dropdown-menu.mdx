@@ -1,0 +1,91 @@
+---
+title: Dropdown Menu
+sidebar_position: 42
+description: Radix DropdownMenu — contextual action list with checkboxes, radios, and submenus.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Dropdown Menu
+
+Built on `@radix-ui/react-dropdown-menu`. Supports checkboxes, radio groups, submenus, keyboard navigation, and screen readers. Renders in a portal.
+
+```bash
+cd packages/ui && npx shadcn@latest add dropdown-menu
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `DropdownMenu` | Root context |
+| `DropdownMenuTrigger` | Element that opens the menu |
+| `DropdownMenuContent` | Floating panel |
+| `DropdownMenuItem` | Action item |
+| `DropdownMenuCheckboxItem` | Toggle item with checkbox |
+| `DropdownMenuRadioGroup` | Group of radio items |
+| `DropdownMenuRadioItem` | Single-select item |
+| `DropdownMenuLabel` | Non-interactive group heading |
+| `DropdownMenuSeparator` | Horizontal divider |
+| `DropdownMenuShortcut` | Keyboard shortcut hint (right-aligned) |
+| `DropdownMenuSub` | Submenu root |
+| `DropdownMenuSubTrigger` | Item that opens a submenu |
+| `DropdownMenuSubContent` | Submenu panel |
+
+## Usage
+
+```jsx
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuShortcut,
+} from '@davinci/ui/components/ui/dropdown-menu';
+import { Button } from '@davinci/ui/components/ui/button';
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline">Options</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent className="w-56">
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem>
+      Profile <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+    </DropdownMenuItem>
+    <DropdownMenuItem>Settings</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem className="text-destructive">
+      Sign out
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+## With checkboxes
+
+```jsx
+const [checked, setChecked] = React.useState(true);
+
+<DropdownMenuCheckboxItem
+  checked={checked}
+  onCheckedChange={setChecked}
+>
+  Show activity feed
+</DropdownMenuCheckboxItem>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Panel background | `--bg-elevated` |
+| Panel border | `--border` |
+| Item hover | `--bg-hover` / `--accent` (Tailwind `accent`) |
+| Item text | `--fg` |
+| Destructive item | `--danger-fg` |
+| Separator | `--border-subtle` |
+
+## Preview
+
+<StorybookEmbed story="components-dropdownmenu--default" height={280} />

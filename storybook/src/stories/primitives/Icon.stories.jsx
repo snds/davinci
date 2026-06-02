@@ -1,5 +1,15 @@
 import React from 'react';
-import Icon, { ICON_CODEPOINTS } from '../../components/Icon';
+import { Icon } from '@davinci/ui/components/davinci/icon';
+
+// A representative set of Material Symbols Rounded ligatures for the grid demo.
+const ICON_NAMES = [
+  'home', 'search', 'group', 'groups', 'work', 'chat_bubble', 'notifications',
+  'person', 'settings', 'bookmark', 'favorite', 'event', 'newspaper', 'history',
+  'info', 'add', 'edit', 'link', 'delete', 'more_horiz', 'more_vert', 'public',
+  'thumb_up', 'repeat', 'send', 'mail', 'image', 'play_circle', 'article',
+  'location_on', 'arrow_forward', 'dark_mode', 'light_mode', 'close', 'check',
+  'visibility', 'lock',
+];
 
 export default {
   title: 'Primitives/Icon',
@@ -7,7 +17,7 @@ export default {
   argTypes: {
     name: {
       control: 'select',
-      options: Object.keys(ICON_CODEPOINTS),
+      options: ICON_NAMES,
       description: 'Icon name',
     },
     filled: {
@@ -37,7 +47,7 @@ export const AllIcons = {
     <div>
       <h3 style={{ marginBottom: 24 }}>All Icons — Outlined & Filled</h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 8 }}>
-        {Object.keys(ICON_CODEPOINTS).map(name => (
+        {ICON_NAMES.map(name => (
           <div
             key={name}
             style={{

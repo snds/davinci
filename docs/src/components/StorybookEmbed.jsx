@@ -15,6 +15,31 @@ export default function StorybookEmbed({ story, height = 300, title }) {
   const storybookUrl = siteConfig.customFields?.storybookUrl || 'http://localhost:6006';
   const src = `${storybookUrl}/iframe.html?id=${story}&viewMode=story`;
 
+  // A production build that points at localhost means STORYBOOK_URL was never set
+  // (the deploy pipeline sets it — see .github/workflows/deploy-pages.yml). Rather
+  // than ship a dead cross-origin iframe, surface the misconfiguration explicitly.
+  // In dev we keep the iframe: Storybook may be running locally on :6006.
+  const isLocalDefault = storybookUrl.includes('localhost');
+  const isProdBuild = process.env.NODE_ENV === 'production';
+  if (isLocalDefault && isProdBuild) {
+    return (
+      <div
+        style={{
+          marginBottom: '24px',
+          padding: '16px 18px',
+          borderRadius: '12px',
+          border: '1px dashed var(--border)',
+          background: 'var(--bg-subtle)',
+          color: 'var(--fg-muted)',
+          fontSize: '13px',
+        }}
+      >
+        Preview unavailable — this build has no <code>STORYBOOK_URL</code> configured.
+        Run <code>npm run storybook</code> locally, or set <code>STORYBOOK_URL</code> at build time.
+      </div>
+    );
+  }
+
   return (
     <div
       style={{

@@ -1,0 +1,60 @@
+---
+title: Radio Group
+sidebar_position: 40
+description: A set of mutually exclusive radio buttons with accessible keyboard navigation.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Radio Group
+
+A set of checkable buttons where only one can be selected at a time. Built on `@radix-ui/react-radio-group`.
+
+```bash
+cd packages/ui && npx shadcn@latest add radio-group
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `RadioGroup` | Root — manages selection state |
+| `RadioGroupItem` | Individual radio button |
+
+## Usage
+
+```jsx
+import { RadioGroup, RadioGroupItem } from '@davinci/ui/components/ui/radio-group';
+import { Label } from '@davinci/ui/components/ui/label';
+
+// Uncontrolled
+<RadioGroup defaultValue="monthly">
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="monthly" id="r-monthly" />
+    <Label htmlFor="r-monthly">Monthly</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="annual" id="r-annual" />
+    <Label htmlFor="r-annual">Annual</Label>
+  </div>
+</RadioGroup>
+
+// Controlled
+const [plan, setPlan] = React.useState('monthly');
+
+<RadioGroup value={plan} onValueChange={setPlan}>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="monthly" id="r2-monthly" />
+    <Label htmlFor="r2-monthly">Monthly</Label>
+  </div>
+  <div className="flex items-center gap-2">
+    <RadioGroupItem value="annual" id="r2-annual" />
+    <Label htmlFor="r2-annual">Annual — save 20%</Label>
+  </div>
+</RadioGroup>
+```
+
+## Preview
+
+<StorybookEmbed story="components-radiogroup--default" height={260} />

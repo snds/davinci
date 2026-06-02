@@ -3,6 +3,11 @@
    Imports live design tokens and overrides Docusaurus vars
    ============================================================ */
 
+/* ── @davinci/ui: Tailwind v4 + token bridge + shadcn theme vars ── */
+@import "@davinci/ui/styles";
+/* Scan UI package source so Tailwind generates all component utility classes */
+@source "../../../packages/ui/src";
+
 @import '../../../colors_and_type.css';
 @import '../../../ui_kits/web_app/davinci.css';
 
@@ -35,7 +40,8 @@
   --ifm-navbar-link-active-color: var(--fg);
   --ifm-navbar-link-hover-color: var(--fg);
 
-  --ifm-sidebar-width: 260px;
+  --ifm-sidebar-width: 280px;
+  --doc-sidebar-width: 280px; /* Docusaurus v3 uses this, not --ifm-sidebar-width */
   --ifm-menu-color: var(--fg-muted);
   --ifm-menu-color-active: var(--fg);
   --ifm-menu-color-background-active: var(--bg-selected);
@@ -81,6 +87,9 @@
   --ifm-global-radius: var(--radius-lg);
   --ifm-global-shadow-md: var(--shadow-md);
   --ifm-global-shadow-lw: var(--shadow-sm);
+
+  /* Page-inset applied via Docusaurus's container padding var */
+  --ifm-spacing-horizontal: var(--page-inset-x);
 }
 
 /* ---------- Body background with noise pattern ---------- */
@@ -98,7 +107,7 @@ body {
 .navbar {
   border-bottom: 1px solid var(--border);
   background-color: transparent;
-  padding: 0 var(--s-7);
+  padding: 0 var(--page-inset-x);
   height: 60px;
   position: sticky;
 }
@@ -130,12 +139,14 @@ body {
 .navbar__link {
   font-size: var(--text-sm);
   font-weight: var(--fw-medium);
+  color: var(--fg-muted);
   border-radius: var(--radius-md);
   padding: var(--s-2) var(--s-3);
   transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast);
 }
 
 .navbar__link:hover {
+  color: var(--fg);
   background: var(--bg-hover);
   text-decoration: none;
 }
@@ -178,27 +189,127 @@ body {
   padding: var(--s-4) var(--s-3);
 }
 
-/* Category headers */
-.menu__list-item-collapsible {
-  border-radius: var(--radius-md);
+/* Visually separate the standalone intro link from the first category */
+.theme-doc-sidebar-menu > li:first-child {
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
+/* ── Category headers ─────────────────────────────────────────
+   Two DOM variants from Docusaurus:
+   A) Non-linked: <div.collapsible> <a.menu__link--sublist-caret>
+      Chevron is ::after on <a>, moved left via flex order:-1
+   B) Linked (e.g. Components with href): <div.collapsible> <a> <button.menu__caret>
+      Chevron is a <button>, moved left via flex-direction:row-reverse
+
+   Both land chevron at the same x-origin (container padding-left) by:
+   — giving the container its padding (not the link/button)
+   — normalising the button caret to padding:0, width:1.25rem (same as ::after)
+   — using gap:s-2 on both the container (B) and the <a> flex (A)
+   ─────────────────────────────────────────────────────────── */
+.menu__list-item-collapsible {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  margin-top: var(--s-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.menu__list-item-collapsible:hover {
+  background-color: var(--bg-hover);
+}
+
+.menu__list-item-collapsible:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Category label */
 .menu__list-item-collapsible > .menu__link {
+  flex: 1;
+  padding: 0;
   font-size: var(--text-xs);
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   color: var(--fg-muted);
-  padding: var(--s-3) var(--s-3);
-  margin-top: var(--s-4);
+  line-height: 1;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
-.menu__list-item-collapsible > .menu__link:hover {
-  background: transparent;
+/* Suppress the generic .menu__link hover bg for category headers */
+.menu__list-item-collapsible > .menu__link:hover,
+.menu__list-item-collapsible:hover > .menu__link {
+  background: transparent !important;
   color: var(--fg);
 }
 
-/* Leaf links */
+/* Active parent: a child page is open — bold + accent caret color */
+.menu__link--sublist.menu__link--active {
+  background: transparent !important;
+  color: var(--fg) !important;
+  font-weight: var(--fw-bold) !important;
+}
+
+/* Active parent container: subtle left accent so it reads as "you are here" */
+.menu__list-item-collapsible:has(.menu__link--sublist.menu__link--active) {
+  border-left: 2px solid var(--accent);
+  padding-left: calc(var(--s-3) - 2px);
+}
+
+/* Level-2 categories (e.g. Utilities inside Primitives) — visually subordinate */
+.theme-doc-sidebar-item-category-level-2 .menu__list-item-collapsible {
+  margin-top: var(--s-2);
+  padding: 2px var(--s-2);
+}
+
+.theme-doc-sidebar-item-category-level-2 .menu__list-item-collapsible > .menu__link {
+  font-size: calc(var(--text-xs) * 0.9);
+  color: var(--fg-subtle);
+  letter-spacing: var(--ls-wide);
+}
+
+/* Button caret (variant B) — normalise to match ::after size and origin */
+.menu__list-item-collapsible .menu__caret {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+}
+
+.menu__caret::before,
+.menu__list-item-collapsible:hover .menu__caret::before {
+  border-color: var(--fg-muted);
+}
+
+.menu__list-item-collapsible:hover .menu__caret::before {
+  border-color: var(--fg);
+}
+
+/* ::after caret (variant A) — chevron-to-label gap mirrors container gap above */
+.menu__link--sublist-caret {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.menu__link--sublist-caret::after {
+  order: -1;
+  flex-shrink: 0;
+  margin-left: 0 !important;
+}
+
+/* ── Leaf links ───────────────────────────────────────────── */
 .menu__link {
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
@@ -208,54 +319,82 @@ body {
   line-height: var(--lh-normal);
 }
 
-.menu__link:hover,
-.menu__list-item-collapsible:hover > .menu__link {
+/* Nested leaf links — indent to show hierarchy under category */
+.menu__list .menu__list .menu__link {
+  padding-left: 24px;
+}
+
+.menu__link:hover {
   background-color: var(--bg-hover);
   color: var(--fg);
   text-decoration: none;
 }
 
-.menu__link--active {
+.menu__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Active leaf item */
+.menu__link--active:not(.menu__link--sublist) {
   background-color: var(--bg-selected) !important;
   color: var(--blue-11) !important;
   font-weight: var(--fw-semibold);
-}
-
-.menu__caret::before {
-  border-color: var(--fg-muted);
-}
-
-/* Sidebar intro item */
-.menu__list > .menu__list-item:first-child > .menu__link {
-  margin-top: 0;
+  border-left: 2px solid var(--blue-9);
+  padding-left: 22px !important;
 }
 
 /* ============================================================
    TABLE OF CONTENTS (right rail)
    ============================================================ */
+
+/* Pin the TOC column to the top of the row — the row uses align-items:center
+   which would otherwise vertically center the short TOC against a tall content
+   column, pushing it far down the page. */
+.col.col--3:has(.theme-doc-toc-desktop) {
+  align-self: stretch;
+}
+
+/* Ensure the inner TOC element scrolls within the viewport rather than
+   growing taller than the visible area. */
+.theme-doc-toc-desktop {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + var(--s-5));
+  max-height: calc(100vh - var(--ifm-navbar-height) - var(--s-10));
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* TOC: per-item border approach — active item overrides the container's left border.
+   margin-left: -2px pulls items flush with the container border edge so the item's
+   own border-left paints over it, creating a clean accent-color active indicator. */
 .table-of-contents {
   border-left: 2px solid var(--border-subtle);
-  padding-left: var(--s-5);
+  padding-left: 0;
   font-size: var(--text-sm);
 }
 
 .table-of-contents__link {
-  color: var(--fg-subtle);
+  color: var(--fg-muted);
   font-size: var(--text-xs);
   line-height: var(--lh-normal);
-  padding: 3px 0;
+  padding: 3px 0 3px var(--s-4);
+  margin-left: -2px;
+  border-left: 2px solid transparent;
   display: block;
-  transition: color var(--dur-fast);
+  transition: color var(--dur-fast), border-color var(--dur-fast);
 }
 
 .table-of-contents__link:hover {
   color: var(--fg);
+  border-left-color: var(--border);
   text-decoration: none;
 }
 
 .table-of-contents__link--active {
-  color: var(--accent-fg) !important;
-  font-weight: var(--fw-medium);
+  color: var(--fg) !important;
+  font-weight: var(--fw-semibold);
+  border-left-color: var(--accent) !important;
 }
 
 /* ============================================================
@@ -356,6 +495,40 @@ body {
   background: var(--bg-subtle) !important;
   font-size: var(--text-sm);
   line-height: 1.7;
+}
+
+/* Dracula's comment grey lands ~3.74:1 on the dark code surface — below AA.
+   Lift comments to a token that clears 4.5:1. Light mode uses the github theme
+   (Fix: prism.theme) whose comments already pass, so scope this to dark only. */
+html[data-theme='dark'] .prism-code .token.comment,
+html[data-theme='dark'] .prism-code .token.prolog,
+html[data-theme='dark'] .prism-code .token.cdata {
+  /* prism-react-renderer sets token color via inline style, so !important is
+     required to override the theme's per-token color. */
+  color: var(--sand-11) !important;
+}
+
+/* The github light theme's accent tokens (comment, JSX attr-name, function,
+   string) land 2.7–4.4:1 on the near-white code surface — below AA. Remap just
+   those categories to Radix step-11 hues (all ≥4.5:1 here), preserving syntax
+   differentiation. Plain text / keywords / punctuation already pass, so they
+   keep the github palette. Inline token colors require !important. */
+html[data-theme='light'] .prism-code .token.comment,
+html[data-theme='light'] .prism-code .token.prolog,
+html[data-theme='light'] .prism-code .token.cdata {
+  color: var(--sand-11) !important;
+}
+html[data-theme='light'] .prism-code .token.attr-name {
+  color: var(--blue-11) !important;
+}
+html[data-theme='light'] .prism-code .token.function {
+  color: var(--red-11) !important;
+}
+html[data-theme='light'] .prism-code .token.string,
+html[data-theme='light'] .prism-code .token.attr-value,
+html[data-theme='light'] .prism-code .token.char,
+html[data-theme='light'] .prism-code .token.inserted {
+  color: var(--green-11) !important;
 }
 
 /* Code block header/filename bar */
@@ -468,48 +641,55 @@ body {
   height: 16px;
 }
 
+/* Per-type variants — single source (the duplicate block further down was
+   folded in here). Border = Radix step-7, icon = step-9, heading = *-fg. */
+
 /* Note */
 .admonition-note {
   background: var(--bg-surface);
   border-color: var(--border);
 }
 .admonition-note .admonition-heading h5,
-.admonition-note .admonition-icon { color: var(--fg-muted); }
+.admonition-note .admonition-icon,
+.admonition-note svg { color: var(--fg-muted); }
 
 /* Info */
 .admonition-info {
   background: var(--accent-subtle);
-  border-color: var(--accent-border);
+  border-color: var(--blue-7);
 }
-.admonition-info .admonition-heading h5,
-.admonition-info .admonition-icon { color: var(--accent-fg); }
+.admonition-info .admonition-heading h5 { color: var(--accent-fg); }
+.admonition-info .admonition-icon,
+.admonition-info svg { color: var(--blue-9); }
 
 /* Tip */
 .admonition-tip {
   background: var(--green-a3);
-  border-color: rgba(48,164,108,.35);
+  border-color: var(--green-7);
 }
-.admonition-tip .admonition-heading h5,
-.admonition-tip .admonition-icon { color: var(--success-fg); }
+.admonition-tip .admonition-heading h5 { color: var(--success-fg); }
+.admonition-tip .admonition-icon,
+.admonition-tip svg { color: var(--green-9); }
 
 /* Warning */
 .admonition-warning,
 .admonition-caution {
   background: var(--alt-subtle);
-  border-color: rgba(101,89,0,.3);
+  border-color: var(--amber-7);
 }
 .admonition-warning .admonition-heading h5,
-.admonition-warning .admonition-icon,
-.admonition-caution .admonition-heading h5,
-.admonition-caution .admonition-icon { color: var(--alt-fg); }
+.admonition-caution .admonition-heading h5 { color: var(--alt-fg); }
+.admonition-warning .admonition-icon, .admonition-warning svg,
+.admonition-caution .admonition-icon, .admonition-caution svg { color: var(--amber-9); }
 
 /* Danger */
 .admonition-danger {
   background: var(--red-a3);
-  border-color: rgba(229,72,77,.35);
+  border-color: var(--red-7);
 }
 .admonition-danger .admonition-heading h5,
-.admonition-danger .admonition-icon { color: var(--danger-fg); }
+.admonition-danger .admonition-icon,
+.admonition-danger svg { color: var(--danger-fg); }
 
 .admonition > :last-child { margin-bottom: 0; }
 
@@ -521,10 +701,11 @@ body {
 }
 
 .breadcrumbs__link {
-  color: var(--fg-subtle);
+  color: var(--fg-muted);
   border-radius: var(--radius-sm);
   padding: 2px 4px;
   background: none;
+  transition: color var(--dur-fast), background var(--dur-fast);
 }
 
 .breadcrumbs__link:hover {
@@ -564,7 +745,7 @@ body {
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
-  color: var(--fg-subtle);
+  color: var(--fg-muted);
   margin-bottom: 4px;
 }
 
@@ -583,7 +764,7 @@ body {
   background-color: var(--bg-subtle);
   background-image: var(--bg-pattern);
   background-repeat: repeat;
-  padding: var(--s-8) var(--s-7) var(--s-7);
+  padding: var(--s-8) var(--page-inset-x) var(--s-7);
 }
 
 .footer__title {
@@ -686,6 +867,13 @@ body {
   max-width: 1280px;
 }
 
+/* Docusaurus CSS Modules zero out col padding on the doc content column;
+   re-apply the page inset so content never bleeds to the edge. */
+[class*='docItemCol'] {
+  padding-left: var(--page-inset-x);
+  padding-right: var(--page-inset-x);
+}
+
 /* Remove default doc page borders that look off with our theme */
 article header {
   margin-bottom: var(--s-7);
@@ -708,3 +896,183 @@ article header {
   font-size: var(--text-base);
   line-height: var(--lh-normal);
 }
+
+/* ============================================================
+   DOC PAGINATOR (swizzled Button-based nav)
+   ============================================================ */
+
+.pagination-nav {
+  display: flex;
+  gap: var(--s-3);
+  margin-top: var(--s-8);
+}
+
+/* ============================================================
+   BACK TO TOP BUTTON — handled inline with Tailwind classes
+   ============================================================ */
+
+/* ============================================================
+   MOBILE TOC COLLAPSIBLE
+   ============================================================ */
+.tocCollapsibleButton_node_modules-\@docusaurus-theme-classic-lib-theme-TOCCollapsible-CollapseButton-styles-module,
+[class*='tocCollapsibleButton'] {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--fg-muted) !important;
+  font-size: var(--text-xs) !important;
+  font-weight: var(--fw-semibold) !important;
+  letter-spacing: var(--ls-wider) !important;
+  text-transform: uppercase !important;
+  padding: var(--s-3) var(--s-4) !important;
+}
+
+[class*='tocCollapsibleButton']:hover {
+  background: var(--bg-hover) !important;
+  color: var(--fg) !important;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+@media (max-width: 996px) {
+  /* Comfortable horizontal inset on small screens */
+  .main-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Prevent code blocks from blowing out the layout */
+  .prism-code {
+    font-size: var(--text-xs);
+  }
+
+  /* Scrollable tables on narrow viewports */
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Inset for all doc content on phones — uses the layout token */
+  .theme-doc-sidebar-container ~ div,
+  .docMainContainer,
+  .docPage__5DB,
+  [class*='docPage'] {
+    padding-left: var(--page-inset-x);
+    padding-right: var(--page-inset-x);
+  }
+
+  /* Reduce h1 to comfortable reading size on phones */
+  .markdown h1 {
+    font-size: var(--text-3xl);
+  }
+
+  /* Tighten heading 2 on mobile */
+  .markdown h2 {
+    font-size: var(--text-xl);
+  }
+
+  /* Paginator stacks vertically; add breathing room */
+  .pagination-nav {
+    flex-direction: column;
+  }
+}
+
+/* Space between edit-this-page row and paginator */
+.theme-doc-footer {
+  margin-bottom: var(--s-6);
+}
+
+/* External link icon vertical alignment in footer */
+.footer__link-item svg {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* ============================================================
+   MOBILE SIDEBAR OVERLAY
+   ============================================================ */
+
+/* Brand bar — logo + title + color toggle + close button */
+.navbar-sidebar__brand {
+  height: var(--ifm-navbar-height);
+  padding: 0 var(--page-inset-x) !important;
+  align-items: center !important;
+  gap: var(--s-3);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* Tailwind v4 preflight sets svg { display: block } with boosted specificity,
+   overriding Docusaurus's .toggleIcon { display: none }. Restore correct behavior. */
+[class*='toggleIcon'] { display: none !important; }
+[data-theme-choice='dark']  [class*='darkToggleIcon']   { display: block !important; }
+[data-theme-choice='light'] [class*='lightToggleIcon']  { display: block !important; }
+
+/* Color mode toggle — proper icon button size */
+[class*='colorModeToggle'] [class*='toggleButton'],
+[class*='toggle'] [class*='toggleButton'] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  border-radius: var(--radius-md);
+  color: var(--fg-muted);
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+[class*='colorModeToggle'] [class*='toggleButton']:hover,
+[class*='toggle'] [class*='toggleButton']:hover {
+  background: var(--bg-hover);
+  color: var(--fg);
+}
+
+/* Close button — small icon button, far right */
+.navbar-sidebar__close {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  margin-left: auto;
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--fg-muted) !important;
+  background: transparent !important;
+  flex-shrink: 0;
+}
+.navbar-sidebar__close:hover {
+  background: var(--bg-hover) !important;
+  color: var(--fg) !important;
+}
+.navbar-sidebar__close svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+/* Remove "Back to main menu" — navigation is self-evident */
+.navbar-sidebar__back {
+  display: none !important;
+}
+
+/* ============================================================
+   SIDEBAR CHEVRONS — LEFT OF LABEL
+   Two cases:
+   1. Simple category (no link): caret is ::after on the link
+   2. Category with link: caret is a separate .menu__caret button
+   ============================================================ */
+.menu__link--sublist-caret {
+  justify-content: flex-start !important;
+  gap: var(--s-2) !important;
+}
+.menu__link--sublist-caret::after {
+  order: -1 !important;
+  margin-left: 0 !important;
+  flex-shrink: 0;
+}
+

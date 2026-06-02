@@ -1,0 +1,654 @@
+/* Davinci tokens + Tailwind + @davinci/ui component utilities (incl. @source scan) */
+@import "@davinci/ui/styles/globals.css";
+
+/* The skeuomorphic .btn chrome (and other shared class styles) live in
+   davinci.css; @davinci/ui Button composes those classes, so we load it here
+   exactly as Storybook does. */
+@import "../../../ui_kits/web_app/davinci.css";
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+}
+
+/* Icon base size — app default for unsized Material Symbols glyphs. The size
+   prop classes (.icon--sm|md|lg) live in the system stylesheet
+   (@davinci/ui/styles/globals.css), imported at the top of this file. */
+.material-symbols-rounded {
+  font-size: 20px;
+}
+
+/* ----------------------------------------------------------------
+   Demo refinements — softer container outlines + tighter rhythm than
+   the component defaults, tuned for a dense feed UI. Scoped to the
+   demo (does not touch davinci.css / Storybook / docs).
+   ---------------------------------------------------------------- */
+[data-slot="card"] {
+  border-color: var(--border-subtle);
+  border-radius: var(--radius-container);
+}
+.panel__header {
+  padding: 10px 16px;
+}
+.panel__body {
+  padding: 14px 16px;
+}
+.composer {
+  padding: 12px 16px;
+}
+.post {
+  /* No bottom padding: the full-bleed actions tray (or comments) provides the
+     closing edge. Previously a 14px gap sat below the actions on every post. */
+  padding: 14px 16px 0;
+}
+
+/* Form fields & buttons now use the Radix UI-element border (step 7 = --border)
+   by default — no override needed. Internal separators (RTE toolbar divider)
+   take the subtle step (6). */
+[data-slot="rich-textarea"] [role="toolbar"] {
+  border-color: var(--border-subtle);
+}
+/* Floating surfaces (menus, selects, popovers, dialogs, cards) also used the
+   heavy --border; align them to the softened --border-subtle. */
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"],
+[data-slot="popover-content"],
+[data-slot="hover-card-content"],
+[data-slot="dialog-content"],
+[data-slot="sheet-content"] {
+  border-color: var(--border-subtle);
+  border-radius: var(--radius-surface);
+}
+
+/* Button sizing/pill/differential-icon-padding now live in davinci.css. */
+.post__attachment {
+  border-color: var(--border-subtle);
+}
+
+/* Profile card: full-bleed cover + centered avatar overlapping it */
+.profile-card__cover {
+  height: 68px;
+}
+.profile-card__body {
+  margin-top: -28px;
+}
+.profile-card__body > [data-slot="avatar"] {
+  margin: 0 auto 8px;
+  display: flex;
+}
+
+/* Notification type badge — outlined glyph sized to its circle */
+.alert-row__type-badge {
+  width: 22px;
+  height: 22px;
+}
+.alert-row__type-badge .material-symbols-rounded {
+  font-size: 13px;
+}
+
+/* Reaction summary mini chips */
+.reaction-chips {
+  display: inline-flex;
+  align-items: center;
+}
+.reaction-chip {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: 1.5px solid var(--bg-surface);
+  margin-left: -4px;
+}
+.reaction-chip:first-child {
+  margin-left: 0;
+}
+.reaction-chip .material-symbols-rounded {
+  font-size: 11px;
+}
+
+/* Press-and-hold reaction flyout */
+.reaction-flyout {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  box-shadow: var(--shadow-lg);
+  z-index: 30;
+}
+.reaction-flyout__btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--dur-fast) var(--ease-spring), background var(--dur-fast);
+}
+.reaction-flyout__btn:hover {
+  transform: translateY(-6px) scale(1.18);
+  background: var(--bg-hover);
+}
+.reaction-flyout__btn .material-symbols-rounded {
+  font-size: 22px;
+}
+
+/* Comments */
+.post__actions {
+  margin-bottom: 0;
+}
+.post__comments {
+  /* When comments are open they become the closing element, so they carry the
+     post's bottom breathing room (post itself now has padding-bottom: 0). */
+  padding: 12px 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.comment {
+  display: flex;
+  gap: 8px;
+}
+.comment__bubble {
+  background: var(--bg-subtle);
+  border-radius: 10px;
+  padding: 8px 12px;
+  flex: 1;
+  min-width: 0;
+}
+.comment__author {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+.comment__text {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 2px;
+  white-space: pre-wrap;
+}
+.comment__time {
+  font-size: 11px;
+  color: var(--fg-subtle);
+  margin-top: 4px;
+}
+.comment-composer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Company hero sits directly above the square-topped tab bar, so its bottom
+   corners must be square — rounded bottoms read as a gap/bug. (Overrides the
+   demo's [data-slot=card] container radius via higher specificity.) */
+[data-slot="card"].company-hero {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Profile hero: the @davinci/ui Avatar doesn't carry the legacy .avatar--128
+   class the old rule targeted, so the name sat flush against it. Restore the
+   gap (matches the company hero's logo→name rhythm). */
+.profile-header > [data-slot="avatar"] {
+  margin-bottom: 16px;
+}
+/* Center the hero actions so the (shorter) icon "More" button aligns with the
+   taller text buttons, same as the company hero. */
+.profile-header__actions {
+  align-items: center;
+}
+
+/* ---- Profile page: sticky header ----
+   A zero-height sticky anchor holds an absolutely-positioned bar, so it adds no
+   layout space (the -12px cancels the column's flex gap so the hero stays flush
+   at the top). The bar overlays the hero top and fades in once the hero scrolls
+   past — mirroring the company sticky header. */
+.profile-sticky {
+  position: sticky;
+  top: 50px;
+  height: 0;
+  margin-bottom: -12px;
+  z-index: 20;
+}
+.profile-subnav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-container) var(--radius-container);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity var(--dur-fast), transform var(--dur-fast);
+}
+.profile-subnav.is-stuck {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  box-shadow: var(--shadow-md);
+}
+.profile-subnav__name {
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-subnav__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ---- Company page: sticky subnav ---- */
+.company-subnav {
+  position: sticky;
+  /* Tuck a few px under the top nav (which renders < 56px) so no scrolling
+     content peeks through; the overlap hides behind the opaque top nav. */
+  top: 50px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 var(--radius-container) var(--radius-container);
+  /* Extra top padding compensates for the ~6px tucked under the top nav so
+     the visible row reads with balanced optical padding. */
+  padding: 8px 16px 2px;
+  transition: box-shadow var(--dur-fast);
+}
+.company-subnav .company-tabs {
+  border-bottom: none;
+  background: transparent;
+  padding: 0;
+  flex: 1;
+}
+.company-tab {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.company-subnav__id,
+.company-subnav__actions {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.company-subnav.is-stuck {
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--shadow-md);
+}
+.company-subnav.is-stuck .company-subnav__id,
+.company-subnav.is-stuck .company-subnav__actions {
+  display: flex;
+}
+.company-subnav__name {
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ---- Job detail: sticky header (reveals on scroll, mirrors profile) ---- */
+.jobdetail-sticky {
+  position: sticky;
+  top: 50px;
+  height: 0;
+  z-index: 20;
+}
+.jobdetail-subnav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0 0 var(--radius-container) var(--radius-container);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity var(--dur-fast), transform var(--dur-fast);
+}
+.jobdetail-subnav.is-stuck {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  box-shadow: var(--shadow-md);
+}
+.jobdetail-subnav__name {
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jobdetail-subnav__meta {
+  font-size: 12px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jobdetail-subnav__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ---- Company page: misc ---- */
+.detail-row {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.detail-row:last-child {
+  border-bottom: none;
+}
+.detail-row__label {
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+.detail-row__value {
+  font-size: 14px;
+  margin-top: 2px;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.pricing-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 16px;
+}
+.pricing-card__price {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  margin: 6px 0 2px;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.feature-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.stat-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--accent);
+  margin-top: 4px;
+}
+.locations-map-wrap {
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Suggestion card dismiss button */
+.suggestion-card__dismiss {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.suggestion-card__dismiss:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* ---- Column micro-footer ---- */
+.rail-footer {
+  padding: 8px 4px 16px;
+  font-size: 12px;
+}
+.rail-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 8px;
+}
+.rail-footer__links button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg-muted);
+  font: inherit;
+  padding: 0;
+}
+.rail-footer__links button:hover {
+  color: var(--accent-fg);
+  text-decoration: underline;
+}
+.rail-footer__copy {
+  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- Full-width bottom-docked site footer ---- */
+.site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-xl);
+  animation: footer-up var(--dur-base) var(--ease-out);
+}
+@keyframes footer-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.site-footer__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  position: relative;
+}
+.site-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) 1.4fr 1fr;
+  gap: 24px;
+}
+.site-footer__h {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.site-footer a {
+  display: block;
+  font-size: 13px;
+  color: var(--fg-muted);
+  padding: 3px 0;
+  cursor: pointer;
+}
+.site-footer a:hover {
+  color: var(--accent-fg);
+  text-decoration: underline;
+}
+.site-footer__meta > div {
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.site-footer__copy {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.site-footer__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+@media (max-width: 900px) {
+  .site-footer__cols { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---- Messaging dock + chat windows (fixed bottom-right) ---- */
+.msg-dock-layer {
+  position: fixed;
+  right: 24px;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+}
+.msg-dock-layer > * { pointer-events: auto; }
+.msg-dock,
+.msg-window {
+  width: 340px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-bottom: none;
+  border-radius: var(--radius-container) var(--radius-container) 0 0;
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.msg-dock { width: 360px; }
+.msg-dock__head,
+.msg-window__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.msg-dock--open .msg-dock__head,
+.msg-window__head { border-bottom: 1px solid var(--border-subtle); }
+.msg-dock__title,
+.msg-window__name {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.msg-dock__badge {
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 9999px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.msg-dock__head-actions,
+.msg-window__head-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.msg-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.msg-icon-btn:hover { background: var(--bg-hover); color: var(--fg); }
+.msg-dock__body { display: flex; flex-direction: column; height: 540px; min-height: 0; }
+.msg-dock__search { position: relative; display: flex; align-items: center; gap: 6px; padding: 8px 10px; }
+.msg-dock__list,
+.msg-window__body { flex: 1; overflow-y: auto; min-height: 0; }
+.msg-window__body { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.msg-window--normal .msg-window__body { height: 300px; }
+.msg-window--tall { width: 380px; }
+.msg-window--tall .msg-window__body { height: 460px; }
+.msg-window__composer { border-top: 1px solid var(--border-subtle); padding: 8px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.msg-window__composer-bar { display: flex; align-items: center; gap: 4px; }
+.msg-window__composer-icons { display: flex; align-items: center; gap: 2px; }
+.msg-sendmode {
+  background: none;
+  border: none;
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.msg-sendmode:hover { background: var(--bg-hover); color: var(--fg); }
+@media (max-width: 640px) {
+  .msg-dock-layer { right: 0; left: 0; justify-content: center; }
+  .msg-dock-layer > :not(:last-child) { display: none; }
+}

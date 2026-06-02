@@ -1,0 +1,121 @@
+---
+title: Button
+sidebar_position: 10
+description: Triggers an action or event. Six variants, icon ergonomics, and the skeuomorphic .btn chrome.
+---
+
+import LiveDemo from '@site/src/components/LiveDemo';
+import PropsTable from '@site/src/components/PropsTable';
+import { Button } from '@davinci/ui/components/davinci/button';
+
+# Button
+
+Triggers an action or event — submitting a form, opening a dialog, performing a destructive action. Davinci ships Button in **two layers**, and you almost always import the second:
+
+- **Base** — `@davinci/ui/components/ui/button` — a plain `<button>` (no Radix) carrying the `.btn` chrome, `variant`, `size`, and `asChild`.
+- **Davinci** — `@davinci/ui/components/davinci/button` — the base plus product ergonomics: `pill` shape and `icon` / `iconRight` glyphs. This is what the app consumes.
+
+```bash
+cd packages/ui && npx shadcn@latest add button
+```
+
+## Variants
+
+| Variant | Use case | Davinci mapping |
+|---------|----------|-----------------|
+| `primary` / `default` | Primary action — one per view | `--accent` (blue-9) |
+| `secondary` | Resting action (the davinci default) | `--bg-subtle` surface |
+| `outline` | Tertiary — bordered, no fill | `--border` |
+| `ghost` | In-context — no border or fill | `--bg-hover` on hover |
+| `alt` | Spotlight CTA — the single most important action | `--alt` (yellow) |
+| `destructive` | Irreversible / danger | `--danger` (red-9) |
+| `link` | Inline text-link style | `--accent-fg` |
+
+## Sizes
+
+| Size | Footprint | Notes |
+|------|-----------|-------|
+| `sm` | 32px tall | Dense rows, toolbars |
+| `default` | 40px tall | Standard |
+| `lg` | 44px tall | Hero / marketing CTAs |
+| `icon` · `icon-sm` · `icon-xs` · `icon-lg` | square | Icon-only buttons; pair with a Tooltip for an accessible label |
+
+## Props
+
+<PropsTable props={[
+  { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'alt' | 'destructive' | 'link'", default: "'secondary'", description: 'Visual style — see Variants. (The base Button defaults to "default" / primary.)' },
+  { name: 'size', type: "'sm' | 'default' | 'lg' | 'icon' | 'icon-sm' | 'icon-xs' | 'icon-lg'", default: "'default'", description: 'Control or icon-only footprint.' },
+  { name: 'pill', type: 'boolean', default: 'false', description: 'Fully-rounded shape. Davinci Button only.' },
+  { name: 'icon', type: 'string', description: 'Leading Material Symbols glyph name (e.g. "add"). Davinci Button only.' },
+  { name: 'iconRight', type: 'string', description: 'Trailing glyph name (e.g. "arrow_forward"). Davinci Button only.' },
+  { name: 'asChild', type: 'boolean', default: 'false', description: 'Render as the child element instead of a <button> — for links/polymorphism. Base Button.' },
+  { name: '…rest', type: 'ButtonHTMLAttributes', description: 'Native button props pass through: onClick, disabled, type, aria-*, etc.' },
+]} />
+
+## Usage
+
+```jsx
+import { Button } from '@davinci/ui/components/davinci/button';
+
+// Variants
+<Button variant="primary">Save changes</Button>
+<Button>Cancel</Button>                  {/* secondary is the default */}
+<Button variant="alt">Get started</Button>
+<Button variant="destructive">Delete account</Button>
+<Button variant="ghost">Dismiss</Button>
+
+// Icon ergonomics (Material Symbols glyph names — no JSX icon import needed)
+<Button icon="add">Create post</Button>
+<Button variant="outline" iconRight="arrow_forward">Continue</Button>
+<Button size="icon-sm" icon="more_horiz" aria-label="More" />
+
+// Pill shape
+<Button pill variant="primary" icon="add">Follow</Button>
+
+// Polymorphic (base Button)
+import { Button as BaseButton } from '@davinci/ui/components/ui/button';
+<BaseButton asChild><a href="/dashboard">Dashboard</a></BaseButton>
+
+// Disabled / loading
+<Button disabled>Saving…</Button>
+```
+
+## Why it's built this way
+
+- **Skeuomorphic `.btn` chrome.** Buttons carry a vertical gradient, a lit top edge, a shadowed bottom edge, and a soft drop shadow — a deliberate Davinci signature that makes the primary action feel pressable and physically distinct from flat surfaces. The chrome lives in `davinci.css` so it stays in sync across the app, Storybook, and these docs.
+- **`secondary` is the resting default.** Most buttons in a dense product UI are *not* the primary action. Defaulting the Davinci Button to `secondary` means the common case is quiet by default, and elevating an action to `primary` (or `alt`) is an explicit, visible choice — which keeps "one primary per view" enforceable.
+- **`alt` (Spotlight) is its own variant, not a color prop.** The single highest-intent CTA gets a distinct yellow treatment so it can't be confused with the routine blue primary. Making it a named variant (rather than ad-hoc styling) keeps it rare and recognizable.
+- **`icon` / `iconRight` take glyph *names*, not JSX.** Passing `icon="add"` (a Material Symbols ligature) instead of `<PlusIcon/>` keeps call sites terse and guarantees every icon button uses the system icon at the correct optical size and padding (`.btn--icon-leading` / `--icon-trailing`) — no per-call sizing drift.
+- **Icon-only buttons require a label.** `size="icon*"` renders a glyph with no text, so always pair it with a Tooltip or `aria-label` — the API makes the label the caller's responsibility rather than silently shipping an unlabeled control.
+
+## Theming
+
+| Utility class | Resolves to | Davinci token |
+|---------------|-------------|---------------|
+| `bg-primary` | `var(--accent)` | blue-9 |
+| `text-primary-foreground` | `var(--fg-on-accent)` | white |
+| `bg-secondary` | `var(--bg-subtle)` | sand-2 |
+| `bg-destructive` | `var(--danger)` | red-9 |
+| `border-input` | `var(--border)` | sand-6 |
+
+## Preview
+
+The real `@davinci/ui` Button, rendered inline (not an iframe):
+
+<LiveDemo title="Button variants" code={`import { Button } from '@davinci/ui/components/davinci/button';
+
+<Button variant="primary">Primary</Button>
+<Button>Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="alt">Spotlight</Button>
+<Button icon="add">With icon</Button>
+<Button pill variant="primary" icon="add">Pill</Button>`}>
+  <Button variant="primary">Primary</Button>
+  <Button>Secondary</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="alt">Spotlight</Button>
+  <Button icon="add">With icon</Button>
+  <Button pill variant="primary" icon="add">Pill</Button>
+</LiveDemo>

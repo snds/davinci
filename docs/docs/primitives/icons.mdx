@@ -4,10 +4,94 @@ sidebar_label: Icons
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Icons
 
 Davinci uses [Material Symbols Rounded](https://fonts.google.com/icons) as its icon system. This is a variable font from Google Fonts that supports optical size, weight, fill, and grade axes — giving a single icon font enormous expressive range.
+
+<LiveDemo
+  title="Common icons"
+  center
+  html={`<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+  ${[
+    ['home','Home'],['search','Search'],['notifications','Notifications'],['chat_bubble_outline','Messages'],
+    ['group','Network'],['work','Jobs'],['person','Profile'],['settings','Settings'],
+    ['thumb_up','Like'],['repeat','Repost'],['send','Send'],['more_horiz','More'],
+    ['image','Image'],['link','Link'],['tag','Tag'],['bookmark_border','Save'],
+    ['edit','Edit'],['delete','Delete'],['close','Close'],['add','Add'],
+    ['check_circle','Success'],['error','Error'],['warning','Warning'],['info','Info'],
+  ].map(([icon, label]) => `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:8px;border:1px solid var(--border-subtle);width:68px;cursor:default;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+    <span class="material-symbols-rounded" style="font-size:22px;color:var(--fg-muted);">${icon}</span>
+    <span style="font-size:9px;color:var(--fg-subtle);text-align:center;line-height:1.2;">${label}</span>
+  </div>`).join('')}
+</div>`}
+  pad="20px"
+/>
+
+<LiveDemo
+  title="Icon sizes"
+  center
+  html={`<div style="display:flex;gap:20px;align-items:flex-end;justify-content:center;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:16px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">16px</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:18px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">18px</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:20px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">20px (default)</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:24px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">24px</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:32px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">32px</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:48px;color:var(--fg-muted);">star</span>
+    <span style="font-size:10px;color:var(--fg-subtle);">48px</span>
+  </div>
+</div>`}
+  pad="32px 24px"
+/>
+
+<LiveDemo
+  title="Fill and color variants"
+  center
+  html={`<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--fg-muted);font-variation-settings:'FILL' 0;">favorite</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">FILL 0 (outline)</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--red-10);font-variation-settings:'FILL' 1;">favorite</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">FILL 1 (filled)</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--accent);">star</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">--accent</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--green-11);">check_circle</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">Success</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--red-10);">error</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">Danger</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+    <span class="material-symbols-rounded" style="font-size:28px;color:var(--yellow-10);">warning</span>
+    <span style="font-size:11px;color:var(--fg-subtle);">Warning</span>
+  </div>
+</div>`}
+  pad="32px 24px"
+/>
 
 ## Setup
 
@@ -139,4 +223,4 @@ Always provide accessible labels for icon-only buttons:
 
 ## Storybook
 
-<StorybookEmbed story="primitives-icon--icon-grid" height={500} title="Icon grid" />
+<StorybookEmbed story="primitives-icon--all-icons" height={500} title="Icon grid" />

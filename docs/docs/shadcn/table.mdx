@@ -1,0 +1,88 @@
+---
+title: Table
+sidebar_position: 54
+description: Semantic HTML table with Davinci-themed rows, headers, and captions.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Table
+
+Styled HTML table components. No Radix dependency. Wraps in an `overflow-auto` container for horizontal scrolling on small screens.
+
+```bash
+cd packages/ui && npx shadcn@latest add table
+```
+
+## Sub-components
+
+| Component | Maps to |
+|-----------|---------|
+| `Table` | `<table>` |
+| `TableHeader` | `<thead>` |
+| `TableBody` | `<tbody>` |
+| `TableFooter` | `<tfoot>` |
+| `TableRow` | `<tr>` |
+| `TableHead` | `<th>` |
+| `TableCell` | `<td>` |
+| `TableCaption` | `<caption>` |
+
+## Usage
+
+```jsx
+import {
+  Table, TableHeader, TableBody, TableFooter,
+  TableRow, TableHead, TableCell, TableCaption,
+} from '@davinci/ui/components/ui/table';
+
+const invoices = [
+  { id: 'INV-001', status: 'Paid',    amount: '$250.00' },
+  { id: 'INV-002', status: 'Pending', amount: '$150.00' },
+  { id: 'INV-003', status: 'Overdue', amount: '$350.00' },
+];
+
+<Table>
+  <TableCaption>Recent invoices</TableCaption>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Invoice</TableHead>
+      <TableHead>Status</TableHead>
+      <TableHead className="text-right">Amount</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {invoices.map((inv) => (
+      <TableRow key={inv.id}>
+        <TableCell className="font-medium">{inv.id}</TableCell>
+        <TableCell>{inv.status}</TableCell>
+        <TableCell className="text-right">{inv.amount}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+  <TableFooter>
+    <TableRow>
+      <TableCell colSpan={2}>Total</TableCell>
+      <TableCell className="text-right">$750.00</TableCell>
+    </TableRow>
+  </TableFooter>
+</Table>
+```
+
+## Theming
+
+| Part | Davinci token |
+|------|---------------|
+| Header text | `--fg-muted` |
+| Row border | `--border-subtle` |
+| Row hover | `--bg-hover` |
+| Footer background | `--bg-subtle` |
+| Caption | `--fg-muted` |
+
+## Data Table
+
+For sortable, filterable, paginated tables with TanStack Table, see the **Data Table** pattern (add with `npx shadcn@latest add data-table`).
+
+## Preview
+
+<StorybookEmbed story="components-table--users-table" height={400} />

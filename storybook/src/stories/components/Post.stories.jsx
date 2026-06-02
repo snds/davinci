@@ -1,73 +1,65 @@
-import React, { useState } from 'react';
-import Post from '../../components/Post';
-import { seededPhoto } from '../../components/Avatar';
+import React from 'react';
+import { Panel } from '@davinci/ui/components/davinci/panel';
+import { Avatar } from '@davinci/ui/components/davinci/avatar';
+import { Button } from '@davinci/ui/components/davinci/button';
 
+/* Example usage — a feed post assembled from @davinci/ui (Panel + Avatar +
+   Button) plus tokens. Not a system component. */
 export default {
   title: 'Components/Post',
-  component: Post,
-  parameters: {
-    layout: 'padded',
-  },
+  parameters: { layout: 'centered' },
 };
 
-const basePost = {
-  author: 'Sofia Antonova',
-  role: 'Staff Designer at Helix · 2nd',
-  time: '2h',
-  avatar: 'SA',
-  variant: 'g4',
-  photoSeed: 'Sofia Antonova',
-  body: 'Shipping a refresh of our component library today. Fewer tokens, warmer neutrals, and — finally — a proper focus ring on every interactive surface.',
-  reactions: 482,
-  comments: 34,
-};
+function initials(name) {
+  return name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+}
 
-function InteractivePost(props) {
-  const [liked, setLiked] = useState(props.liked || false);
-  return <Post {...props} liked={liked} onLike={() => setLiked(l => !l)} />;
+function PostExample({
+  author = 'Sofia Antonova',
+  role = 'Staff Designer · Helix',
+  body,
+  company = false,
+  liked = false,
+  attachment,
+}) {
+  return (
+    <Panel bare style={{ width: 540, maxWidth: '100%' }}>
+      <div style={{ display: 'flex', gap: 10, padding: 14 }}>
+        <Avatar initials={initials(author)} size={48} variant={company ? 'g2' : 'g4'} shape={company ? 'rounded' : 'circle'} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontFamily: 'var(--font-display)', fontSize: 14 }}>{author}</div>
+          <div style={{ fontSize: 12, color: 'var(--fg-muted)' }}>{role}</div>
+        </div>
+        <Button variant="ghost" size="icon-sm" icon="more_horiz" aria-label="Post options" />
+      </div>
+      <div style={{ padding: '0 16px 12px', fontSize: 14, lineHeight: 1.55 }}>{body}</div>
+      {attachment && (
+        <div style={{ borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)', padding: 14, background: 'var(--bg-subtle)' }}>
+          <div style={{ fontWeight: 600, fontSize: 14 }}>{attachment}</div>
+          <div style={{ fontSize: 12, color: 'var(--fg-muted)', marginTop: 2 }}>radix-ui.com</div>
+        </div>
+      )}
+      <div style={{ display: 'flex', gap: 4, padding: 8, borderTop: '1px solid var(--border-subtle)' }}>
+        <Button variant="ghost" size="sm" icon="thumb_up" style={liked ? { color: 'var(--accent-fg)' } : undefined}>Like</Button>
+        <Button variant="ghost" size="sm" icon="chat_bubble">Comment</Button>
+        <Button variant="ghost" size="sm" icon="repeat">Repost</Button>
+        <Button variant="ghost" size="sm" icon="send">Send</Button>
+      </div>
+    </Panel>
+  );
 }
 
 export const Default = {
-  render: () => <InteractivePost {...basePost} />,
+  render: () => <PostExample body="Most design systems are asset libraries with a sitemap. The ones that last are contracts." />,
 };
-
 export const Liked = {
-  name: 'Liked State',
-  render: () => <InteractivePost {...basePost} liked={true} />,
+  render: () => <PostExample liked body="A design system is a contract, not a style guide." />,
 };
-
 export const WithAttachment = {
-  name: 'With Attachment',
-  render: () => (
-    <InteractivePost
-      {...basePost}
-      attachment={{
-        title: 'Radix Colors for design systems that age well',
-        sub: 'davinci-systems.com · 8 min read',
-        image: seededPhoto('article-radix-colors', 480, 240, 'article'),
-      }}
-    />
-  ),
+  name: 'With attachment',
+  render: () => <PostExample body="Great read on building color systems that age well:" attachment="Radix Colors for design systems that age well" />,
 };
-
 export const CompanyPost = {
-  name: 'Company Post',
-  render: () => (
-    <InteractivePost
-      author="Helix Systems"
-      role="Product & Design Platform · 24,802 followers"
-      time="5h"
-      avatar="HX"
-      variant="g2"
-      isCompany={true}
-      body="We're hiring a Design Engineer to work on our token pipeline. Based in Lisbon or fully remote."
-      attachment={{
-        title: 'Design Engineer · Helix Platform Team',
-        sub: 'Remote / Lisbon · 5 days ago · 48 applicants',
-        style: { background: 'linear-gradient(135deg, var(--yellow-7), var(--yellow-10))' },
-      }}
-      reactions={188}
-      comments={12}
-    />
-  ),
+  name: 'Company post',
+  render: () => <PostExample author="Helix Systems" role="Product & Design Platform" company body="We're hiring a Design Engineer for the Platform team — come build the system with us." />,
 };

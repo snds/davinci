@@ -1,0 +1,191 @@
+{
+  "$comment": "Tracks installed shadcn/ui components so the base layer (components/ui) stays regenerable. `npm run check:base` enforces base purity (no Davinci skin); the deeper check re-adds each component with `npx shadcn@latest add <name> --overwrite` and diffs. Do not hand-edit components/ui \u2014 appearance lives in davinci.css, ergonomics in components/davinci. See repo CLAUDE.md.",
+  "style": "new-york-v4",
+  "registryBase": "https://ui.shadcn.com/r/styles/new-york-v4",
+  "components": {
+    "accordion": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "alert": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "alert-dialog": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "aspect-ratio": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "avatar": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "badge": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "breadcrumb": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "button": {
+      "skin": "davinci.css [data-slot=button][data-variant]",
+      "wrapper": "components/davinci/button.jsx"
+    },
+    "calendar": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "card": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "carousel": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "chart": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "checkbox": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "collapsible": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "command": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "context-menu": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "dialog": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "drawer": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "dropdown-menu": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "form": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "hover-card": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "input": {
+      "skin": "davinci.css input[data-slot=input]",
+      "wrapper": "components/davinci/input.jsx"
+    },
+    "input-otp": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "label": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "menubar": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "navigation-menu": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "pagination": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "popover": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "progress": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "radio-group": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "resizable": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "scroll-area": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "select": {
+      "skin": "davinci.css button[data-slot=select-trigger]",
+      "wrapper": null
+    },
+    "separator": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "sheet": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "sidebar": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "skeleton": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "slider": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "sonner": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "switch": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "table": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "tabs": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "textarea": {
+      "skin": "davinci.css textarea[data-slot=textarea]",
+      "wrapper": "components/davinci/textarea.jsx"
+    },
+    "toggle": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "toggle-group": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    },
+    "tooltip": {
+      "skin": "shadcn-bridge.css (token bridge only)",
+      "wrapper": null
+    }
+  }
+}

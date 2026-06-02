@@ -4,10 +4,76 @@ sidebar_label: Profile
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Profile
 
 The Profile pattern assembles the full user (or company) profile page. It consists of a hero header section, a tabbed content area, and an optional sidebar with contextual panels.
+
+<LiveDemo
+  title="Profile header"
+  html={`<div class="panel" style="max-width:600px;overflow:hidden;">
+  <div class="profile-cover" style="height:120px;"></div>
+  <div class="profile-header">
+    <div class="avatar avatar--128">JD</div>
+    <div class="profile-header__name">Jane Doe</div>
+    <div class="profile-header__headline">Senior Product Designer · Design systems, Figma, and the space between design and code.</div>
+    <div class="profile-header__meta">
+      <span><span class="material-symbols-rounded" style="font-size:14px;vertical-align:middle;">location_on</span> San Francisco, CA</span>
+      <span><a href="#" style="color:var(--accent-fg);text-decoration:none;font-weight:600;">342 connections</a></span>
+      <span>Davinci Co.</span>
+    </div>
+    <div class="profile-header__actions">
+      <button class="btn btn--primary">Connect</button>
+      <button class="btn btn--secondary">Message</button>
+      <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded">more_horiz</span></button>
+    </div>
+  </div>
+  <div class="tab-list" style="padding:0 8px;">
+    <button class="tab active">Activity</button>
+    <button class="tab">About</button>
+    <button class="tab">Experience</button>
+    <button class="tab">Education</button>
+    <button class="tab">Skills</button>
+  </div>
+</div>`}
+  pad="0"
+/>
+
+<LiveDemo
+  title="Experience section"
+  html={`<div class="panel" style="max-width:540px;">
+  <div class="panel__header">
+    <span>Experience</span>
+    <button class="btn btn--ghost btn--icon btn--sm"><span class="material-symbols-rounded" style="font-size:18px;">add</span></button>
+  </div>
+  <div class="panel__body" style="padding:0;">
+    <div class="entry" style="margin:0 16px;">
+      <div class="entry__logo">DC</div>
+      <div style="flex:1;">
+        <div class="entry__title">Senior Product Designer</div>
+        <div class="entry__sub">Davinci Co. · Full-time</div>
+        <div class="entry__time">Jan 2021 – Present · 4 yrs</div>
+        <div class="entry__desc">Leading design systems work and cross-functional product design across the platform.</div>
+        <div class="entry__skills">
+          <span class="pill pill--accent">Design Systems</span>
+          <span class="pill pill--accent">Figma</span>
+          <span class="pill">Product Design</span>
+        </div>
+      </div>
+    </div>
+    <div class="entry" style="margin:0 16px;">
+      <div class="entry__logo">FG</div>
+      <div style="flex:1;">
+        <div class="entry__title">Product Designer</div>
+        <div class="entry__sub">Figma · Full-time</div>
+        <div class="entry__time">Mar 2018 – Dec 2020 · 2 yrs 9 mos</div>
+      </div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
 ## When to use
 
@@ -125,4 +191,4 @@ On mobile (< 768px):
 
 ## Storybook
 
-<StorybookEmbed story="patterns-profile--default" height={700} title="Profile page" />
+<StorybookEmbed story="patterns-profilepage--default" height={700} title="Profile page" />

@@ -1,0 +1,79 @@
+---
+title: Navigation Menu
+sidebar_position: 37
+description: Horizontal navigation with animated mega-menu dropdowns and accessible keyboard support.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Navigation Menu
+
+Horizontal site navigation with support for mega-menu content panels and full keyboard navigation. Built on `@radix-ui/react-navigation-menu`.
+
+```bash
+cd packages/ui && npx shadcn@latest add navigation-menu
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `NavigationMenu` | Root container |
+| `NavigationMenuList` | Ordered list of top-level items |
+| `NavigationMenuItem` | Single top-level nav item |
+| `NavigationMenuTrigger` | Button that opens a content panel |
+| `NavigationMenuContent` | Floating panel with rich content |
+| `NavigationMenuLink` | Accessible link inside content or as a standalone item |
+| `NavigationMenuIndicator` | Animated caret beneath the active trigger |
+| `NavigationMenuViewport` | Shared viewport that panels animate into |
+| `navigationMenuTriggerStyle()` | Utility that returns trigger styles for plain link items |
+
+## Usage
+
+```jsx
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
+  NavigationMenuLink,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from '@davinci/ui/components/ui/navigation-menu';
+import { cn } from '@davinci/ui/lib/utils';
+
+// Mega-menu item
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+          <li>
+            <NavigationMenuLink asChild>
+              <a href="/analytics" className="block rounded-md p-3 leading-none hover:bg-accent">
+                <div className="text-sm font-medium">Analytics</div>
+                <p className="text-sm text-muted-foreground">Real-time dashboards.</p>
+              </a>
+            </NavigationMenuLink>
+          </li>
+        </ul>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+
+    {/* Plain link — use helper for correct styles */}
+    <NavigationMenuItem>
+      <NavigationMenuLink href="/pricing" className={navigationMenuTriggerStyle()}>
+        Pricing
+      </NavigationMenuLink>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+  <NavigationMenuViewport />
+</NavigationMenu>
+```
+
+## Preview
+
+<StorybookEmbed story="components-navigationmenu--default" height={380} />

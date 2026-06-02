@@ -1,0 +1,110 @@
+---
+title: Surfaces
+sidebar_label: Surfaces
+---
+
+import TokenTable from '@site/src/components/TokenTable';
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
+
+# Surfaces
+
+Surfaces are the modern mapping of DaVinci's original **Containers** — semantic
+regions defined by their *role in a containment hierarchy* rather than by a fixed
+appearance. They exist to compose layouts without resorting to deeply nested,
+arbitrarily styled boxes.
+
+The hierarchy is:
+
+> **Canvas › Container › ( Module · Bristol ) › content**
+
+<LiveDemo
+  title="Surface hierarchy"
+  center
+  html={`<div style="background:var(--bg);background-image:var(--bg-pattern);background-repeat:repeat;padding:24px;border-radius:10px;">
+  <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);padding:20px;max-width:520px;">
+    <div style="font-weight:600;margin-bottom:4px;">Container</div>
+    <div style="font-size:12px;color:var(--fg-muted);margin-bottom:16px;">A content region placed on the Canvas.</div>
+    <div style="background:var(--bg-subtle);border-radius:12px;padding:14px;margin-bottom:10px;">
+      <div style="font-weight:600;font-size:13px;">Module</div>
+      <div style="font-size:12px;color:var(--fg-muted);">Quiet same-tone grouping.</div>
+    </div>
+    <div style="background:var(--bg-inverse);color:var(--fg-on-inverse);border-radius:12px;padding:14px;">
+      <div style="font-weight:600;font-size:13px;">Bristol</div>
+      <div style="font-size:12px;color:var(--fg-on-inverse-muted);">Inverse contrast grouping — polarity flips with theme.</div>
+    </div>
+  </div>
+</div>`}
+  pad="40px 24px"
+/>
+
+## Surface tokens
+
+<TokenTable tokens={[
+  { name: '--bg',                  description: 'Canvas — root page background (paired with --bg-pattern texture)' },
+  { name: '--bg-surface',          description: 'Container — raised content region' },
+  { name: '--bg-subtle',           description: 'Module — quiet same-tone grouping' },
+  { name: '--bg-inverse',          description: 'Bristol — inverse/contrast surface (flips polarity per theme)' },
+  { name: '--fg-on-inverse',       description: 'Foreground text on a Bristol surface' },
+  { name: '--fg-on-inverse-muted', description: 'Muted/secondary text on a Bristol surface' },
+  { name: '--border-inverse',      description: 'Border for inverse surfaces (optional; Bristol is borderless by default)' },
+]} />
+
+The shadcn/Tailwind bridge exposes the inverse surface as `bg-surface-inverse` /
+`text-surface-inverse-foreground`. The other three map to existing shadcn names:
+`bg-background` (Canvas), `bg-card` (Container), `bg-secondary` (Module).
+
+## DaVinci heritage
+
+| DaVinci name | Role | Modern token | `<Surface variant>` |
+|---|---|---|---|
+| **Canvas** | Master page background | `--bg` + `--bg-pattern` | `canvas` |
+| **Container** | Content region on a canvas | `--bg-surface` | `container` |
+| **Module** | Quiet grouping of content blocks | `--bg-subtle` | `module` |
+| **Bristol** | Inverse/contrast grouping | `--bg-inverse` | `bristol` |
+| ~~**Punchcut**~~ | *(retired)* Textured inset/outset region | — | — |
+
+**Bristol & theme polarity.** In the original, Module and Bristol were used
+together on a light page for within-theme contrast — Module quiet, Bristol a
+dark region that pops. In the modern system Bristol is an *inverse surface*
+(cf. Material's `inverseSurface`): it renders dark on a light theme and light on
+a dark theme, so the "pop against the page" intent survives in both modes.
+
+**Why Punchcut was dropped.** Punchcut added raster texture and an inset/recessed
+treatment. Flat surfaces plus the elevation (`--shadow-*`) ramp cover its use
+cases without shipping textures, so it was retired during modernization.
+
+## The Surface primitive
+
+`<Surface>` applies the right tokens and encodes the containment hierarchy. The
+nesting rules are enforced with **dev-only console warnings** — never fatal — so
+a Module rendered without a Container ancestor, or a nested Canvas, is flagged in
+development but never breaks production.
+
+```jsx
+import { Surface } from '@davinci/ui/components/davinci/surface';
+
+<Surface variant="canvas">
+  <Surface variant="container">
+    <Surface variant="module">…quiet grouping…</Surface>
+    <Surface variant="bristol">…contrast grouping…</Surface>
+  </Surface>
+</Surface>
+```
+
+## Usage guidelines
+
+- **One Canvas per page** — it's the root; don't nest it.
+- **Containers sit on the Canvas** — not inside Modules or Bristols.
+- **Module vs Bristol** — reach for Module to group quietly; reach for Bristol when
+  a region should stand apart from its surroundings.
+- **Prefer surfaces over ad-hoc boxes** — the ladder exists specifically to avoid
+  deeply nested, one-off styled containers.
+
+---
+
+## Storybook
+
+<StorybookEmbed story="foundations-surfaces--surfaces" height={520} title="Surface tokens" />
+
+<StorybookEmbed story="foundations-surfaces--hierarchy" height={420} title="Containment hierarchy" />

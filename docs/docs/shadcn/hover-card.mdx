@@ -1,0 +1,70 @@
+---
+title: Hover Card
+sidebar_position: 32
+description: Popover that opens on hover — ideal for previews and inline context.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Hover Card
+
+A non-modal floating card that opens when the user hovers over a trigger element. Built on `@radix-ui/react-hover-card`. Use for user profile previews, link previews, and inline contextual info that doesn't block the workflow.
+
+```bash
+cd packages/ui && npx shadcn@latest add hover-card
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `HoverCard` | Root provider — manages open state and delay |
+| `HoverCardTrigger` | The element that triggers the card on hover |
+| `HoverCardContent` | The floating card panel |
+
+## Usage
+
+```jsx
+import { Avatar, AvatarImage, AvatarFallback } from '@davinci/ui/components/ui/avatar';
+import {
+  HoverCard, HoverCardTrigger, HoverCardContent,
+} from '@davinci/ui/components/ui/hover-card';
+
+<HoverCard>
+  <HoverCardTrigger asChild>
+    <a href="https://twitter.com/shadcn" className="underline">@shadcn</a>
+  </HoverCardTrigger>
+  <HoverCardContent className="w-80">
+    <div className="flex justify-between space-x-4">
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>SC</AvatarFallback>
+      </Avatar>
+      <div className="space-y-1">
+        <h4 className="text-sm font-semibold">@shadcn</h4>
+        <p className="text-sm">The creator of shadcn/ui.</p>
+        <p className="text-xs text-muted-foreground">Joined December 2021</p>
+      </div>
+    </div>
+  </HoverCardContent>
+</HoverCard>
+```
+
+## Key props on `HoverCard`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `openDelay` | `number` | `700` | Ms before card opens |
+| `closeDelay` | `number` | `300` | Ms before card closes |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | function | — | Controlled open callback |
+
+## Related
+
+- **Tooltip** — for short one-liner labels, not rich content
+- **Popover** — opens on click rather than hover
+
+## Preview
+
+<StorybookEmbed story="components-hovercard--default" height={280} />

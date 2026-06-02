@@ -1,0 +1,77 @@
+---
+title: Breadcrumb
+sidebar_position: 23
+description: Accessible navigation trail showing the current page's location hierarchy.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Breadcrumb
+
+A navigation component that renders the current page's position within a hierarchy. No Radix dependency — built on semantic HTML with `<nav>` and `aria-label="breadcrumb"`. Supports custom separators and collapsed ellipsis states.
+
+```bash
+cd packages/ui && npx shadcn@latest add breadcrumb
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Breadcrumb` | Root `<nav>` with `aria-label="breadcrumb"` |
+| `BreadcrumbList` | Ordered `<ol>` of breadcrumb items |
+| `BreadcrumbItem` | A single `<li>` in the trail |
+| `BreadcrumbLink` | Anchor link for navigable ancestor pages |
+| `BreadcrumbPage` | Non-link label for the current page (`aria-current="page"`) |
+| `BreadcrumbSeparator` | Visual divider between items (default: `/`) |
+| `BreadcrumbEllipsis` | Collapsed segment indicator for long paths |
+
+## Usage
+
+```jsx
+import {
+  Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink,
+  BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis,
+} from '@davinci/ui/components/ui/breadcrumb';
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+With a collapsed middle section:
+
+```jsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Preview
+
+<StorybookEmbed story="components-breadcrumb--default" height={220} />

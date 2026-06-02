@@ -21,36 +21,40 @@ The system is structured in four layers, each building on the one below:
 
 | Layer | What it contains |
 |---|---|
-| **Foundations** | Design tokens — color scales, type scale, spacing, radii, shadows |
-| **Primitives** | Low-level UI atoms — Buttons, Avatars, Icons, Pills |
-| **Components** | Composed UI blocks — Panel, Post, Composer, Navigation |
-| **Patterns** | Full page regions — Feed, Profile, Rails |
+| **Foundations** | Design tokens — color scales, surfaces, type scale, spacing, radii, shadows, breakpoints |
+| **Primitives** | Atomic building blocks — Button, Input, Avatar, Badge, Icons, and form atoms |
+| **Components** | Composed, interactive, multi-part components — Card, Dialog, Tabs, Table, and the rest of the shadcn-based library |
+| **Patterns** | Davinci app compositions — Panel, Post, Composer, Navigation, Feed, Profile, Rails |
 
 ## Quick navigation
 
 ### Foundations
 - [Colors](/foundations/colors) — Radix-based sand/blue/yellow scales plus semantic tokens
+- [Surfaces](/foundations/surfaces) — Layered surface variants and elevation context
 - [Typography](/foundations/typography) — Type scale, font families, weights
 - [Spacing](/foundations/spacing) — 4-px-based spacing scale with usage guidance
 - [Shadows](/foundations/shadows) — Elevation system with 5 depth levels
 - [Radii](/foundations/radii) — Border radius tokens from xs (2px) to full (9999px)
+- [Breakpoints](/foundations/breakpoints) — Responsive breakpoints and layout insets
 
 ### Primitives
-- [Buttons](/primitives/buttons) — Primary, Secondary, Outline, Ghost × 3 sizes
-- [Avatars](/primitives/avatars) — User avatars with gradient variants and sizes
 - [Icons](/primitives/icons) — Material Symbols Rounded integration
-- [Pills](/primitives/pills) — Status badges, tags, and count indicators
+- [Button](/shadcn/button) — Variants and sizes on the skeuomorphic `.btn` chrome
+- [Input](/shadcn/input) & [Textarea](/shadcn/textarea) — Form text fields
+- [Avatar](/shadcn/avatar) & [Badge](/shadcn/badge) — Identity and status atoms
 
 ### Components
+- [Component library overview](/shadcn/) — the full shadcn-based set
+- [Card](/shadcn/card) — The primary container surface
+- [Dialog](/shadcn/dialog) & [Sheet](/shadcn/sheet) — Overlays
+- [Tabs](/shadcn/tabs) · [Dropdown Menu](/shadcn/dropdown-menu) · [Table](/shadcn/table)
+
+### Patterns
 - [Panel](/components/panel) — The primary card container for content sections
 - [Post](/components/post) — Social post with reactions, media, and author info
 - [Composer](/components/composer) — Rich text post input with toolbar
-- [Navigation](/components/navigation) — TopNav and NavList sidebar patterns
-
-### Patterns
-- [Feed](/patterns/feed) — The main content feed layout
-- [Profile](/patterns/profile) — User and company profile pages
-- [Rails](/patterns/rails) — Left and right rail layouts for desktop
+- [Navigation](/components/navigation) — TopNav and NavList patterns
+- [Feed](/patterns/feed) · [Profile](/patterns/profile) · [Rails](/patterns/rails)
 
 ## Technology
 
@@ -58,10 +62,11 @@ The system is structured in four layers, each building on the one below:
 |---|---|
 | CSS Custom Properties | All design tokens live as CSS variables |
 | Radix Colors | Color scale foundation for all palettes |
+| Radix UI + shadcn/ui | Headless primitives and the component library, wrapped as `@davinci/ui` |
 | Material Symbols Rounded | Icon system via Google Fonts variable font |
 | Inter | Primary body and display typeface |
 | JetBrains Mono | Monospace code typeface |
-| Storybook 8 | Interactive component explorer (port 6006) |
+| Storybook | Interactive component explorer |
 | TinaCMS | Content editing for this documentation |
 
 ## Using the tokens

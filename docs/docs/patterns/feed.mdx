@@ -4,10 +4,85 @@ sidebar_label: Feed
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Feed
 
 The Feed is the primary content pattern — the central column of Davinci's home page. It composes the Composer at the top and a vertical sequence of Post cards below, with optional filtering controls.
+
+<LiveDemo
+  title="Feed — composed"
+  html={`<div style="max-width:540px;display:flex;flex-direction:column;gap:12px;">
+  <div class="panel">
+    <div class="composer">
+      <div class="avatar avatar--40">JD</div>
+      <div class="composer__input">What's on your mind?</div>
+    </div>
+    <div class="composer__actions">
+      <button class="composer__action"><span class="material-symbols-rounded">image</span>Photo</button>
+      <button class="composer__action"><span class="material-symbols-rounded">videocam</span>Video</button>
+      <button class="composer__action"><span class="material-symbols-rounded">article</span>Article</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="post">
+      <div class="post__header">
+        <div class="avatar avatar--40">JD</div>
+        <div class="post__who">
+          <div class="post__name">Jane Doe</div>
+          <div class="post__role">Senior Product Designer · Davinci Co.</div>
+          <div class="post__time"><span class="material-symbols-rounded" style="font-size:13px;">schedule</span> 2h</div>
+        </div>
+        <button class="btn btn--ghost btn--icon"><span class="material-symbols-rounded">more_horiz</span></button>
+      </div>
+      <div class="post__body">Excited to share that our design system docs just shipped — fully dog-fooded with the same CSS it documents. The token-to-component pipeline is finally documented end to end.</div>
+      <div class="post__reactions">
+        <span>👍 · ❤️ · 🎉  <strong>42</strong></span>
+        <span>12 comments</span>
+      </div>
+      <div class="post__actions">
+        <button class="post__action active"><span class="material-symbols-rounded">thumb_up</span>Like</button>
+        <button class="post__action"><span class="material-symbols-rounded">chat_bubble_outline</span>Comment</button>
+        <button class="post__action"><span class="material-symbols-rounded">repeat</span>Repost</button>
+        <button class="post__action"><span class="material-symbols-rounded">send</span>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="post">
+      <div class="post__header">
+        <div class="avatar avatar--40 avatar--g2">MK</div>
+        <div class="post__who">
+          <div class="post__name">Marcus Kim</div>
+          <div class="post__role">Engineering Lead · Build Co.</div>
+          <div class="post__time"><span class="material-symbols-rounded" style="font-size:13px;">schedule</span> 5h</div>
+        </div>
+      </div>
+      <div class="post__body">This article on token-first design systems is required reading for anyone building a design system in 2025.</div>
+      <div class="post__attachment">
+        <div class="post__attachment-img"></div>
+        <div class="post__attachment-body">
+          <strong>Stop Paying for Design System Docs</strong>
+          <span style="color:var(--fg-muted);">Build them yourself — davinci.design</span>
+        </div>
+      </div>
+      <div class="post__actions">
+        <button class="post__action"><span class="material-symbols-rounded">thumb_up</span>Like</button>
+        <button class="post__action"><span class="material-symbols-rounded">chat_bubble_outline</span>Comment</button>
+        <button class="post__action"><span class="material-symbols-rounded">repeat</span>Repost</button>
+        <button class="post__action"><span class="material-symbols-rounded">send</span>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:16px 0;">
+    <button class="btn btn--secondary">Load more posts</button>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
 ## When to use
 

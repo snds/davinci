@@ -4,10 +4,103 @@ sidebar_label: Rails
 ---
 
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Rails
 
 Rails are the left and right fixed-width columns that flank the center feed in Davinci's desktop layout. They hold navigational, contextual, and discovery panels that persist as the user scrolls.
+
+<LiveDemo
+  title="Left rail"
+  html={`<div style="max-width:240px;display:flex;flex-direction:column;gap:12px;">
+  <div class="panel">
+    <div class="profile-card__cover"></div>
+    <div class="profile-card__body">
+      <div class="avatar avatar--48 profile-card__avatar">JD</div>
+      <div class="profile-card__name">Jane Doe</div>
+      <div class="profile-card__role">Senior Product Designer · Davinci Co.</div>
+      <hr class="separator" style="margin:10px 0;" />
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+        <span style="color:var(--fg-muted);">Profile views</span>
+        <strong style="color:var(--accent-fg);">142</strong>
+      </div>
+      <div class="progress progress--sm"><div class="progress__bar" style="width:58%;"></div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <ul class="nav-list">
+      <li class="active"><span class="material-symbols-rounded">home</span>Home</li>
+      <li><span class="material-symbols-rounded">group</span>Network<span class="count">5</span></li>
+      <li><span class="material-symbols-rounded">work</span>Jobs</li>
+      <li><span class="material-symbols-rounded">notifications</span>Notifications<span class="count">3</span></li>
+    </ul>
+  </div>
+</div>`}
+  pad="24px"
+/>
+
+<LiveDemo
+  title="Right rail"
+  html={`<div style="max-width:300px;display:flex;flex-direction:column;gap:12px;">
+  <div class="panel">
+    <div class="panel__header">
+      <span>People you may know</span>
+    </div>
+    <div style="display:flex;flex-direction:column;">
+      <div class="rail-item">
+        <div class="avatar avatar--40 avatar--g2">MK</div>
+        <div class="rail-item__text">
+          <div class="rail-item__title">Marcus Kim</div>
+          <div class="rail-item__sub">Engineering Lead · 12 mutual</div>
+        </div>
+        <button class="btn btn--outline btn--sm">Connect</button>
+      </div>
+      <div class="rail-item">
+        <div class="avatar avatar--40 avatar--g5">AR</div>
+        <div class="rail-item__text">
+          <div class="rail-item__title">Aisha Rahman</div>
+          <div class="rail-item__sub">Product Manager · 8 mutual</div>
+        </div>
+        <button class="btn btn--outline btn--sm">Connect</button>
+      </div>
+      <div class="rail-item">
+        <div class="avatar avatar--40 avatar--g3">CW</div>
+        <div class="rail-item__text">
+          <div class="rail-item__title">Chris Wong</div>
+          <div class="rail-item__sub">Designer · 5 mutual</div>
+        </div>
+        <button class="btn btn--outline btn--sm">Connect</button>
+      </div>
+    </div>
+    <div style="padding:8px 14px;">
+      <button class="btn btn--ghost btn--sm" style="width:100%;justify-content:center;">Show all recommendations</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel__header">
+      <span>Trending topics</span>
+    </div>
+    <div style="display:flex;flex-direction:column;">
+      <div class="rail-item">
+        <div class="rail-item__text">
+          <div style="font-size:10px;color:var(--fg-subtle);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Design · Trending</div>
+          <div class="rail-item__title">#DesignSystems</div>
+          <div class="rail-item__sub">4,218 posts</div>
+        </div>
+      </div>
+      <div class="rail-item">
+        <div class="rail-item__text">
+          <div style="font-size:10px;color:var(--fg-subtle);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Technology · Trending</div>
+          <div class="rail-item__title">#AIDesign</div>
+          <div class="rail-item__sub">11,042 posts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`}
+  pad="24px"
+/>
 
 ## When to use
 

@@ -1,0 +1,57 @@
+---
+title: Checkbox
+sidebar_position: 13
+description: Radix Checkbox — checked, unchecked, and indeterminate states.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Checkbox
+
+Built on `@radix-ui/react-checkbox`. Supports checked, unchecked, and indeterminate states. Fully keyboard accessible, works with `<label>`, and integrates with react-hook-form.
+
+```bash
+cd packages/ui && npx shadcn@latest add checkbox
+```
+
+## Usage
+
+```jsx
+import { Checkbox } from '@davinci/ui/components/ui/checkbox';
+import { Label } from '@davinci/ui/components/ui/label';
+
+// Standalone
+<Checkbox id="terms" />
+
+// With label
+<div className="flex items-center gap-2">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms">Accept terms and conditions</Label>
+</div>
+
+// Disabled
+<Checkbox disabled />
+<Checkbox disabled checked />
+
+// Controlled
+const [checked, setChecked] = React.useState(false);
+<Checkbox checked={checked} onCheckedChange={setChecked} />
+
+// Indeterminate (common in select-all patterns)
+<Checkbox checked="indeterminate" />
+```
+
+## Theming
+
+| State | Davinci token |
+|-------|---------------|
+| Unchecked border | `--border` |
+| Checked fill | `--accent` (blue-9) |
+| Checked icon | `--fg-on-accent` |
+| Focus ring | `--border-focus` |
+| Disabled | opacity 50% |
+
+## Preview
+
+<StorybookEmbed story="components-checkbox--default" height={220} />

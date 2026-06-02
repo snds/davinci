@@ -1,0 +1,69 @@
+---
+title: Alert Dialog
+sidebar_position: 21
+description: Blocking modal for destructive confirmations built on Radix AlertDialog.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Alert Dialog
+
+A modal that interrupts the user and requires an explicit response before they can continue. Built on `@radix-ui/react-alert-dialog`. Unlike Dialog, the backdrop is non-dismissible — the user must choose an action.
+
+```bash
+cd packages/ui && npx shadcn@latest add alert-dialog
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `AlertDialog` | Root context provider |
+| `AlertDialogTrigger` | Element that opens the dialog |
+| `AlertDialogContent` | The modal panel — renders in a portal |
+| `AlertDialogHeader` | Top section inside AlertDialogContent |
+| `AlertDialogTitle` | Required — names the dialog for accessibility |
+| `AlertDialogDescription` | Explains what the action will do |
+| `AlertDialogFooter` | Bottom section — action buttons |
+| `AlertDialogAction` | Primary confirm button (closes dialog) |
+| `AlertDialogCancel` | Cancel button (closes dialog) |
+
+## Usage
+
+```jsx
+import {
+  AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader,
+  AlertDialogTitle, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogAction, AlertDialogCancel,
+} from '@davinci/ui/components/ui/alert-dialog';
+import { Button } from '@davinci/ui/components/ui/button';
+
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button variant="destructive">Delete account</Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone. Your account and all associated data
+        will be permanently deleted.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
+## Related
+
+- **Dialog** — non-blocking modal that can be dismissed via backdrop click
+- **Sheet** — slides in from an edge, same dismissal rules as Dialog
+
+## Preview
+
+<StorybookEmbed story="components-alertdialog--default" height={260} />

@@ -1,0 +1,66 @@
+---
+title: Sheet
+sidebar_position: 31
+description: Radix Dialog variant that slides in from an edge — drawer/panel pattern.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Sheet
+
+A Dialog variant that enters from a screen edge. Shares the same API as `Dialog` — same focus trap, portal, and accessibility semantics — but with a slide-in animation.
+
+```bash
+cd packages/ui && npx shadcn@latest add sheet
+```
+
+## Side options
+
+| `side` | Enters from |
+|--------|-------------|
+| `top` | Top edge |
+| `bottom` | Bottom edge (common for mobile filters) |
+| `left` | Left edge |
+| `right` | Right edge (default — sidebars, detail panels) |
+
+## Sub-components
+
+Same as Dialog: `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose`.
+
+## Usage
+
+```jsx
+import {
+  Sheet, SheetTrigger, SheetContent, SheetHeader,
+  SheetTitle, SheetDescription, SheetFooter, SheetClose,
+} from '@davinci/ui/components/ui/sheet';
+import { Button } from '@davinci/ui/components/ui/button';
+
+<Sheet>
+  <SheetTrigger asChild>
+    <Button variant="outline">Open filters</Button>
+  </SheetTrigger>
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>Filters</SheetTitle>
+      <SheetDescription>Narrow your search results.</SheetDescription>
+    </SheetHeader>
+    {/* filter controls */}
+    <SheetFooter>
+      <SheetClose asChild>
+        <Button variant="outline">Cancel</Button>
+      </SheetClose>
+      <Button>Apply</Button>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>
+```
+
+## Theming
+
+Same as Dialog — `--bg-elevated` panel, `--overlay` backdrop, `--border` edge.
+
+## Preview
+
+<StorybookEmbed story="components-sheet--right" height={280} />

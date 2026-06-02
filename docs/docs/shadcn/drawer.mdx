@@ -1,0 +1,79 @@
+---
+title: Drawer
+sidebar_position: 30
+description: Mobile-optimised bottom sheet built on the Vaul library.
+---
+
+import StorybookEmbed from '@site/src/components/StorybookEmbed';
+
+
+# Drawer
+
+A bottom sheet panel that slides up from the bottom of the screen. Built on `vaul`. Optimised for mobile — supports native drag-to-dismiss with inertia. Use in place of Dialog on narrow viewports, or for persistent panels like filters and detail views.
+
+```bash
+cd packages/ui && npx shadcn@latest add drawer
+```
+
+## Sub-components
+
+| Component | Role |
+|-----------|------|
+| `Drawer` | Root provider — wraps Vaul `Drawer.Root` |
+| `DrawerTrigger` | Element that opens the drawer |
+| `DrawerClose` | Element that closes the drawer |
+| `DrawerContent` | The panel — includes the drag handle |
+| `DrawerHeader` | Top section inside DrawerContent |
+| `DrawerTitle` | Accessible panel title |
+| `DrawerDescription` | Optional subtitle text |
+| `DrawerFooter` | Bottom section — action buttons |
+
+## Usage
+
+```jsx
+import {
+  Drawer, DrawerTrigger, DrawerClose, DrawerContent,
+  DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter,
+} from '@davinci/ui/components/ui/drawer';
+import { Button } from '@davinci/ui/components/ui/button';
+
+<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="outline">Open Drawer</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Move goal</DrawerTitle>
+      <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+    </DrawerHeader>
+    {/* content */}
+    <DrawerFooter>
+      <Button>Submit</Button>
+      <DrawerClose asChild>
+        <Button variant="outline">Cancel</Button>
+      </DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+### Responsive Dialog + Drawer
+
+A common pattern is rendering a Dialog on desktop and a Drawer on mobile using a breakpoint hook:
+
+```jsx
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { Dialog, DialogContent } from '@davinci/ui/components/ui/dialog';
+import { Drawer, DrawerContent } from '@davinci/ui/components/ui/drawer';
+
+const isDesktop = useMediaQuery('(min-width: 768px)');
+
+if (isDesktop) {
+  return <Dialog>{/* ... */}</Dialog>;
+}
+return <Drawer>{/* ... */}</Drawer>;
+```
+
+## Preview
+
+<StorybookEmbed story="components-drawer--default" height={280} />

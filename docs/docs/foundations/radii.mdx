@@ -5,10 +5,47 @@ sidebar_label: Radii
 
 import TokenTable from '@site/src/components/TokenTable';
 import StorybookEmbed from '@site/src/components/StorybookEmbed';
+import LiveDemo from '@site/src/components/LiveDemo';
 
 # Radii
 
 Davinci uses a 7-step radius scale from near-sharp (2px) to fully circular (9999px). The scale is intentionally conservative — the system looks clean and modern without rounded-rectangle excess.
+
+<LiveDemo
+  title="Radius scale"
+  center
+  html={`<div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;justify-content:center;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:2px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">xs<br/>2px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:4px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">sm<br/>4px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:6px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">md<br/>6px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:8px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">lg<br/>8px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:12px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">xl<br/>12px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:16px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">2xl<br/>16px</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:60px;height:60px;background:var(--accent-subtle);border:1px solid var(--accent-border);border-radius:9999px;"></div>
+    <div style="font-size:10px;color:var(--fg-muted);text-align:center;">full<br/>9999px</div>
+  </div>
+</div>`}
+  pad="32px 24px"
+/>
 
 ## Radius tokens
 
