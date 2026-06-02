@@ -1,0 +1,57 @@
+# ============================================================
+# Davinci Design System — CI guards
+#
+# Runs the design-system guards on every PR and on pushes to feat/** branches,
+# WITHOUT deploying. Deployment stays in deploy-pages.yml (which also runs these
+# checks before publishing). This workflow is the PR gate: it lets the guards —
+# including the --fg-subtle deprecation ratchet (check:deprecated, DS-2026-001) —
+# block a merge, not just a deploy.
+# ============================================================
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: ['feat/**']
+  workflow_dispatch:
+
+# Newer pushes supersede in-flight runs for the same ref — checks are read-only,
+# so cancelling a stale run is safe (unlike the deploy workflow).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Base-purity check (components/ui is pristine shadcn)
+        run: npm run check:base
+
+      - name: Token-hygiene check (stories + docs)
+        run: npm run check:tokens
+
+      - name: Component-reference check (demo)
+        run: npm run check:refs
+
+      - name: Doc-embed check (storybook ids)
+        run: npm run check:embeds
+
+      - name: Deprecated-token check (--fg-subtle ratchet, DS-2026-001)
+        run: npm run check:deprecated
