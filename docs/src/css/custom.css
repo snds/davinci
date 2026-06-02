@@ -497,6 +497,40 @@ body {
   line-height: 1.7;
 }
 
+/* Dracula's comment grey lands ~3.74:1 on the dark code surface — below AA.
+   Lift comments to a token that clears 4.5:1. Light mode uses the github theme
+   (Fix: prism.theme) whose comments already pass, so scope this to dark only. */
+html[data-theme='dark'] .prism-code .token.comment,
+html[data-theme='dark'] .prism-code .token.prolog,
+html[data-theme='dark'] .prism-code .token.cdata {
+  /* prism-react-renderer sets token color via inline style, so !important is
+     required to override the theme's per-token color. */
+  color: var(--sand-11) !important;
+}
+
+/* The github light theme's accent tokens (comment, JSX attr-name, function,
+   string) land 2.7–4.4:1 on the near-white code surface — below AA. Remap just
+   those categories to Radix step-11 hues (all ≥4.5:1 here), preserving syntax
+   differentiation. Plain text / keywords / punctuation already pass, so they
+   keep the github palette. Inline token colors require !important. */
+html[data-theme='light'] .prism-code .token.comment,
+html[data-theme='light'] .prism-code .token.prolog,
+html[data-theme='light'] .prism-code .token.cdata {
+  color: var(--sand-11) !important;
+}
+html[data-theme='light'] .prism-code .token.attr-name {
+  color: var(--blue-11) !important;
+}
+html[data-theme='light'] .prism-code .token.function {
+  color: var(--red-11) !important;
+}
+html[data-theme='light'] .prism-code .token.string,
+html[data-theme='light'] .prism-code .token.attr-value,
+html[data-theme='light'] .prism-code .token.char,
+html[data-theme='light'] .prism-code .token.inserted {
+  color: var(--green-11) !important;
+}
+
 /* Code block header/filename bar */
 .codeBlockTitle_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Title-styles-module,
 [class*='codeBlockTitle'] {

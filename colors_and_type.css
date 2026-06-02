@@ -25,7 +25,7 @@
 
   --fg:            var(--sand-12);
   --fg-muted:      var(--sand-11);
-  --fg-subtle:     var(--sand-10);
+  --fg-subtle:     var(--fg-muted); /* DEPRECATED — alias of --fg-muted (see DDR DS-2026-001). Radix has only two AA-legible text steps (11/12); a third "tertiary text" colour cannot meet WCAG AA. Express tertiary emphasis via size/weight, not a fainter colour. Migrate consumers to --fg-muted. */
   --fg-disabled:   var(--sand-8);
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #1a1500;
@@ -95,7 +95,7 @@
 
   --fg:            var(--sand-12);
   --fg-muted:      var(--sand-11);
-  --fg-subtle:     var(--sand-10);
+  --fg-subtle:     var(--fg-muted); /* DEPRECATED — alias of --fg-muted (see DDR DS-2026-001). Radix has only two AA-legible text steps (11/12); a third "tertiary text" colour cannot meet WCAG AA. Express tertiary emphasis via size/weight, not a fainter colour. Migrate consumers to --fg-muted. */
   --fg-disabled:   var(--sand-8);
   --fg-on-accent:  #ffffff;
   --fg-on-alt:     #2a2200;
@@ -332,6 +332,14 @@ p, .body {
 .body-sm { font-size: var(--text-sm); color: var(--fg-muted); line-height: var(--lh-normal); }
 .body-lg { font-size: var(--text-lg); line-height: var(--lh-normal); }
 .caption { font-size: var(--text-xs); color: var(--fg-muted); line-height: var(--lh-normal); }
+
+/* Tertiary emphasis (timestamps, metadata, supporting labels) — the sanctioned
+   replacement for the deprecated `color: var(--fg-subtle)` (see DDR DS-2026-001).
+   De-emphasis is carried by the smaller size, NOT a fainter colour: --fg-muted
+   (sand-11) is the lowest text colour that meets WCAG AA, so the only AA-safe
+   lever below secondary text is scale. Shares the caption treatment by design —
+   `.caption` is for prose captions, `.text-tertiary` is the general intent name. */
+.text-tertiary { font-size: var(--text-xs); color: var(--fg-muted); line-height: var(--lh-normal); }
 
 code, .code, kbd, samp, pre {
   font-family: var(--font-mono);

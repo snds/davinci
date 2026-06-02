@@ -194,7 +194,11 @@ const config = {
       },
 
       prism: {
-        theme: themes.dracula,
+        // Light mode needs a light syntax theme: Dracula's off-white foreground
+        // (#f8f8f2) is invisible on the near-white `--bg-subtle` code surface.
+        // Prism swaps theme↔darkTheme on html[data-theme]; the code background is
+        // already theme-aware, so dark mode keeps Dracula.
+        theme: themes.github,
         darkTheme: themes.dracula,
         additionalLanguages: ['css', 'jsx', 'bash'],
       },

@@ -57,6 +57,9 @@ jobs:
       - name: Doc-embed check (storybook ids)
         run: npm run check:embeds
 
+      - name: Deprecated-token check (--fg-subtle ratchet, DS-2026-001)
+        run: npm run check:deprecated
+
       - name: Build docs
         env:
           STORYBOOK_URL: https://snds.github.io/davinci/storybook/

@@ -235,8 +235,8 @@ export const Semantic = {
 
       <SemanticGroup title="Foreground / Text" tokens={[
         ['--fg',           'Primary text'],
-        ['--fg-muted',     'Secondary text'],
-        ['--fg-subtle',    'Tertiary / timestamps'],
+        ['--fg-muted',     'Secondary text (also use for tertiary/timestamps)'],
+        ['--fg-subtle',    'Deprecated — alias of --fg-muted (DS-2026-001)'],
         ['--fg-disabled',  'Disabled'],
         ['--fg-on-accent', 'On blue fills (always white)'],
         ['--fg-on-alt',    'On yellow fills (dark brown)'],

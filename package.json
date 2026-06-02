@@ -24,7 +24,8 @@
     "check:tokens":       "node scripts/check-token-hygiene.js",
     "check:refs":         "node scripts/check-component-refs.js",
     "check:embeds":       "node scripts/check-doc-embeds.js",
-    "check:base":         "node scripts/check-base.js"
+    "check:base":         "node scripts/check-base.js",
+    "check:deprecated":   "node scripts/check-deprecated-tokens.js"
   },
   "engines": {
     "node": ">=20.0.0",
